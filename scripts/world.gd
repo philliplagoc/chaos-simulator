@@ -22,7 +22,18 @@ const BLOCK_COLORS := {
 func _ready() -> void:
 	add_child(CityCamera.new())
 	add_child(DesktopBanner.new())
+	_spawn_lights()
 	queue_redraw()
+
+
+func _spawn_lights() -> void:
+	var i := 0
+	for cell in Sim.city.intersections():
+		var light := TrafficLight.new()
+		light.cell = cell
+		light.offset_s = i * 6.5
+		add_child(light)
+		i += 1
 
 
 func _draw() -> void:

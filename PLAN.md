@@ -1470,7 +1470,7 @@ Say to the human:
 - **Why:** R4, spec step 4 ("4 intersections cycling green/yellow/red with offsets so cross traffic alternates").
 - **Docs & gotchas:** lights write their colors into `Sim.lights` each frame and cars read them there, so no car ever holds a reference to a light (CLAUDE.md rule). Each approach gets its own green in turn (Assumption 3). This version of `sim.gd` also adds the collision-layer constants, agent counts and helpers that later tasks use. **If the Progress log says `FALLBACK` (from T008), set `CITIZEN_COUNT := 30` and `CAR_COUNT := 15` in the new `sim.gd`.**
 
-- [ ] **Step 1: Write the failing test and register it**
+- [x] **Step 1: Write the failing test and register it**
 
 Create `tests/test_traffic_light.gd` with exactly this:
 
@@ -1548,8 +1548,8 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_traffic_light.gd ...`
-- [ ] **Step 3: Write the light, the light board and spawn the lights**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_traffic_light.gd ...`
+- [x] **Step 3: Write the light, the light board and spawn the lights**
 
 Create `scripts/traffic_light.gd` with exactly this:
 
@@ -1723,8 +1723,8 @@ func _spawn_lights() -> void:
 		i += 1
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `450 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T016: per-approach traffic lights and light board" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run and confirm it passes**: TEST → `450 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T016: per-approach traffic lights and light board" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** tests pass, including "only one approach is ever non-red".
 **If it fails:** `Identifier "TrafficLight" not declared` in `sim.gd` means the import step was skipped. Run the full TEST command.
@@ -6840,6 +6840,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T014 | Done | Banner added. Plan fix (change log v1.1): checks `get_window().size.x`, since the stretched viewport never goes below 1280 wide. `438 checks, 0 failed`, smoke clean. Next: T015 (human check + Substack post 1). |
 | 2026-10-17 | T015 | Done (post pending) | Human checked the district, pan/zoom, entrances and the banner (`--resolution 800x720`): looks good. Substack post 1 drafted in chat but NOT published yet; ask the human for the URL later. |
 | 2026-10-17 | Phase 2 | Done | Checkpoint: `438 checks, 0 failed`. Pushed to GitHub. Next: T016. Start a fresh session. |
+| 2026-10-17 | T016 | Done | Per-approach traffic lights + `Sim.lights` board; `sim.gd` now has layer constants, 40/20 counts, `light_for`, `body_velocity`, `free_road_cell`. `450 checks, 0 failed`, smoke clean. Next: T017 (Car). |
 
 ## Change log
 
