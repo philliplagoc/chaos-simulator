@@ -2865,7 +2865,10 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 
 
 func _flee(delta: float) -> void:
-	global_position = (global_position + _flee_dir * FLEE_SPEED * delta).clamp(Vector2.ZERO, CityMap.map_rect().end)
+	# Stop at building edges (off-map counts as a building) instead of running through.
+	var next := global_position + _flee_dir * FLEE_SPEED * delta
+	if Sim.city.cell(CityMap.world_to_cell(next)) != CityMap.Cell.BLOCK:
+		global_position = next
 	_flee_left -= delta
 	if _flee_left <= 0.0:
 		remove_from_group("fleeing")
@@ -6862,6 +6865,8 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T021 | Done | `CitizenData` + `CitizenBrain`. `546 checks, 0 failed`. Next: T022 (Citizen node). |
 | 2026-10-17 | T022 | Done | `Citizen` added (not spawned yet); cars can be owned/parked; `Sim.is_road_clear`. `546 checks, 0 failed`, smoke clean. Next: T023 (spawn citizens). |
 | 2026-10-17 | T023 | Done | 40 citizens + owned cars parked at home + ambient traffic; F3 labels; right-click test danger. `546 checks, 0 failed`, smoke clean. Next: T024 (human: rush hours + scatter, post 2). |
+| 2026-10-17 | T024 | Done (post pending) | Human: morning rush, midday quiet, evening rush and right-click scatter all yes. Feedback: fleeing citizens ran through buildings → fixed (change log v1.4). Jaywalking + cars stopping is by design; walking through cars is partly fixed by T035; the clock arrives in T043. Substack post 2 NOT published yet; ask the human for the URL later. |
+| 2026-10-17 | Phase 4 | Done | Checkpoint: `546 checks, 0 failed`, smoke clean. Pushed to GitHub. Next: T025. Start a fresh session. |
 
 ## Change log
 
@@ -6869,3 +6874,4 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 - v1.1 (2026-10-17): T014 checks the real window width (`get_window().size.x`) instead of the stretched viewport width, which never drops below 1280 with aspect "expand". T015 step 4 now starts the game narrow with `--resolution 800x720`. Agreed with the human.
 - v1.2 (2026-10-17): T016 lamps moved from the road center lines to the four corners (each at its drivers' near right), because center-line lamps read as belonging to both directions. Drawing only; timing and tests unchanged. Agreed with the human.
 - v1.3 (2026-10-17): Added T039b (through-traffic drives off the map and new cars drive in, instead of U-turning at the edge). Placed after T039 because `car.gd` changes in 7 tasks before then; its code gets written and tested at that point. Agreed with the human.
+- v1.4 (2026-10-17): Fleeing citizens stop at building edges instead of running through them (T024 feedback, Option B). `Citizen._flee` skips a step that would land on a BLOCK cell; this also replaces the clamp to the map edge. No new tests, so the check counts are unchanged; a throwaway headless run (3,000 frames, ~70 scares) showed 0 fleeing frames on a building versus 14,794 before. Agreed with the human.

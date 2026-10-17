@@ -176,7 +176,10 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 
 
 func _flee(delta: float) -> void:
-	global_position = (global_position + _flee_dir * FLEE_SPEED * delta).clamp(Vector2.ZERO, CityMap.map_rect().end)
+	# Stop at building edges (off-map counts as a building) instead of running through.
+	var next := global_position + _flee_dir * FLEE_SPEED * delta
+	if Sim.city.cell(CityMap.world_to_cell(next)) != CityMap.Cell.BLOCK:
+		global_position = next
 	_flee_left -= delta
 	if _flee_left <= 0.0:
 		remove_from_group("fleeing")
