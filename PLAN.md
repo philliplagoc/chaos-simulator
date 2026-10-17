@@ -422,10 +422,10 @@ Say to the human:
 **Ask them to report:** the `gh auth status` output. It should say `Logged in to github.com account <your-username>`.
 
 Agent, after the human confirms:
-- [ ] **Step 1: Create the public repo and push**
+- [x] **Step 1: Create the public repo and push**
   Run: `gh repo create chaos-simulator --public --source . --remote origin --push`
   Expected: `✓ Created repository <username>/chaos-simulator on GitHub` and a `Branch 'main' set up to track remote branch 'main'` line.
-- [ ] **Step 2: Note it** in the Progress log with the repo URL.
+- [x] **Step 2: Note it** in the Progress log with the repo URL.
 
 **If something seems wrong:** `gh repo create` says the name exists: ask the human for another name. A push asks for a password: run `gh auth setup-git` and push again with `git push -u origin main`.
 
@@ -454,7 +454,7 @@ Say to the human:
 **If something seems wrong:** if a zip has a different name, use the name you see in Downloads. If `Test-Path` prints `False`, check whether the zip created an extra folder level (for example `art\kenney\racing\kenney_racing-pack\PNG\...`). If so, move the contents up one level.
 
 Agent, after the human confirms:
-- [ ] **Step 1: Commit the art**
+- [x] **Step 1: Commit the art**
   Run: `git add -A; git commit -m "T005: Kenney CC0 art packs (ignored by Godot)" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"; git push`
   Expected: a commit line, then the push summary.
 
@@ -6825,6 +6825,9 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T001 | Done | Godot was already in `C:\Godot` with `godot.cmd` and on the user PATH. `godot --version` → `4.7.2.stable.official.ed1daf0bf`. |
 | 2026-10-17 | T002 | Done | Only the Web templates are installed (no desktop ones; the build is web only). `web_nothreads_release.zip` is present. |
 | 2026-10-17 | T003 | Done | `3 checks, 0 failed`. The repo already existed from the initial commit, so `git init` was skipped and T003 is the second commit, not the root. Next: T004 (human: GitHub sign-in). |
+| 2026-10-17 | T004 | Done | Repo https://github.com/philliplagoc/chaos-simulator (public) already existed with `origin` set, so `gh repo create` was skipped. Pushed `main` (fast-forward to `6fbbd0b`). `gh` is signed in to github.com as philliplagoc, and the school account stays signed in. |
+| 2026-10-17 | T005 | Done | Three Kenney packs unzipped into `art/kenney/` (racing, shooter, city; 2,088 files) with `.gdignore`. Both check sprites found. |
+| 2026-10-17 | Phase 0 | Done | Checkpoint: `3 checks, 0 failed`. Next: T006 (performance spike). Start a fresh session. |
 
 ## Change log
 
