@@ -17,12 +17,17 @@ const BLOCK_COLORS := {
 	&"park": Color("4e9a3f"),
 	&"lot": Color("55555c"),
 }
+const CAR_COLORS: Array[Color] = [
+	Color("e74c3c"), Color("3498db"), Color("f1c40f"), Color("ecf0f1"),
+	Color("2ecc71"), Color("e67e22"), Color("9b59b6"), Color("1abc9c"),
+]
 
 
 func _ready() -> void:
 	add_child(CityCamera.new())
 	add_child(DesktopBanner.new())
 	_spawn_lights()
+	_spawn_cars()
 	queue_redraw()
 
 
@@ -34,6 +39,14 @@ func _spawn_lights() -> void:
 		light.offset_s = i * 6.5
 		add_child(light)
 		i += 1
+
+
+func _spawn_cars() -> void:
+	for n in Sim.CAR_COUNT:
+		var car := Car.new()
+		car.color = CAR_COLORS[Sim.rng.randi_range(0, CAR_COLORS.size() - 1)]
+		add_child(car)
+		car.place(Sim.free_road_cell())
 
 
 func _draw() -> void:
