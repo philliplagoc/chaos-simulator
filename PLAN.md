@@ -6838,6 +6838,8 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T012 | Done | World scene is now the main scene; `Sim` owns `city` and `nav`. `438 checks, 0 failed`, smoke clean. Next: T013 (camera). |
 | 2026-10-17 | T013 | Done | `CityCamera` pan/zoom added. `438 checks, 0 failed`, smoke clean. Human confirmed the T012 district looks right. Next: T014 (desktop banner). |
 | 2026-10-17 | T014 | Done | Banner added. Plan fix (change log v1.1): checks `get_window().size.x`, since the stretched viewport never goes below 1280 wide. `438 checks, 0 failed`, smoke clean. Next: T015 (human check + Substack post 1). |
+| 2026-10-17 | T015 | Done (post pending) | Human checked the district, pan/zoom, entrances and the banner (`--resolution 800x720`): looks good. Substack post 1 drafted in chat but NOT published yet; ask the human for the URL later. |
+| 2026-10-17 | Phase 2 | Done | Checkpoint: `438 checks, 0 failed`. Pushed to GitHub. Next: T016. Start a fresh session. |
 
 ## Change log
 
