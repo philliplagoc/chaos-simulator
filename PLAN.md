@@ -1022,7 +1022,7 @@ static func map_rect() -> Rect2:
 - **Why:** R1, spec step 3 ("separate AStarGrid2D grids for road lanes and sidewalks"), plus a jaywalk grid for impatient walkers (R5).
 - **Docs & gotchas:** https://docs.godotengine.org/en/stable/classes/class_astargrid2d.html. Use `DIAGONAL_MODE_NEVER` with the Manhattan heuristic. If the start cell is solid, the path comes back empty.
 
-- [ ] **Step 1: Write the failing test and register it**
+- [x] **Step 1: Write the failing test and register it**
 
 Create `tests/test_nav.gd` with exactly this:
 
@@ -1096,8 +1096,8 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_nav.gd ...`
-- [ ] **Step 3: Write `Nav`**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_nav.gd ...`
+- [x] **Step 3: Write `Nav`**
 
 Create `scripts/nav.gd` with exactly this:
 
@@ -1142,8 +1142,8 @@ func walk_path(from: Vector2i, to: Vector2i, impatient := false) -> PackedVector
 	return (jaywalk if impatient else walk).get_point_path(from, to)
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `438 checks, 0 failed`
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T011: Nav road, walk and jaywalk grids" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run and confirm it passes**: TEST → `438 checks, 0 failed`
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T011: Nav road, walk and jaywalk grids" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** every destination pair is reachable by road and on foot (the test checks all 72 pairs).
 **If it fails:** `walk path ... only crosses roads at crosswalks` failing means `is_walkable` includes `ROAD` cells.
@@ -6834,6 +6834,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T009 | Done | itch.io draft page made at https://flippertheripper.itch.io/my-chaos-simulator (still Draft; HTML, 1280x720, SharedArrayBuffer off). Chrome 60 FPS on itch. Firefox not tested. |
 | 2026-10-17 | Phase 1 | Done | Checkpoint: `3 checks, 0 failed`. Performance PASS in Chrome (local and itch); Firefox still to check before launch. Next: T010 (CityMap). Start a fresh session. |
 | 2026-10-17 | T010 | Done | `CityMap` added. `219 checks, 0 failed`. Next: T011 (Nav grids). |
+| 2026-10-17 | T011 | Done | `Nav` road/walk/jaywalk grids. `438 checks, 0 failed`. Next: T012 (World scene). |
 
 ## Change log
 
