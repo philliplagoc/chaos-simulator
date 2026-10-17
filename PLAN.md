@@ -5522,6 +5522,18 @@ replace with:
 - [ ] **Step 2: Run tests and smoke**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T039: Road Rager anger meter: tailgate, overtake, ram" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
+### T039b [R4] Through-traffic leaves town instead of U-turning (added in v1.3)
+- **Owner:** Agent
+- **Depends on:** T039 (or T038 if T039 was skipped)
+- **Files:** Modify `scripts/car.gd` · maybe `tests/` (a new check)
+- **Why:** human request at T019: cars U-turning at the city limits looks fake. Ambient cars should drive off the map, disappear, and a new car should drive in from another random edge.
+- **Docs & gotchas:** the code is **not written yet** on purpose: `car.gd` changes in T022–T039, so write and test it against the T039 version. Rules: only ambient cars (`owner_id == -1`) and never a stolen car or the Road Rager mid-rage; owned cars still park at home. Exits come from `Sim.city.edge_exits()`. The new car enters at a random edge exit with no car within 2.5 cells, facing inward; use `Sim.rng` only (seeded). Keep the car count at `Sim.CAR_COUNT` (reuse the same node: re-`place()` it, as `_tow()` does). Check that T046's later find blocks in `car.gd` still match after this change, and fix them in this plan if not.
+
+- [ ] **Step 1: Agent writes the change**, then adds one headless check (an ambient car routed to an edge exit re-enters at an edge cell, and the car count stays the same). Show the human the diff before committing.
+- [ ] **Step 2: Run tests and smoke**: TEST → all pass (count goes up by the new checks; update the later checkpoint counts in this plan). SMOKE → clean.
+- [ ] **Step 3: Human check**: run the game for 2 minutes; ambient cars drive off the edges and new ones drive in; owned cars still park.
+- [ ] **Step 4: Commit**: `git add -A; git commit -m "T039b: through-traffic leaves town and new cars drive in" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+
 ### T040 [R8] Criminal menu: pick one, click to place
 - **Owner:** Agent
 - **Depends on:** T039 (or T038 if T039 was skipped)
@@ -6844,9 +6856,12 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T016 fix | Done | Lamps moved to the corners (change log v1.2). `450 checks, 0 failed`, smoke clean. Next: T017 (Car). |
 | 2026-10-17 | T017 | Done | `Car` added (not spawned yet). `450 checks, 0 failed`, smoke clean. Next: T018 (spawn 20 cars). |
 | 2026-10-17 | T018 | Done | 20 cars spawn on seeded free road cells. `450 checks, 0 failed`, smoke clean. Next: T019 (human: 5 minutes of traffic). |
+| 2026-10-17 | T019 | Done | Human watched 5 minutes: 0 crashes, no pile-ups. They asked for cars to leave town instead of U-turning at the edge: added as T039b (change log v1.3). |
+| 2026-10-17 | Phase 3 | Done | Checkpoint: `450 checks, 0 failed`. Pushed to GitHub. Next: T020. Start a fresh session. |
 
 ## Change log
 
 - v1 (2026-10-16): First plan, from spec v2. Deviations agreed with the human: per-approach traffic lights (Assumption 3), a `PARKED` car state (Assumption 4), shapes until Phase 10 with buildings kept as shapes in v1 (Assumption 5), raw art in `art/kenney/` with `.gdignore` (Assumption 6).
 - v1.1 (2026-10-17): T014 checks the real window width (`get_window().size.x`) instead of the stretched viewport width, which never drops below 1280 with aspect "expand". T015 step 4 now starts the game narrow with `--resolution 800x720`. Agreed with the human.
 - v1.2 (2026-10-17): T016 lamps moved from the road center lines to the four corners (each at its drivers' near right), because center-line lamps read as belonging to both directions. Drawing only; timing and tests unchanged. Agreed with the human.
+- v1.3 (2026-10-17): Added T039b (through-traffic drives off the map and new cars drive in, instead of U-turning at the edge). Placed after T039 because `car.gd` changes in 7 tasks before then; its code gets written and tested at that point. Agreed with the human.
