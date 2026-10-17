@@ -88,19 +88,20 @@ static func body_velocity(body: Object) -> Vector2:
 	return Vector2.ZERO
 
 
-## A random road cell (not an intersection) with no car within 2 cells.
+## True when no car is within 1.5 cells of this cell's center.
+func is_road_clear(c: Vector2i) -> bool:
+	var p := CityMap.cell_to_world(c)
+	for car: Node2D in get_tree().get_nodes_in_group("cars"):
+		if car.global_position.distance_to(p) < CityMap.CELL * 1.5:
+			return false
+	return true
+
+
+## A random clear road cell that is not an intersection.
 func free_road_cell() -> Vector2i:
 	for attempt in 50:
 		var c := Vector2i(rng.randi_range(0, CityMap.W - 1), rng.randi_range(0, CityMap.H - 1))
 		c = city.nearest_road_cell(c)
-		if city.is_intersection(c):
-			continue
-		var p := CityMap.cell_to_world(c)
-		var clear := true
-		for car: Node2D in get_tree().get_nodes_in_group("cars"):
-			if car.global_position.distance_to(p) < CityMap.CELL * 2.5:
-				clear = false
-				break
-		if clear:
+		if not city.is_intersection(c) and is_road_clear(c):
 			return c
 	return city.nearest_road_cell(Vector2i(rng.randi_range(0, CityMap.W - 1), 0))

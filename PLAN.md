@@ -2513,7 +2513,7 @@ static func choose(d: CitizenData, minute: float) -> StringName:
   - Panic spreads exactly one step: a citizen fleeing a real danger emits a small `panic` danger, but citizens fleeing `panic` don't emit another. That keeps it from looping forever.
   - Owned cars pull out only when `Sim.is_road_clear()` says the curb is free.
 
-- [ ] **Step 1: Give cars owners and parking**
+- [x] **Step 1: Give cars owners and parking**
 
 Edit `scripts/car.gd` (6 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -2682,7 +2682,7 @@ replace with:
 		if not city.is_intersection(c) and is_road_clear(c):
 ```
 
-- [ ] **Step 2: Write the citizen**
+- [x] **Step 2: Write the citizen**
 
 Create `scripts/citizen.gd` with exactly this:
 
@@ -2894,8 +2894,8 @@ func _draw() -> void:
 		draw_string(ThemeDB.fallback_font, Vector2(-20, -10), "%s %s" % [goal, Mode.keys()[mode].to_lower()], HORIZONTAL_ALIGNMENT_LEFT, -1, 10)
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `546 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T022: Citizen walks, drives own car, flees danger" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `546 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T022: Citizen walks, drives own car, flees danger" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T023 [R1] Spawn 40 citizens and their cars, debug labels, test danger
 - **Owner:** Agent
@@ -6860,6 +6860,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | Phase 3 | Done | Checkpoint: `450 checks, 0 failed`. Pushed to GitHub. Next: T020. Start a fresh session. |
 | 2026-10-17 | T020 | Done | Sim clock (06:00 start, 2 sim min per real second). `455 checks, 0 failed`. Next: T021 (citizen data + brain). |
 | 2026-10-17 | T021 | Done | `CitizenData` + `CitizenBrain`. `546 checks, 0 failed`. Next: T022 (Citizen node). |
+| 2026-10-17 | T022 | Done | `Citizen` added (not spawned yet); cars can be owned/parked; `Sim.is_road_clear`. `546 checks, 0 failed`, smoke clean. Next: T023 (spawn citizens). |
 
 ## Change log
 

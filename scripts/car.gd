@@ -3,6 +3,9 @@ extends CharacterBody2D
 ## A lane-following car. It drives along a road path of cell centers and sits
 ## LANE_OFFSET px to the right of its heading, so oncoming cars never touch.
 ## A forward shape sensor brakes for anything ahead; Sim.lights says when to stop.
+## Ambient cars wander. An owned car stays PARKED until its owner calls drive_to().
+
+signal arrived  # an owned car reached its goal and parked
 
 enum State { DRIVING, STOPPED_AT_LIGHT, BRAKING, CRASHED, FLEEING, PARKED }
 
@@ -26,6 +29,9 @@ var path := PackedVector2Array()
 var path_i := 0
 var lane_side := 1.0          # +1 = right lane, -1 = oncoming lane
 var patience := 100.0
+var owner_id := -1            # citizen id, -1 = ambient traffic
+var parked_at := -1           # destination index while PARKED
+var _goal_dest := -1          # destination index an owner asked for
 var _lane_offset := Vector2.ZERO
 var _state_time := 0.0
 var _flee_left := 0.0
@@ -58,7 +64,36 @@ func _ready() -> void:
 func place(cell: Vector2i) -> void:
 	center = CityMap.cell_to_world(cell)
 	global_position = center
-	new_route()
+	_route()
+
+
+## Park in this destination's lot (slot picked by owner id).
+func park(dest_index: int) -> void:
+	_set_state(State.PARKED)
+	parked_at = dest_index
+	_goal_dest = -1
+	center = CityMap.cell_to_world(Sim.city.parking_slot(dest_index, maxi(owner_id, 0)))
+	global_position = center
+	rotation = 0.0
+	speed = 0.0
+	velocity = Vector2.ZERO
+	_lane_offset = Vector2.ZERO
+	_redraw_if_changed()
+
+
+## Owner asks to be driven to a destination. The car pulls out once the curb is clear.
+func drive_to(dest_index: int, driver_patience: float) -> void:
+	_goal_dest = dest_index
+	patience = driver_patience
+
+
+## Route to the owner's goal if there is one, otherwise wander.
+func _route() -> void:
+	if _goal_dest < 0:
+		new_route()
+		return
+	path = Sim.nav.road_path(CityMap.world_to_cell(center), Sim.city.destinations[_goal_dest].curb)
+	path_i = 1
 
 
 ## Pick a random road cell and path to it. Prefer routes that don't start
@@ -77,6 +112,11 @@ func _physics_process(delta: float) -> void:
 	_state_time += delta
 	match state:
 		State.PARKED:
+			if _goal_dest >= 0 and Sim.is_road_clear(Sim.city.destinations[parked_at].curb):
+				center = CityMap.cell_to_world(Sim.city.destinations[parked_at].curb)
+				parked_at = -1
+				_set_state(State.DRIVING)
+				_route()
 			return
 		State.CRASHED:
 			if _state_time > CRASH_SECONDS:
@@ -84,6 +124,10 @@ func _physics_process(delta: float) -> void:
 			_redraw_if_changed()
 			return
 	if path_i >= path.size():
+		if _goal_dest >= 0:
+			park(_goal_dest)
+			arrived.emit()
+			return
 		new_route()
 	_flee_left = maxf(0.0, _flee_left - delta)
 	var target := _target_speed()
@@ -232,7 +276,7 @@ func _update_patience(delta: float) -> void:
 		_stuck = 0.0
 	if _stuck > STUCK_SECONDS:
 		_stuck = 0.0
-		new_route()
+		_route()
 
 
 func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
