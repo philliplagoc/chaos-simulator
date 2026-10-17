@@ -1610,8 +1610,8 @@ func _draw() -> void:
 	var colors: Array = Sim.lights.get(cell, [Light.GREEN, Light.GREEN, Light.GREEN, Light.GREEN])
 	var blink_off := knocked_out and fmod(_t, 1.0) > 0.5
 	var k := CityMap.CELL * 1.0
-	# Lamp i sits where approach i's drivers wait: north, east, south, west.
-	var at: Array[Vector2] = [Vector2(0, -k), Vector2(k, 0), Vector2(0, k), Vector2(-k, 0)]
+	# Lamp i sits on the corner at its drivers' near right: NW, NE, SE, SW.
+	var at: Array[Vector2] = [Vector2(-k, -k), Vector2(k, -k), Vector2(k, k), Vector2(-k, k)]
 	for i in 4:
 		draw_circle(at[i], 5.0, Color.BLACK)
 		if not blink_off:
@@ -6841,8 +6841,10 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T015 | Done (post pending) | Human checked the district, pan/zoom, entrances and the banner (`--resolution 800x720`): looks good. Substack post 1 drafted in chat but NOT published yet; ask the human for the URL later. |
 | 2026-10-17 | Phase 2 | Done | Checkpoint: `438 checks, 0 failed`. Pushed to GitHub. Next: T016. Start a fresh session. |
 | 2026-10-17 | T016 | Done | Per-approach traffic lights + `Sim.lights` board; `sim.gd` now has layer constants, 40/20 counts, `light_for`, `body_velocity`, `free_road_cell`. `450 checks, 0 failed`, smoke clean. Next: T017 (Car). |
+| 2026-10-17 | T016 fix | Done | Lamps moved to the corners (change log v1.2). `450 checks, 0 failed`, smoke clean. Next: T017 (Car). |
 
 ## Change log
 
 - v1 (2026-10-16): First plan, from spec v2. Deviations agreed with the human: per-approach traffic lights (Assumption 3), a `PARKED` car state (Assumption 4), shapes until Phase 10 with buildings kept as shapes in v1 (Assumption 5), raw art in `art/kenney/` with `.gdignore` (Assumption 6).
 - v1.1 (2026-10-17): T014 checks the real window width (`get_window().size.x`) instead of the stretched viewport width, which never drops below 1280 with aspect "expand". T015 step 4 now starts the game narrow with `--resolution 800x720`. Agreed with the human.
+- v1.2 (2026-10-17): T016 lamps moved from the road center lines to the four corners (each at its drivers' near right), because center-line lamps read as belonging to both directions. Drawing only; timing and tests unchanged. Agreed with the human.

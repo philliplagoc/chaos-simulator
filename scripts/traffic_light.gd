@@ -54,8 +54,8 @@ func _draw() -> void:
 	var colors: Array = Sim.lights.get(cell, [Light.GREEN, Light.GREEN, Light.GREEN, Light.GREEN])
 	var blink_off := knocked_out and fmod(_t, 1.0) > 0.5
 	var k := CityMap.CELL * 1.0
-	# Lamp i sits where approach i's drivers wait: north, east, south, west.
-	var at: Array[Vector2] = [Vector2(0, -k), Vector2(k, 0), Vector2(0, k), Vector2(-k, 0)]
+	# Lamp i sits on the corner at its drivers' near right: NW, NE, SE, SW.
+	var at: Array[Vector2] = [Vector2(-k, -k), Vector2(k, -k), Vector2(k, k), Vector2(-k, k)]
 	for i in 4:
 		draw_circle(at[i], 5.0, Color.BLACK)
 		if not blink_off:
