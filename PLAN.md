@@ -1395,9 +1395,9 @@ func _ready() -> void:
 - **Depends on:** T013
 - **Files:** Create `scripts/desktop_banner.gd` · Modify `scripts/world.gd`
 - **Why:** spec scope: "phones see a 'best on desktop' note".
-- **Docs & gotchas:** in a web build, `OS.has_feature("web_android")` and `OS.has_feature("web_ios")` detect phones and tablets. A window narrower than 900 px also shows it.
+- **Docs & gotchas:** in a web build, `OS.has_feature("web_android")` and `OS.has_feature("web_ios")` detect phones and tablets. A window narrower than 900 px at startup also shows it. Use `get_window().size`, not the viewport: with stretch aspect "expand" the viewport never gets narrower than 1280.
 
-- [ ] **Step 1: Write the banner**
+- [x] **Step 1: Write the banner**
 
 Create `scripts/desktop_banner.gd` with exactly this:
 
@@ -1409,7 +1409,7 @@ extends CanvasLayer
 
 func _ready() -> void:
 	layer = 10
-	var narrow := get_viewport().get_visible_rect().size.x < 900
+	var narrow := get_window().size.x < 900  # real pixels; the stretched viewport never drops below 1280
 	if not (narrow or OS.has_feature("web_android") or OS.has_feature("web_ios")):
 		queue_free()
 		return
@@ -1421,7 +1421,7 @@ func _ready() -> void:
 	add_child(b)
 ```
 
-- [ ] **Step 2: Add it to the world**
+- [x] **Step 2: Add it to the world**
 
 Edit `scripts/world.gd` (1 change). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -1438,8 +1438,8 @@ replace with:
 	add_child(DesktopBanner.new())
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `438 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T014: best-on-desktop banner" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `438 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T014: best-on-desktop banner" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T015 🧑 HUMAN: Scroll the district, then write Substack post 1
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -1451,7 +1451,7 @@ Say to the human:
 1. Run `godot --path .`. You should see a green city with gray sidewalks, dark roads with yellow dashed center lines, white crosswalk stripes near the 4 intersections, and 9 colored blocks with names: Maple Flats, Tower One, Birch Court, Bean There, Central Park, First Bank, Corner Shop, Gas & Go, Parking.
 2. **Drag** with the left mouse button to pan and **scroll** to zoom. Check that you can reach all four edges, and that the view stops at the map edge instead of showing empty space.
 3. Every block has a **yellow square** on the sidewalk (its entrance) and a **yellow dot** on the road (its curb).
-4. Make the window narrow (under 900 px wide): a "Best on desktop" bar appears at the top. Click it to hide it.
+4. Close the game and start it narrow: `godot --path . --resolution 800x720`. A "Best on desktop" bar appears at the top. Click it to hide it. (The check runs once at startup, so dragging the window narrower later does nothing.)
 5. Reply "looks good", or describe what's off. A screenshot helps.
 6. **Substack post 1** (spec timeline, week 1): *"Why I'm building a chaos sim before GTA 6 + the stress test."* Ask Claude Code: "Draft Substack post 1 from DEVLOG.md and the T008/T009 FPS numbers." Edit it in your own voice, add a screenshot of the district, and publish. Mentioning GTA 6 is fine in the post itself; keep it out of the game and the itch page.
 
@@ -6837,7 +6837,9 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T011 | Done | `Nav` road/walk/jaywalk grids. `438 checks, 0 failed`. Next: T012 (World scene). |
 | 2026-10-17 | T012 | Done | World scene is now the main scene; `Sim` owns `city` and `nav`. `438 checks, 0 failed`, smoke clean. Next: T013 (camera). |
 | 2026-10-17 | T013 | Done | `CityCamera` pan/zoom added. `438 checks, 0 failed`, smoke clean. Human confirmed the T012 district looks right. Next: T014 (desktop banner). |
+| 2026-10-17 | T014 | Done | Banner added. Plan fix (change log v1.1): checks `get_window().size.x`, since the stretched viewport never goes below 1280 wide. `438 checks, 0 failed`, smoke clean. Next: T015 (human check + Substack post 1). |
 
 ## Change log
 
 - v1 (2026-10-16): First plan, from spec v2. Deviations agreed with the human: per-approach traffic lights (Assumption 3), a `PARKED` car state (Assumption 4), shapes until Phase 10 with buildings kept as shapes in v1 (Assumption 5), raw art in `art/kenney/` with `.gdignore` (Assumption 6).
+- v1.1 (2026-10-17): T014 checks the real window width (`get_window().size.x`) instead of the stretched viewport width, which never drops below 1280 with aspect "expand". T015 step 4 now starts the game narrow with `--resolution 800x720`. Agreed with the human.

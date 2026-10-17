@@ -21,6 +21,7 @@ const BLOCK_COLORS := {
 
 func _ready() -> void:
 	add_child(CityCamera.new())
+	add_child(DesktopBanner.new())
 	queue_redraw()
 
 
