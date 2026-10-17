@@ -202,7 +202,7 @@ Say to the human:
 - **Why:** spec step 1. The `Sim` autoload owns the only seeded RNG ("same seed rebuilds the same city"), and `EventBus` carries `danger` (R6).
 - **Docs & gotchas:** https://docs.godotengine.org/en/stable/tutorials/scripting/singletons_autoload.html. The project was created with the **Forward+** renderer, which can't run in a browser, so this task switches it to **Compatibility**. Tests run as a scene, not with `-s`: in `-s` mode autoloads like `Sim` don't exist and scripts that use them won't compile.
 
-- [ ] **Step 1: Write the failing test and the test runner**
+- [x] **Step 1: Write the failing test and the test runner**
 
 Create `tests/run_tests.tscn` with exactly this:
 
@@ -279,11 +279,11 @@ func run(t) -> bool:
 	return true
 ```
 
-- [ ] **Step 2: Run the test and confirm it fails**
+- [x] **Step 2: Run the test and confirm it fails**
   Run: `godot --headless --path . --import; godot --headless --path . res://tests/run_tests.tscn`
   Expected: `SCRIPT ERROR` lines about `res://scripts/sim.gd`, a line `FAIL: could not load res://tests/test_sim.gd ...`, and a last line ending in `1 failed`.
 
-- [ ] **Step 3: Write the autoloads and the project settings**
+- [x] **Step 3: Write the autoloads and the project settings**
 
 Create `scripts/sim.gd` with exactly this:
 
@@ -384,11 +384,11 @@ This becomes the Substack draft.
 - **Interesting decision:** every random number in the game comes from one seeded generator in `Sim`, so a seed replays the same starting city.
 ```
 
-- [ ] **Step 4: Run the test and confirm it passes**
+- [x] **Step 4: Run the test and confirm it passes**
   Run: `godot --headless --path . --import; godot --headless --path . res://tests/run_tests.tscn`
   Expected last line: `3 checks, 0 failed`
 
-- [ ] **Step 5: Create the repo and commit**
+- [x] **Step 5: Create the repo and commit**
   Run:
 ```powershell
 git init -b main
@@ -6822,6 +6822,9 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | Date | Task | Status | Notes for the next session |
 |---|---|---|---|
 | 2026-10-16 | Plan | Written | All code in this plan was tested in a scratch copy with Godot 4.7.2 (tests, a headless smoke run per task, 5-minute traffic runs on 4 seeds, a full 12-minute day, criminal trials on 5 seeds). Start with T001. |
+| 2026-10-17 | T001 | Done | Godot was already in `C:\Godot` with `godot.cmd` and on the user PATH. `godot --version` → `4.7.2.stable.official.ed1daf0bf`. |
+| 2026-10-17 | T002 | Done | Only the Web templates are installed (no desktop ones; the build is web only). `web_nothreads_release.zip` is present. |
+| 2026-10-17 | T003 | Done | `3 checks, 0 failed`. The repo already existed from the initial commit, so `git init` was skipped and T003 is the second commit, not the root. Next: T004 (human: GitHub sign-in). |
 
 ## Change log
 
