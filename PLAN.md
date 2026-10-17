@@ -742,7 +742,7 @@ Say to the human:
 - **Why:** R1 ("build the district from a fixed layout"), spec scope ("8 destinations").
 - **Docs & gotchas:** this is pure data (`RefCounted`, no nodes) so it can be tested. Destinations have an `entrance` (sidewalk cell where citizens go in), a `curb` (road cell where cars stop), a `lot` (parking cell inside the block) and 16 parking slots.
 
-- [ ] **Step 1: Write the failing test and register it**
+- [x] **Step 1: Write the failing test and register it**
 
 Create `tests/test_city_map.gd` with exactly this:
 
@@ -824,9 +824,9 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run and confirm it fails**
+- [x] **Step 2: Run and confirm it fails**
   Run TEST. Expected: `FAIL: could not load res://tests/test_city_map.gd ...` and a last line ending in `1 failed`.
-- [ ] **Step 3: Write `CityMap`**
+- [x] **Step 3: Write `CityMap`**
 
 Create `scripts/city_map.gd` with exactly this:
 
@@ -1007,9 +1007,9 @@ static func map_rect() -> Rect2:
 	return Rect2(0, 0, W * CELL, H * CELL)
 ```
 
-- [ ] **Step 4: Run and confirm it passes**
+- [x] **Step 4: Run and confirm it passes**
   Run TEST. Expected last line: `219 checks, 0 failed`
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
   Run: `git add -A; git commit -m "T010: CityMap district layout" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** the test passes.
@@ -6833,6 +6833,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T008 | PASS (Chrome only) | Chrome 60/60/60 FPS at 60/120/240 dots. Firefox NOT tested (human has no Firefox; agreed to assume the same for now). Keep 40 citizens + 20 cars. Firefox must still be checked before launch (T047 and the Phase 10 browser checks). Next: T009 (human: itch.io draft). |
 | 2026-10-17 | T009 | Done | itch.io draft page made at https://flippertheripper.itch.io/my-chaos-simulator (still Draft; HTML, 1280x720, SharedArrayBuffer off). Chrome 60 FPS on itch. Firefox not tested. |
 | 2026-10-17 | Phase 1 | Done | Checkpoint: `3 checks, 0 failed`. Performance PASS in Chrome (local and itch); Firefox still to check before launch. Next: T010 (CityMap). Start a fresh session. |
+| 2026-10-17 | T010 | Done | `CityMap` added. `219 checks, 0 failed`. Next: T011 (Nav grids). |
 
 ## Change log
 

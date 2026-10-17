@@ -6,6 +6,7 @@ extends Node
 
 const SUITES: Array[String] = [
 	"res://tests/test_sim.gd",
+	"res://tests/test_city_map.gd",
 ]
 
 var checks := 0
