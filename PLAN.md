@@ -636,7 +636,7 @@ renderer/rendering_method.mobile="gl_compatibility"
 - **Why:** R11, D1. Thread Support OFF gives a single-threaded build that needs no special server headers, which itch.io requires.
 - **Docs & gotchas:** https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_web.html. The output folder must exist before exporting. The preset name must be exactly `Web`. `include_filter` adds `data/*.json`, because plain JSON files aren't resources and would otherwise be left out of the build (the bios need it later).
 
-- [ ] **Step 1: Create the preset**
+- [x] **Step 1: Create the preset**
 
 Create `export_presets.cfg` with exactly this:
 
@@ -678,7 +678,7 @@ html/experimental_virtual_keyboard=false
 progressive_web_app/enabled=false
 ```
 
-- [ ] **Step 2: Export**
+- [x] **Step 2: Export**
   Run:
 ```powershell
 New-Item -ItemType Directory -Force build\web | Out-Null
@@ -686,7 +686,7 @@ godot --headless --path . --export-release "Web" build/web/index.html
 Get-ChildItem build\web | Select-Object Name, Length
 ```
   Expected: the export finishes without `ERROR: Cannot export project`, and `build\web` contains at least `index.html`, `index.js`, `index.wasm` and `index.pck`.
-- [ ] **Step 3: Commit** (the build folder is git-ignored; only the preset is committed)
+- [x] **Step 3: Commit** (the build folder is git-ignored; only the preset is committed)
   Run: `git add -A; git commit -m "T007: Web export preset (single-threaded)" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** `build\web\index.html` exists.
@@ -6829,6 +6829,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T005 | Done | Three Kenney packs unzipped into `art/kenney/` (racing, shooter, city; 2,088 files) with `.gdignore`. Both check sprites found. |
 | 2026-10-17 | Phase 0 | Done | Checkpoint: `3 checks, 0 failed`. Next: T006 (performance spike). Start a fresh session. |
 | 2026-10-17 | T006 | Done | Spike scene is the main scene. `3 checks, 0 failed`; smoke run clean. Next: T007 (Web export preset). |
+| 2026-10-17 | T007 | Done | Web export works: `build\web` has index.html/js/wasm (39.5 MB)/pck, no errors. Next: T008 (human: FPS check in Chrome and Firefox). |
 
 ## Change log
 
