@@ -2904,7 +2904,7 @@ func _draw() -> void:
 - **Why:** R1 ("spawn 40 citizens"), spec step 5 ("toggleable debug label with the current goal", "a test danger I trigger with right-click").
 - **Docs & gotchas:** citizens are generated first, so the seed decides who owns a car. Owned cars start parked at home, and ambient traffic fills the rest up to `Sim.CAR_COUNT`. F3 toggles labels; right-click emits `danger(…, 150, &"test")`.
 
-- [ ] **Step 1: Write the ring effect**
+- [x] **Step 1: Write the ring effect**
 
 Create `scripts/fx_ring.gd` with exactly this:
 
@@ -2941,7 +2941,7 @@ func _draw() -> void:
 	draw_arc(Vector2.ZERO, radius * k, 0.0, TAU, 32, Color(color, 1.0 - k), 3.0)
 ```
 
-- [ ] **Step 2: Spawn people and cars, add F3 and right-click**
+- [x] **Step 2: Spawn people and cars, add F3 and right-click**
 
 Edit `scripts/world.gd` (3 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3019,8 +3019,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		FxRing.spawn(self, at, 150.0, Color.ORANGE_RED)
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `546 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T023: spawn 40 citizens, owned cars, F3 labels, right-click danger" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `546 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T023: spawn 40 citizens, owned cars, F3 labels, right-click danger" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T024 🧑 HUMAN: Two rush hours and a scatter test, then post 2
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -6861,6 +6861,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T020 | Done | Sim clock (06:00 start, 2 sim min per real second). `455 checks, 0 failed`. Next: T021 (citizen data + brain). |
 | 2026-10-17 | T021 | Done | `CitizenData` + `CitizenBrain`. `546 checks, 0 failed`. Next: T022 (Citizen node). |
 | 2026-10-17 | T022 | Done | `Citizen` added (not spawned yet); cars can be owned/parked; `Sim.is_road_clear`. `546 checks, 0 failed`, smoke clean. Next: T023 (spawn citizens). |
+| 2026-10-17 | T023 | Done | 40 citizens + owned cars parked at home + ambient traffic; F3 labels; right-click test danger. `546 checks, 0 failed`, smoke clean. Next: T024 (human: rush hours + scatter, post 2). |
 
 ## Change log
 

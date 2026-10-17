@@ -1,5 +1,6 @@
 extends Node2D
 ## Root of the game. Draws the district and spawns everything in it.
+## Keys: F3 toggles citizen goal labels. Right-click drops a test danger.
 
 const COLORS := {
 	CityMap.Cell.BLOCK: Color("3f6b3a"),
@@ -27,7 +28,7 @@ func _ready() -> void:
 	add_child(CityCamera.new())
 	add_child(DesktopBanner.new())
 	_spawn_lights()
-	_spawn_cars()
+	_spawn_people_and_cars()
 	queue_redraw()
 
 
@@ -41,12 +42,39 @@ func _spawn_lights() -> void:
 		i += 1
 
 
-func _spawn_cars() -> void:
-	for n in Sim.CAR_COUNT:
-		var car := Car.new()
-		car.color = CAR_COLORS[Sim.rng.randi_range(0, CAR_COLORS.size() - 1)]
-		add_child(car)
-		car.place(Sim.free_road_cell())
+## Citizens first (so the seed decides who owns a car), then their cars parked
+## at home, then ambient traffic to make up Sim.CAR_COUNT.
+func _spawn_people_and_cars() -> void:
+	var people := CitizenData.generate_all(Sim.CITIZEN_COUNT, Sim.city, Sim.rng, Sim.CAR_COUNT - 4)
+	var cars := 0
+	for d in people:
+		var c := Citizen.new()
+		c.data = d
+		if d.has_car:
+			var car := _new_car()
+			car.owner_id = d.id
+			car.park(d.home)
+			c.car = car
+			cars += 1
+		add_child(c)
+	for n in Sim.CAR_COUNT - cars:
+		_new_car().place(Sim.free_road_cell())
+
+
+func _new_car() -> Car:
+	var car := Car.new()
+	car.color = CAR_COLORS[Sim.rng.randi_range(0, CAR_COLORS.size() - 1)]
+	add_child(car)
+	return car
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
+		Citizen.show_debug = not Citizen.show_debug
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		var at := get_global_mouse_position()
+		EventBus.danger.emit(at, 150.0, &"test")
+		FxRing.spawn(self, at, 150.0, Color.ORANGE_RED)
 
 
 func _draw() -> void:
