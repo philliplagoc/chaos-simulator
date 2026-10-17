@@ -10,5 +10,5 @@ This becomes the Substack draft.
 
 ## 2026-10-17
 - **Built:** finished Phase 0. Godot is on PATH, the Web export templates are installed, the code is on GitHub (https://github.com/philliplagoc/chaos-simulator), and the Kenney CC0 art packs are stored in `art/kenney/`.
-- **Broke:** `godot` isn't found from Claude Code's `!` prompt, because that runs Git Bash, which can't find `godot.cmd` by name. Running Godot from PowerShell works. Closing the editor before the template download finished meant installing the templates twice.
+- **Broke:** `godot` isn't found from Claude Code's `!` prompt, because that runs Git Bash, which can't find `godot.cmd` by name. Running Godot from PowerShell works. The first editor session ended without the templates installed, so we opened the editor a second time.
 - **Interesting decision:** the raw art packs sit behind a `.gdignore` file, so Godot doesn't import 2,000+ images we won't use. Only the dozen sprites picked in Phase 10 get copied into `art/sprites/`.
