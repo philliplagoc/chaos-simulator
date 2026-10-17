@@ -1322,7 +1322,7 @@ renderer/rendering_method.mobile="gl_compatibility"
 - **Why:** spec scope: "scrolling district with drag-to-pan and scroll-to-zoom", clamped to the map.
 - **Docs & gotchas:** https://docs.godotengine.org/en/stable/classes/class_camera2d.html. Divide mouse motion by `zoom` so panning matches the cursor at any zoom level.
 
-- [ ] **Step 1: Write the camera**
+- [x] **Step 1: Write the camera**
 
 Create `scripts/city_camera.gd` with exactly this:
 
@@ -1367,7 +1367,7 @@ func _clamp() -> void:
 	position.y = clampf(position.y, m.position.y + half.y, maxf(m.end.y - half.y, m.position.y + half.y))
 ```
 
-- [ ] **Step 2: Add it to the world**
+- [x] **Step 2: Add it to the world**
 
 Edit `scripts/world.gd` (1 change). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -1384,8 +1384,8 @@ func _ready() -> void:
 	add_child(CityCamera.new())
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `438 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T013: pan and zoom camera" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `438 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T013: pan and zoom camera" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** tests and smoke pass.
 **If it fails:** if the view jumps when zooming, check that `position += before - get_global_mouse_position()` runs *after* the zoom changes.
@@ -6836,6 +6836,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T010 | Done | `CityMap` added. `219 checks, 0 failed`. Next: T011 (Nav grids). |
 | 2026-10-17 | T011 | Done | `Nav` road/walk/jaywalk grids. `438 checks, 0 failed`. Next: T012 (World scene). |
 | 2026-10-17 | T012 | Done | World scene is now the main scene; `Sim` owns `city` and `nav`. `438 checks, 0 failed`, smoke clean. Next: T013 (camera). |
+| 2026-10-17 | T013 | Done | `CityCamera` pan/zoom added. `438 checks, 0 failed`, smoke clean. Human confirmed the T012 district looks right. Next: T014 (desktop banner). |
 
 ## Change log
 

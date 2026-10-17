@@ -20,6 +20,7 @@ const BLOCK_COLORS := {
 
 
 func _ready() -> void:
+	add_child(CityCamera.new())
 	queue_redraw()
 
 
