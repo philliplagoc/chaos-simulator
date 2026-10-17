@@ -2237,7 +2237,7 @@ static func sim_to_seconds(sim_minutes: float) -> float:
   - `Array.shuffle()` uses the global RNG, so the code has its own Fisher-Yates shuffle.
   - Shifts start between 06:30 and 09:00 (±20 min jitter), and workers leave 45 minutes early. That makes the morning rush. The evening rush comes from shifts ending around 16:30–18:00.
 
-- [ ] **Step 1: Write the failing test and register it**
+- [x] **Step 1: Write the failing test and register it**
 
 Create `tests/test_citizens.gd` with exactly this:
 
@@ -2340,8 +2340,8 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_citizens.gd ...`
-- [ ] **Step 3: Write the data and the brain**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_citizens.gd ...`
+- [x] **Step 3: Write the data and the brain**
 
 Create `scripts/citizen_data.gd` with exactly this:
 
@@ -2500,8 +2500,8 @@ static func choose(d: CitizenData, minute: float) -> StringName:
 	return best
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `546 checks, 0 failed`
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T021: seeded citizen data and utility-scoring brain" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run and confirm it passes**: TEST → `546 checks, 0 failed`
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T021: seeded citizen data and utility-scoring brain" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T022 [R5] [R6] The `Citizen`: walk, drive own car, flee
 - **Owner:** Agent
@@ -6859,6 +6859,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T019 | Done | Human watched 5 minutes: 0 crashes, no pile-ups. They asked for cars to leave town instead of U-turning at the edge: added as T039b (change log v1.3). |
 | 2026-10-17 | Phase 3 | Done | Checkpoint: `450 checks, 0 failed`. Pushed to GitHub. Next: T020. Start a fresh session. |
 | 2026-10-17 | T020 | Done | Sim clock (06:00 start, 2 sim min per real second). `455 checks, 0 failed`. Next: T021 (citizen data + brain). |
+| 2026-10-17 | T021 | Done | `CitizenData` + `CitizenBrain`. `546 checks, 0 failed`. Next: T022 (Citizen node). |
 
 ## Change log
 

@@ -9,6 +9,7 @@ const SUITES: Array[String] = [
 	"res://tests/test_city_map.gd",
 	"res://tests/test_nav.gd",
 	"res://tests/test_traffic_light.gd",
+	"res://tests/test_citizens.gd",
 ]
 
 var checks := 0
