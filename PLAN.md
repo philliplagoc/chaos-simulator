@@ -2119,7 +2119,7 @@ Say to the human:
 - **Why:** R3: "1 real second = 2 sim minutes (a full day in 12 real minutes), starting at 6:00".
 - **Docs & gotchas:** the clock adds the scaled `delta`, so pause (time scale 0) and 3× speed (T043) apply to it automatically.
 
-- [ ] **Step 1: Add the failing clock tests**
+- [x] **Step 1: Add the failing clock tests**
 
 Replace the whole file `tests/test_sim.gd` with exactly this:
 
@@ -2150,8 +2150,8 @@ func run(t) -> bool:
 	return true
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_sim.gd ...` (`format_clock` doesn't exist yet).
-- [ ] **Step 3: Add the clock**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_sim.gd ...` (`format_clock` doesn't exist yet).
+- [x] **Step 3: Add the clock**
 
 Edit `scripts/sim.gd` (3 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -2224,8 +2224,8 @@ static func sim_to_seconds(sim_minutes: float) -> float:
 	return sim_minutes / SIM_MINUTES_PER_SECOND
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `455 checks, 0 failed`
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T020: sim clock, 06:00 start, 12-minute day" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run and confirm it passes**: TEST → `455 checks, 0 failed`
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T020: sim clock, 06:00 start, 12-minute day" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T021 [R2] [R5] Citizen data and the utility brain
 - **Owner:** Agent
@@ -6858,6 +6858,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T018 | Done | 20 cars spawn on seeded free road cells. `450 checks, 0 failed`, smoke clean. Next: T019 (human: 5 minutes of traffic). |
 | 2026-10-17 | T019 | Done | Human watched 5 minutes: 0 crashes, no pile-ups. They asked for cars to leave town instead of U-turning at the edge: added as T039b (change log v1.3). |
 | 2026-10-17 | Phase 3 | Done | Checkpoint: `450 checks, 0 failed`. Pushed to GitHub. Next: T020. Start a fresh session. |
+| 2026-10-17 | T020 | Done | Sim clock (06:00 start, 2 sim min per real second). `455 checks, 0 failed`. Next: T021 (citizen data + brain). |
 
 ## Change log
 

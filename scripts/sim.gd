@@ -1,6 +1,6 @@
 extends Node
-## Autoload. Owns the only seeded RNG, the shared district map + grids, and the
-## traffic light board. Never call the global randi()/randf().
+## Autoload. Owns the only seeded RNG, the sim clock, the shared district map +
+## grids, and the traffic light board. Never call the global randi()/randf().
 
 ## Collision layer bits (use in collision_layer / collision_mask).
 const L_CARS := 1
@@ -13,7 +13,14 @@ const L_WALLS := 16
 const CITIZEN_COUNT := 40
 const CAR_COUNT := 20
 
+## Clock: 1 real second = 2 sim minutes, so a full day takes 12 real minutes.
+const SIM_MINUTES_PER_SECOND := 2.0
+const DAY_START := 6 * 60
+const DAY_MINUTES := 24 * 60
+
 var seed_value: int = 2026
+## Sim minutes since midnight of day 1. Engine.time_scale (pause, 1x, 3x) scales it.
+var minutes: float = DAY_START
 var rng := RandomNumberGenerator.new()
 var city := CityMap.new()
 var nav := Nav.new(city)
@@ -31,6 +38,30 @@ func start_city(new_seed: int) -> void:
 	seed_value = new_seed
 	rng = make_rng(new_seed)
 	lights.clear()
+	minutes = DAY_START
+	Engine.time_scale = 1.0
+
+
+func _process(delta: float) -> void:
+	minutes += delta * SIM_MINUTES_PER_SECOND
+
+
+func minute_of_day() -> float:
+	return fposmod(minutes, DAY_MINUTES)
+
+
+func clock_text() -> String:
+	return format_clock(minutes)
+
+
+static func format_clock(m: float) -> String:
+	var d := int(fposmod(m, DAY_MINUTES))
+	return "%02d:%02d" % [d / 60, d % 60]
+
+
+## Real seconds for a span of sim minutes (at 1x speed).
+static func sim_to_seconds(sim_minutes: float) -> float:
+	return sim_minutes / SIM_MINUTES_PER_SECOND
 
 
 static func make_rng(s: int) -> RandomNumberGenerator:
