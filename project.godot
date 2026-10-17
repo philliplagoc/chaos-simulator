@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Chaos Simulator"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+run/main_scene="res://scenes/spike/spike.tscn"
 config/icon="res://icon.svg"
 
 [autoload]

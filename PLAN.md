@@ -471,7 +471,7 @@ Agent, after the human confirms:
 - **Why:** R11 / risk #1, the riskiest part of the spec, tested on its own first.
 - **Docs & gotchas:** https://docs.godotengine.org/en/stable/classes/class_astargrid2d.html. Call `update()` after setting `region`, `cell_size` and `offset`, and only *then* mark cells solid (`update()` clears solidity). `get_point_path()` returns cell centers when `offset` is half a cell. Never use `Array.shuffle()` or `randi()`: use `Sim.rng`.
 
-- [ ] **Step 1: Write the spike**
+- [x] **Step 1: Write the spike**
 
 Create `scenes/spike/spike.tscn` with exactly this:
 
@@ -580,7 +580,7 @@ func _draw() -> void:
 		draw_rect(Rect2(Vector2(c) * CELL, Vector2(CELL, CELL)), Color("3a3a3a"))
 ```
 
-- [ ] **Step 2: Make the spike the main scene**
+- [x] **Step 2: Make the spike the main scene**
 
 Replace the whole file `project.godot` with exactly this:
 
@@ -620,10 +620,10 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 ```
 
-- [ ] **Step 3: Run the tests and a headless smoke run**
+- [x] **Step 3: Run the tests and a headless smoke run**
   Run: `godot --headless --path . --import; godot --headless --path . res://tests/run_tests.tscn` → expected last line `3 checks, 0 failed`
   Run: `godot --headless --path . --quit-after 600` → expected: only the `Godot Engine v4.7.2...` line, no `SCRIPT ERROR`.
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   Run: `git add -A; git commit -m "T006: performance spike with 60 path-finding dots" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** tests pass and the smoke run is clean. The human looks at it in T008.
@@ -6828,6 +6828,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T004 | Done | Repo https://github.com/philliplagoc/chaos-simulator (public) already existed with `origin` set, so `gh repo create` was skipped. Pushed `main` (fast-forward to `6fbbd0b`). `gh` is signed in to github.com as philliplagoc, and the school account stays signed in. |
 | 2026-10-17 | T005 | Done | Three Kenney packs unzipped into `art/kenney/` (racing, shooter, city; 2,088 files) with `.gdignore`. Both check sprites found. |
 | 2026-10-17 | Phase 0 | Done | Checkpoint: `3 checks, 0 failed`. Next: T006 (performance spike). Start a fresh session. |
+| 2026-10-17 | T006 | Done | Spike scene is the main scene. `3 checks, 0 failed`; smoke run clean. Next: T007 (Web export preset). |
 
 ## Change log
 
