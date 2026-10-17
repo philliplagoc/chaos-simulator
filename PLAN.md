@@ -1742,7 +1742,7 @@ func _spawn_lights() -> void:
   - If the body gets shoved more than 10 px off its path point, the car waits for it to catch up.
   - A car stuck for 40 s reroutes.
 
-- [ ] **Step 1: Write the car**
+- [x] **Step 1: Write the car**
 
 Create `scripts/car.gd` with exactly this:
 
@@ -2014,8 +2014,8 @@ func _draw() -> void:
 		draw_circle(Vector2(0, 0), 7.0, Color(0.3, 0.3, 0.3, 0.7))
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `450 checks, 0 failed`. SMOKE → clean. (No cars are spawned yet.)
-- [ ] **Step 3: Commit**: `git add -A; git commit -m "T017: Car with lane driving, lights, braking and crashes" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 2: Run tests and smoke**: TEST → `450 checks, 0 failed`. SMOKE → clean. (No cars are spawned yet.)
+- [x] **Step 3: Commit**: `git add -A; git commit -m "T017: Car with lane driving, lights, braking and crashes" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** it compiles (tests and smoke clean).
 **If it fails:** `Invalid call. Nonexistent function 'body_velocity'` means `sim.gd` isn't the T016 version.
@@ -6842,6 +6842,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | Phase 2 | Done | Checkpoint: `438 checks, 0 failed`. Pushed to GitHub. Next: T016. Start a fresh session. |
 | 2026-10-17 | T016 | Done | Per-approach traffic lights + `Sim.lights` board; `sim.gd` now has layer constants, 40/20 counts, `light_for`, `body_velocity`, `free_road_cell`. `450 checks, 0 failed`, smoke clean. Next: T017 (Car). |
 | 2026-10-17 | T016 fix | Done | Lamps moved to the corners (change log v1.2). `450 checks, 0 failed`, smoke clean. Next: T017 (Car). |
+| 2026-10-17 | T017 | Done | `Car` added (not spawned yet). `450 checks, 0 failed`, smoke clean. Next: T018 (spawn 20 cars). |
 
 ## Change log
 
