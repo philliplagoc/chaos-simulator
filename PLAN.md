@@ -6831,7 +6831,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T006 | Done | Spike scene is the main scene. `3 checks, 0 failed`; smoke run clean. Next: T007 (Web export preset). |
 | 2026-10-17 | T007 | Done | Web export works: `build\web` has index.html/js/wasm (39.5 MB)/pck, no errors. Next: T008 (human: FPS check in Chrome and Firefox). |
 | 2026-10-17 | T008 | PASS (Chrome only) | Chrome 60/60/60 FPS at 60/120/240 dots. Firefox NOT tested (human has no Firefox; agreed to assume the same for now). Keep 40 citizens + 20 cars. Firefox must still be checked before launch (T047 and the Phase 10 browser checks). Next: T009 (human: itch.io draft). |
-| 2026-10-17 | T009 | Done | itch.io draft page made (HTML, 1280x720, SharedArrayBuffer off). Chrome 60 FPS on itch. Firefox not tested. |
+| 2026-10-17 | T009 | Done | itch.io draft page made at https://flippertheripper.itch.io/my-chaos-simulator (still Draft; HTML, 1280x720, SharedArrayBuffer off). Chrome 60 FPS on itch. Firefox not tested. |
 | 2026-10-17 | Phase 1 | Done | Checkpoint: `3 checks, 0 failed`. Performance PASS in Chrome (local and itch); Firefox still to check before launch. Next: T010 (CityMap). Start a fresh session. |
 
 ## Change log
