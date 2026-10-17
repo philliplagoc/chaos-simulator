@@ -1155,7 +1155,7 @@ func walk_path(from: Vector2i, to: Vector2i, impatient := false) -> PackedVector
 - **Why:** R1, spec step 3 ("every destination has a marked entrance").
 - **Docs & gotchas:** `_draw()` runs once and is cached until `queue_redraw()`, so drawing 5,184 cells costs nothing per frame. `Sim` now owns the shared `CityMap` and `Nav`, so agents don't need references to the world.
 
-- [ ] **Step 1: Give `Sim` the map**
+- [x] **Step 1: Give `Sim` the map**
 
 Replace the whole file `scripts/sim.gd` with exactly this:
 
@@ -1186,7 +1186,7 @@ static func make_rng(s: int) -> RandomNumberGenerator:
 	return r
 ```
 
-- [ ] **Step 2: Create the world scene**
+- [x] **Step 2: Create the world scene**
 
 Create `scenes/world/world.tscn` with exactly this:
 
@@ -1269,7 +1269,7 @@ func _draw_lane_lines() -> void:
 			draw_line(Vector2(x, y * CityMap.CELL + half), Vector2(x + 10, y * CityMap.CELL + half), Color("e0c050"), 1.5)
 ```
 
-- [ ] **Step 3: Make it the main scene**
+- [x] **Step 3: Make it the main scene**
 
 Replace the whole file `project.godot` with exactly this:
 
@@ -1309,8 +1309,8 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 ```
 
-- [ ] **Step 4: Run tests and smoke**: TEST → `438 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T012: World scene draws the district and entrances" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run tests and smoke**: TEST → `438 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T012: World scene draws the district and entrances" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** tests and smoke pass. (You can't scroll yet; that's T013.)
 **If it fails:** `Invalid access to property or key 'home'` in `_draw` means a `LAYOUT` type is missing from `BLOCK_COLORS`.
@@ -6835,6 +6835,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | Phase 1 | Done | Checkpoint: `3 checks, 0 failed`. Performance PASS in Chrome (local and itch); Firefox still to check before launch. Next: T010 (CityMap). Start a fresh session. |
 | 2026-10-17 | T010 | Done | `CityMap` added. `219 checks, 0 failed`. Next: T011 (Nav grids). |
 | 2026-10-17 | T011 | Done | `Nav` road/walk/jaywalk grids. `438 checks, 0 failed`. Next: T012 (World scene). |
+| 2026-10-17 | T012 | Done | World scene is now the main scene; `Sim` owns `city` and `nav`. `438 checks, 0 failed`, smoke clean. Next: T013 (camera). |
 
 ## Change log
 

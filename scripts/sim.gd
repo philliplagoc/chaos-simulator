@@ -1,8 +1,11 @@
 extends Node
-## Autoload. Owns the only seeded RNG. Never call the global randi()/randf().
+## Autoload. Owns the only seeded RNG and the shared district map + grids.
+## Never call the global randi()/randf().
 
 var seed_value: int = 2026
 var rng := RandomNumberGenerator.new()
+var city := CityMap.new()
+var nav := Nav.new(city)
 
 
 func _ready() -> void:
