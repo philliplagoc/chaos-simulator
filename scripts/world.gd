@@ -50,16 +50,23 @@ func _ready() -> void:
 	queue_redraw()
 
 
-## Invisible walls around the map so tumbling bodies bounce back in.
+## Invisible walls around the map and on every building, so tumbling bodies
+## bounce off them. Each building leaves its 3 entrance-side rows open for
+## the parking slots and the gas pumps.
 func _spawn_walls() -> void:
 	var m := CityMap.map_rect()
 	var t := 64.0
-	for r: Rect2 in [
+	var walls: Array[Rect2] = [
 		Rect2(m.position.x - t, m.position.y - t, m.size.x + 2 * t, t),
 		Rect2(m.position.x - t, m.end.y, m.size.x + 2 * t, t),
 		Rect2(m.position.x - t, m.position.y, t, m.size.y),
 		Rect2(m.end.x, m.position.y, t, m.size.y),
-	]:
+	]
+	for d in Sim.city.destinations:
+		var cells: Rect2i = d.rect
+		cells = cells.grow_individual(0, -3 if d.side == -1 else 0, 0, -3 if d.side == 1 else 0)
+		walls.append(Rect2(Vector2(cells.position) * CityMap.CELL, Vector2(cells.size) * CityMap.CELL).grow(-12))
+	for r in walls:
 		var wall := StaticBody2D.new()
 		wall.collision_layer = Sim.L_WALLS
 		wall.collision_mask = 0
