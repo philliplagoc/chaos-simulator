@@ -3057,7 +3057,7 @@ Say to the human:
 - **Why:** R2 ("a bio from a pre-written pool of ~300"), S2.
 - **Docs & gotchas:** JSON keys must match the profession names exactly. The test checks the count, length, uniqueness and a banned-word list; the human skims the bios in T028. The banned-word pattern is a GDScript **raw string** (`r"..."`) so `\b` (word boundary) reaches the regex engine intact. Without it, "skill" would trip "kill".
 
-- [ ] **Step 1: Write the failing test and register it**
+- [x] **Step 1: Write the failing test and register it**
 
 Create `tests/test_bios.gd` with exactly this:
 
@@ -3136,8 +3136,8 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: data/bios.json exists` (and more), last line ending in `failed` with a non-zero count.
-- [ ] **Step 3: Write `data/bios.json`**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: data/bios.json exists` (and more), last line ending in `failed` with a non-zero count.
+- [x] **Step 3: Write `data/bios.json`**
   Write the file yourself (no script, no external service), following these rules exactly:
   - A JSON object with exactly six keys: `"office_worker"`, `"bank_teller"`, `"barista"`, `"shop_clerk"`, `"delivery_driver"`, `"retiree"`. Each value is an array of **exactly 50** strings.
   - Each bio is one or two sentences, **5 to 30 words**, PG-13, funny, in the voice of a quirky small city. It fits the profession.
@@ -3151,8 +3151,8 @@ func check(ok: bool, what: String) -> void:
     - shop_clerk: `"Knows exactly which aisle everything is in except the thing you're holding."`
     - delivery_driver: `"Has a personal rivalry with one specific mailbox on Birch Court."`
     - retiree: `"Feeds the park pigeons on a strict schedule and keeps a spreadsheet of their moods."`
-- [ ] **Step 4: Run and confirm it passes**: TEST → `1457 checks, 0 failed`
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T025: 300 citizen bios" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run and confirm it passes**: TEST → `1457 checks, 0 failed`
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T025: 300 citizen bios" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **Done when:** the bios test passes with 0 failures.
 **If it fails:** each `FAIL:` line quotes the bio that broke a rule. Fix those lines and re-run TEST. A JSON parse failure (`bios.json is a JSON object` failing) is usually a trailing comma or a curly quote.
@@ -6867,6 +6867,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T023 | Done | 40 citizens + owned cars parked at home + ambient traffic; F3 labels; right-click test danger. `546 checks, 0 failed`, smoke clean. Next: T024 (human: rush hours + scatter, post 2). |
 | 2026-10-17 | T024 | Done (post pending) | Human: morning rush, midday quiet, evening rush and right-click scatter all yes. Feedback: fleeing citizens ran through buildings → fixed (change log v1.4). Jaywalking + cars stopping is by design; walking through cars is partly fixed by T035; the clock arrives in T043. Substack post 2 NOT published yet; ask the human for the URL later. |
 | 2026-10-17 | Phase 4 | Done | Checkpoint: `546 checks, 0 failed`, smoke clean. Pushed to GitHub. Next: T025. Start a fresh session. |
+| 2026-10-17 | T025 | Done | 300 bios in `data/bios.json` (50 per profession, max 5 per opening word, ASCII). `1457 checks, 0 failed`. Next: T026 (give every citizen a bio). |
 
 ## Change log
 
