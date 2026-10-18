@@ -30,6 +30,12 @@ func blast_radius() -> float:
 	return 170.0 if is_pump else 140.0
 
 
+## A car that runs into us calls this (see Hydrant.take_hit).
+func take_hit(v: Vector2) -> void:
+	if v.length() >= 60.0:
+		ignite()
+
+
 func ignite() -> void:
 	if _fuse < 0.0 and not exploded:
 		_fuse = FUSE_SECONDS

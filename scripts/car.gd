@@ -4,6 +4,8 @@ extends CharacterBody2D
 ## LANE_OFFSET px to the right of its heading, so oncoming cars never touch.
 ## A forward shape sensor brakes for anything ahead; Sim.lights says when to stop.
 ## Ambient cars wander. An owned car stays PARKED until its owner calls drive_to().
+## A hard hit swaps it for a spinning ImpactBody; once that settles the car
+## drives back to the nearest lane, or stays CRASHED if the hit was huge.
 
 signal arrived  # an owned car reached its goal and parked
 
@@ -15,7 +17,9 @@ const ACCEL := 120.0
 const DECEL := 260.0
 const LANE_OFFSET := 8.0
 const TURN_SPEED := 40.0
-const CRASH_SPEED := 75.0
+const CRASH_SPEED := 75.0     # fender-bender: stop and sit there
+const SPINOUT_SPEED := 130.0  # spin out, then drive on
+const WRECK_SPEED := 220.0    # spin out and stay wrecked
 const CRASH_SECONDS := 20.0   # 40 sim minutes, then the car is towed
 const STUCK_SECONDS := 40.0   # longer than a full light cycle (38 s)
 const FLEE_SECONDS := 3.0
@@ -40,6 +44,10 @@ var _stuck := 0.0
 var _slippery := 0            # how many puddles we're in
 var _launch_left := 0.0       # seconds left flying straight (debug launch)
 var _impact_velocity := Vector2.ZERO
+var _since_impact := 99.0
+var _spinning := false
+var _spin_hard := false
+var _spun_from_lot := -1
 var _drawn_state := -1
 var _sensor := ShapeCast2D.new()
 
@@ -123,6 +131,9 @@ func new_route() -> void:
 
 func _physics_process(delta: float) -> void:
 	_state_time += delta
+	_since_impact += delta
+	if _spinning:
+		return  # the ImpactBody is doing the moving
 	match state:
 		State.PARKED:
 			if _goal_dest >= 0 and Sim.is_road_clear(Sim.city.destinations[parked_at].curb):
@@ -260,17 +271,36 @@ func _advance(dist: float) -> void:
 func _check_crash() -> void:
 	for i in get_slide_collision_count():
 		var col := get_slide_collision(i)
-		var impact := (lane_velocity() - Sim.body_velocity(col.get_collider())).length()
-		if impact >= CRASH_SPEED:
+		var other := col.get_collider()
+		var mine := lane_velocity()
+		var impact := (mine - Sim.body_velocity(other)).length()
+		if impact < CRASH_SPEED:
+			continue
+		if other.has_method("take_hit"):
+			other.call("take_hit", mine)  # we're touching it, so we may tell it
+		if impact >= SPINOUT_SPEED:
+			spinout(mine * 0.4 + col.get_normal() * impact * 0.6, impact >= WRECK_SPEED)
+		else:
 			crash(impact)
-			return
+		return
+
+
+## Another car ran into us with velocity `v`.
+func take_hit(v: Vector2) -> void:
+	if _spinning or state == State.CRASHED:
+		return
+	var impact := (v - lane_velocity()).length()
+	if impact >= SPINOUT_SPEED:
+		spinout(v * 0.7, impact >= WRECK_SPEED)
+	elif impact >= CRASH_SPEED:
+		crash(impact)
 
 
 ## Velocity along the lane, ignoring the sideways slide of lane changes.
 ## Just after a crash it still reports the impact speed, so whatever we hit
 ## notices how hard it was hit even if it checks a frame late.
 func lane_velocity() -> Vector2:
-	if state == State.CRASHED and _state_time < 0.2:
+	if _since_impact < 0.2:
 		return _impact_velocity
 	return heading * speed
 
@@ -279,11 +309,60 @@ func crash(_impact: float) -> void:
 	if state == State.CRASHED:
 		return
 	_impact_velocity = heading * speed
+	_since_impact = 0.0
 	_set_state(State.CRASHED)
 	_launch_left = 0.0
 	speed = 0.0
 	velocity = Vector2.ZERO
 	EventBus.danger.emit(global_position, 110.0, &"crash")
+
+
+## Hand the car to the physics engine: hide it and spawn a spinning body.
+func spinout(impulse: Vector2, hard: bool) -> void:
+	if _spinning or state == State.CRASHED:
+		return
+	_impact_velocity = lane_velocity()
+	_since_impact = 0.0
+	if not ImpactBody.can_spawn():
+		crash(impulse.length())  # too many bodies flying: just stop
+		return
+	_spinning = true
+	_spin_hard = hard
+	_spun_from_lot = parked_at
+	_launch_left = 0.0
+	visible = false
+	collision_layer = 0
+	var body := ImpactBody.new()
+	body.is_car = true
+	body.size = SIZE
+	body.color = color
+	body.position = global_position
+	body.rotation = rotation
+	body.linear_velocity = heading * speed
+	body.settled.connect(_on_spin_settled)
+	get_parent().add_child.call_deferred(body)
+	body.kick.call_deferred(impulse, Sim.rng.randf_range(-12.0, 12.0))
+	speed = 0.0
+	EventBus.danger.emit.call_deferred(global_position, 110.0, &"crash")
+
+
+func _on_spin_settled(at: Vector2, angle: float) -> void:
+	_spinning = false
+	visible = true
+	collision_layer = Sim.L_CARS
+	global_position = at
+	rotation = angle
+	_lane_offset = Vector2.ZERO
+	if _spin_hard:
+		_set_state(State.DRIVING)
+		crash(0.0)
+		return
+	if _spun_from_lot >= 0:
+		park(_spun_from_lot)  # a parked car rolls back into its slot
+		return
+	center = CityMap.cell_to_world(Sim.city.nearest_road_cell(CityMap.world_to_cell(at)))
+	_set_state(State.DRIVING)
+	_route()
 
 
 ## Clear a crashed car: it reappears on a free road cell and drives on.
@@ -314,19 +393,24 @@ func _update_patience(delta: float) -> void:
 
 
 func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
-	if state in [State.CRASHED, State.PARKED]:
+	if state == State.CRASHED or _spinning:
 		return
 	var d := global_position.distance_to(pos)
 	if kind == &"explosion" and d < radius * 0.6:
-		crash(250.0)  # caught in the blast
+		spinout((global_position - pos).normalized() * 380.0, d < radius * 0.3)  # caught in the blast
+		return
+	if state == State.PARKED:
 		return
 	if kind in [&"crash", &"explosion", &"theft"] and d < radius * 1.5:
 		_flee_left = FLEE_SECONDS
 
 
 ## Called by a Puddle when we drive in or out of it.
+## Hitting water fast spins us out.
 func set_slippery(on: bool) -> void:
 	_slippery = maxi(0, _slippery + (1 if on else -1))
+	if on and speed > 45.0 and state != State.PARKED:
+		spinout(heading.rotated(Sim.rng.randf_range(-0.8, 0.8)) * speed * 0.6, false)
 
 
 func _set_state(s: State) -> void:

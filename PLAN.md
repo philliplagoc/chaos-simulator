@@ -4768,7 +4768,7 @@ func _draw_star(p: Vector2) -> void:
 - **Why:** R7, spec step 8 ("switch to RigidBody2D with spin, then return to path-following from the nearest lane once settled, or stay CRASHED if speed was very high").
 - **Docs & gotchas:** impact thresholds are 75 (fender-bender), 130 (spinout) and 220 (wreck). A car that hits another car calls `take_hit()` on it (they're touching), so the victim spins out too. A spinning car vanishes into its body on the same frame it hits something, so objects also get `take_hit()`: an object's hurtbox can't be relied on for that hit. Puddles spin out cars entering faster than 45, and blasts spin out cars within 60% of the radius.
 
-- [ ] **Step 1: Spinouts in the car**
+- [x] **Step 1: Spinouts in the car**
 
 Edit `scripts/car.gd` (10 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -4992,7 +4992,7 @@ func set_slippery(on: bool) -> void:
 		spinout(heading.rotated(Sim.rng.randf_range(-0.8, 0.8)) * speed * 0.6, false)
 ```
 
-- [ ] **Step 2: Direct hits on hydrants and barrels**
+- [x] **Step 2: Direct hits on hydrants and barrels**
 
 Edit `scripts/hydrant.gd` (1 change). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -5037,8 +5037,8 @@ func take_hit(v: Vector2) -> void:
 		ignite()
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T036: car spinouts and direct hits on objects" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T036: car spinouts and direct hits on objects" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T037 🧑 HUMAN: The tumble check, the Nov 5 rule, and post 3
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -6920,6 +6920,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | Phase 6 | Done | Checkpoint: `1893 checks, 0 failed`, smoke clean. Pushed to GitHub. Human asked when cars hit pedestrians: that is T035 (Phase 7). Next: T034 (ImpactBody and map walls). Start a fresh session. |
 | 2026-10-17 | T034 | Done | `ImpactBody` (not used yet) + invisible map walls on `L_WALLS`. `1893 checks, 0 failed`, smoke clean. Next: T035 (citizens tumble). |
 | 2026-10-17 | T035 | Done | Citizens tumble (car hurtbox at 40 px/s or inside 60% of a blast), see stars 3 s, fade, reappear at home after 30 s. `1893 checks, 0 failed`, smoke clean. Next: T036 (car spinouts). |
+| 2026-10-17 | T036 | Done | Car spinouts (130+ spin, 220+ wreck; fast into a puddle; inside 60% of a blast); cars `take_hit` each other, hydrants and barrels. `1893 checks, 0 failed`, smoke clean. Next: T037 (human: tumble check, Nov 5 rule, post 3). |
 
 ## Change log
 

@@ -20,6 +20,13 @@ func _ready() -> void:
 	add_child(hurt)
 
 
+## A car that runs into us calls this (it can't rely on the hurtbox, because
+## a spinning car vanishes into its ImpactBody on the same frame).
+func take_hit(v: Vector2) -> void:
+	if v.length() >= 60.0:
+		burst_open()
+
+
 func burst_open() -> void:
 	if burst:
 		return
