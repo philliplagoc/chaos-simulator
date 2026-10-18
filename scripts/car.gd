@@ -39,7 +39,7 @@ var path_i := 0
 var lane_side := 1.0          # +1 = right lane, -1 = oncoming lane
 var patience := 100.0
 var owner_id := -1            # citizen id, -1 = ambient traffic
-var temporary := false        # debug cars vanish instead of being towed
+var temporary := false        # a debug car: vanishes if its launch hits nothing
 var parked_at := -1           # destination index while PARKED
 var _goal_dest := -1          # destination index an owner asked for
 var _lane_offset := Vector2.ZERO
@@ -161,7 +161,7 @@ func _physics_process(delta: float) -> void:
 		velocity = heading * speed
 		move_and_slide()
 		_check_crash()
-		if _launch_left <= 0.0 and state != State.CRASHED:
+		if _launch_left <= 0.0 and state != State.CRASHED and not _spinning:  # flew 3 s and hit nothing
 			queue_free()
 		return
 	if path_i >= path.size():
@@ -377,9 +377,9 @@ func _on_spin_settled(at: Vector2, angle: float) -> void:
 
 ## Back to normal from where we stand (no teleporting). A parked car stays
 ## parked wherever it ended up; a car still on its lane drives on; anything
-## else drives back to the nearest road first. Husks and debug cars go away.
+## else drives back to the nearest road first. Husks go away.
 func _recover() -> void:
-	if temporary or _burnt:
+	if _burnt:
 		queue_free()
 		return
 	if parked_at >= 0:
