@@ -4522,8 +4522,8 @@ func _spawn_walls() -> void:
 		add_child(wall)
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T034: ImpactBody tumble/spinout body and map walls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T034: ImpactBody tumble/spinout body and map walls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T035 [R7] Citizens tumble, lie dazed, fade, respawn at home
 - **Owner:** Agent
@@ -4532,7 +4532,7 @@ func _spawn_walls() -> void:
 - **Why:** R7, D4, spec step 8 ("hit by a car above a speed threshold or caught in an explosion's knockback radius… dazed stars for 3 seconds, fade out, respawn the same citizen at their home after 60 sim minutes").
 - **Docs & gotchas:** the citizen hides and hands its motion to an `ImpactBody`, then takes back over on `settled`. Bodies are added with `call_deferred`, because adding physics bodies during a physics callback is not allowed. If 5 bodies already exist, the citizen just falls over where it stands.
 
-- [ ] **Step 1: Add tumbling, dazed, fade and respawn**
+- [x] **Step 1: Add tumbling, dazed, fade and respawn**
 
 Edit `scripts/citizen.gd` (11 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -4758,8 +4758,8 @@ func _draw_star(p: Vector2) -> void:
 	draw_line(p + Vector2(0, -3), p + Vector2(0, 3), Color.YELLOW, 1.5)
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 3: Commit**: `git add -A; git commit -m "T035: citizens tumble, see stars, fade and respawn at home" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 2: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 3: Commit**: `git add -A; git commit -m "T035: citizens tumble, see stars, fade and respawn at home" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T036 [R7] Car spinouts; objects feel direct hits
 - **Owner:** Agent
@@ -6919,6 +6919,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T033 | Done | Human: hydrant puddle + fishtailing, double barrel explosion, knocked-out light flashing yellow: all three worked. |
 | 2026-10-17 | Phase 6 | Done | Checkpoint: `1893 checks, 0 failed`, smoke clean. Pushed to GitHub. Human asked when cars hit pedestrians: that is T035 (Phase 7). Next: T034 (ImpactBody and map walls). Start a fresh session. |
 | 2026-10-17 | T034 | Done | `ImpactBody` (not used yet) + invisible map walls on `L_WALLS`. `1893 checks, 0 failed`, smoke clean. Next: T035 (citizens tumble). |
+| 2026-10-17 | T035 | Done | Citizens tumble (car hurtbox at 40 px/s or inside 60% of a blast), see stars 3 s, fade, reappear at home after 30 s. `1893 checks, 0 failed`, smoke clean. Next: T036 (car spinouts). |
 
 ## Change log
 
