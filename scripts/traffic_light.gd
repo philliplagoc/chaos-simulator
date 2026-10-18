@@ -3,6 +3,7 @@ extends Node2D
 ## One per intersection. Each approach (from north, east, south, west) gets its
 ## own green in turn, so turning cars never cross a moving stream. Each frame it
 ## writes its colors to Sim.lights so cars never need a reference to it.
+## Hit its pole hard (or blast it) and it's KNOCKED_OUT: all lamps flash yellow.
 
 enum Light { GREEN, YELLOW, RED, FLASHING }
 
@@ -12,6 +13,15 @@ const ALL_RED_S := 2.0  # slow turning cars need time to clear the junction
 const PHASE := GREEN_S + YELLOW_S + ALL_RED_S
 const CYCLE := 4.0 * PHASE
 const LAMP_COLORS := [Color.GREEN, Color.YELLOW, Color.RED, Color.YELLOW]
+
+## The light's pole. Cars that run into it call take_hit().
+class Pole extends StaticBody2D:
+	signal hit
+
+	func take_hit(v: Vector2) -> void:
+		if v.length() >= 60.0:
+			hit.emit()
+
 
 var cell := Vector2i.ZERO
 var offset_s := 0.0
@@ -39,6 +49,32 @@ static func color_at(t: float, approach_i: int) -> int:
 
 func _ready() -> void:
 	position = CityMap.cell_to_world(cell)
+	# The pole stands on the north-east sidewalk corner, under that corner's lamp.
+	var pole := Pole.new()
+	pole.position = Vector2(CityMap.CELL, -CityMap.CELL)
+	pole.collision_layer = Sim.L_OBJECTS
+	pole.collision_mask = 0
+	pole.add_to_group("objects")
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = 4.0
+	shape.shape = circle
+	pole.add_child(shape)
+	var hurt := Hurtbox.make(10.0, 60.0)
+	hurt.hit.connect(func(_b: Node2D, _v: float) -> void: knock_out())
+	pole.add_child(hurt)
+	pole.hit.connect(knock_out)
+	add_child(pole)
+	EventBus.danger.connect(_on_danger)
+
+
+func knock_out() -> void:
+	knocked_out = true
+
+
+func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
+	if kind == &"explosion" and global_position.distance_to(pos) < radius:
+		knock_out()
 
 
 func _process(delta: float) -> void:

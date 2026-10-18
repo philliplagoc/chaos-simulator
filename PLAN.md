@@ -3938,7 +3938,7 @@ replace with:
 - **Why:** R6, spec step 4/7 ("traffic lights become KNOCKED_OUT when hit"; flashing yellow, cars slow down but don't stop).
 - **Docs & gotchas:** each light gets a pole on its north-east sidewalk corner. The pole has a `take_hit()` method for cars that run into it (used from T036 on) plus a hurtbox. Knocked-out lights publish `FLASHING`, and cars cap their speed at 40 near them.
 
-- [ ] **Step 1: Add the pole and knock-out**
+- [x] **Step 1: Add the pole and knock-out**
 
 Edit `scripts/traffic_light.gd` (4 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -4027,8 +4027,8 @@ replace with:
 	draw_circle(Vector2(k, -k), 4.0, Color("2c3e50") if not knocked_out else Color("7f8c8d"))  # pole
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 3: Commit**: `git add -A; git commit -m "T031: traffic lights can be knocked out" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 2: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 3: Commit**: `git add -A; git commit -m "T031: traffic lights can be knocked out" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T032 [R6] Place the objects; F launches a debug car
 - **Owner:** Agent
@@ -6914,6 +6914,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | Phase 5 | Done | Checkpoint: `1877 checks, 0 failed`, smoke clean. Human: card shows trait + courage, looks good. Pushed to GitHub. Next: T029 (hydrants and puddles). Start a fresh session. |
 | 2026-10-17 | T029 | Done | `Hurtbox`, `Puddle`, `Hydrant` added (not placed yet; T032 places them); cars get weak brakes and fishtail in puddles. `1877 checks, 0 failed`, smoke clean. Next: T030 (barrels and pumps). |
 | 2026-10-17 | T030 | Done | `FuelBarrel` (barrel or pump) chain-explodes via `explosion` danger; cars inside 60% of a blast crash. `1877 checks, 0 failed`, smoke clean. Next: T031 (lights get knocked out). |
+| 2026-10-17 | T031 | Done | Light pole (NE corner) + knock-out by hit, `take_hit` or explosion. Change 4 skipped (v1.6). `1877 checks, 0 failed`, smoke clean. Next: T032 (place objects, F debug car). |
 
 ## Change log
 
@@ -6922,4 +6923,6 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 - v1.2 (2026-10-17): T016 lamps moved from the road center lines to the four corners (each at its drivers' near right), because center-line lamps read as belonging to both directions. Drawing only; timing and tests unchanged. Agreed with the human.
 - v1.3 (2026-10-17): Added T039b (through-traffic drives off the map and new cars drive in, instead of U-turning at the edge). Placed after T039 because `car.gd` changes in 7 tasks before then; its code gets written and tested at that point. Agreed with the human.
 - v1.4 (2026-10-17): Fleeing citizens stop at building edges instead of running through them (T024 feedback, Option B). `Citizen._flee` skips a step that would land on a BLOCK cell; this also replaces the clamp to the map edge. No new tests, so the check counts are unchanged; a throwaway headless run (3,000 frames, ~70 scares) showed 0 fleeing frames on a building versus 14,794 before. Agreed with the human.
+- v1.5 (2026-10-17): Bios drive behavior (T028 feedback). Added T028b: each bio carries one of six traits (hothead, hero, nervous, snacker, penny_pincher, chill) that scale existing needs knobs, plus a seeded courage value (0 flight - 100 fight) shown on the card. Added T039c (after T039b): citizens with courage 70+ run at `theft`/`crash` dangers instead of fleeing and can tackle a thief on foot by touching it; the thief emits `theft` while walking to a car. No new danger kinds. Check counts from the Phase 5 checkpoint on went up by 379. Agreed with the human.
+- v1.6 (2026-10-17): T031 Change 4 (draw a pole dot) dropped: since v1.2 the NE lamp sits exactly on the pole spot and would hide the dot, so the NE lamp marks the pole. Collision, hurtbox and knock-out unchanged.
 - v1.5 (2026-10-17): Bios drive behavior (T028 feedback). Added T028b: each bio carries one of six traits (hothead, hero, nervous, snacker, penny_pincher, chill) that scale existing needs knobs, plus a seeded courage value (0 flight - 100 fight) shown on the card. Added T039c (after T039b): citizens with courage 70+ run at `theft`/`crash` dangers instead of fleeing and can tackle a thief on foot by touching it; the thief emits `theft` while walking to a car. No new danger kinds. Check counts from the Phase 5 checkpoint on went up by 379. Agreed with the human.
