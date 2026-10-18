@@ -56,7 +56,8 @@ var bio := ""
 
 
 ## Build `count` citizens. At most `max_cars` of them own a car (~40% chance each).
-static func generate_all(count: int, city: CityMap, rng: RandomNumberGenerator, max_cars: int) -> Array[CitizenData]:
+## `bios` maps profession name -> Array of bio strings (see load_bios()).
+static func generate_all(count: int, city: CityMap, rng: RandomNumberGenerator, max_cars: int, bios := {}) -> Array[CitizenData]:
 	var jobs: Array[StringName] = []
 	for p: StringName in PROFESSION_MIX:
 		for n in roundi(PROFESSION_MIX[p] * count / 40.0):
@@ -69,6 +70,9 @@ static func generate_all(count: int, city: CityMap, rng: RandomNumberGenerator, 
 	for i in city.destinations.size():
 		if city.destinations[i].type == &"home" and i != homes[0]:
 			homes.append(i)
+	var pools := {}
+	for p in bios:
+		pools[p] = (bios[p] as Array).duplicate()
 	var out: Array[CitizenData] = []
 	var cars := 0
 	for i in count:
@@ -90,8 +94,17 @@ static func generate_all(count: int, city: CityMap, rng: RandomNumberGenerator, 
 		d.money = rng.randf_range(30.0, 90.0)
 		d.hunger = rng.randf_range(0.0, 40.0)
 		d.patience = rng.randf_range(70.0, 100.0)
+		var pool: Array = pools.get(String(d.profession), [])
+		if not pool.is_empty():
+			d.bio = pool.pop_at(rng.randi_range(0, pool.size() - 1))  # no repeats
 		out.append(d)
 	return out
+
+
+## {"office_worker": ["...", ...], ...} from data/bios.json, or {} if missing.
+static func load_bios(path := "res://data/bios.json") -> Dictionary:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	return parsed if parsed is Dictionary else {}
 
 
 ## Fisher-Yates shuffle with our seeded RNG (Array.shuffle() uses the global one).

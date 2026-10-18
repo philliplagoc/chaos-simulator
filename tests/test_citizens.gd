@@ -24,6 +24,12 @@ func run(t) -> bool:
 			same = false
 	t.check(same, "same seed gives the same citizens")
 	t.check(CitizenData.generate_all(30, city, Sim.make_rng(7), 11).size() == 30, "fallback count of 30 works")
+	var with_bios := CitizenData.generate_all(40, city, Sim.make_rng(7), 16, CitizenData.load_bios())
+	var bios_seen := {}
+	for p in with_bios:
+		t.check(p.bio != "", "%s has a bio" % p.name)
+		bios_seen[p.bio] = true
+	t.check(bios_seen.size() == 40, "no two citizens share a bio")
 
 	var d := CitizenData.new()
 	d.profession = &"office_worker"

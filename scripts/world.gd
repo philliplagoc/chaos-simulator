@@ -45,7 +45,7 @@ func _spawn_lights() -> void:
 ## Citizens first (so the seed decides who owns a car), then their cars parked
 ## at home, then ambient traffic to make up Sim.CAR_COUNT.
 func _spawn_people_and_cars() -> void:
-	var people := CitizenData.generate_all(Sim.CITIZEN_COUNT, Sim.city, Sim.rng, Sim.CAR_COUNT - 4)
+	var people := CitizenData.generate_all(Sim.CITIZEN_COUNT, Sim.city, Sim.rng, Sim.CAR_COUNT - 4, CitizenData.load_bios())
 	var cars := 0
 	for d in people:
 		var c := Citizen.new()

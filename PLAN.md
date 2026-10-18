@@ -3164,7 +3164,7 @@ func check(ok: bool, what: String) -> void:
 - **Why:** R2: "assign bios at random by profession on spawn".
 - **Docs & gotchas:** bios are drawn *after* the other fields with the same seeded RNG, without repeats. `FileAccess` + `JSON.parse_string` works in web builds because `export_presets.cfg` includes `data/*.json` (T007).
 
-- [ ] **Step 1: Add the failing test lines**
+- [x] **Step 1: Add the failing test lines**
 
 Edit `tests/test_citizens.gd` (1 change). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3186,8 +3186,8 @@ replace with:
 	t.check(bios_seen.size() == 40, "no two citizens share a bio")
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_citizens.gd ...` (`load_bios` doesn't exist yet).
-- [ ] **Step 3: Load and assign bios**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_citizens.gd ...` (`load_bios` doesn't exist yet).
+- [x] **Step 3: Load and assign bios**
 
 Edit `scripts/citizen_data.gd` (3 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3256,8 +3256,8 @@ replace with:
 	var people := CitizenData.generate_all(Sim.CITIZEN_COUNT, Sim.city, Sim.rng, Sim.CAR_COUNT - 4, CitizenData.load_bios())
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `1498 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T026: assign bios by profession" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run and confirm it passes**: TEST → `1498 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T026: assign bios by profession" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T027 [R10] Click-to-inspect card
 - **Owner:** Agent
@@ -6868,6 +6868,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T024 | Done (post pending) | Human: morning rush, midday quiet, evening rush and right-click scatter all yes. Feedback: fleeing citizens ran through buildings → fixed (change log v1.4). Jaywalking + cars stopping is by design; walking through cars is partly fixed by T035; the clock arrives in T043. Substack post 2 NOT published yet; ask the human for the URL later. |
 | 2026-10-17 | Phase 4 | Done | Checkpoint: `546 checks, 0 failed`, smoke clean. Pushed to GitHub. Next: T025. Start a fresh session. |
 | 2026-10-17 | T025 | Done | 300 bios in `data/bios.json` (50 per profession, max 5 per opening word, ASCII). `1457 checks, 0 failed`. Next: T026 (give every citizen a bio). |
+| 2026-10-17 | T026 | Done | Bios drawn per profession from the seeded RNG, no repeats (`CitizenData.load_bios`). `1498 checks, 0 failed`, smoke clean. Next: T027 (inspector card). |
 
 ## Change log
 
