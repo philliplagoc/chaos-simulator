@@ -3609,7 +3609,7 @@ Say to the human:
 - [x] **Step 2: Use the traits** in `CitizenBrain.scores` (bank, shop) and `Citizen._process` / `_on_danger` (hunger rate, patience refill, scare cost). The card shows the trait label and a 4th bar, **Courage**.
 - [x] **Step 3: Tests:** every bio has a known trait; every profession has 3+ of each trait; every citizen's courage is inside its trait's range; same seed = same traits; a penny pincher with 70 money wants the bank and a default citizen doesn't. TEST → `1877 checks, 0 failed`. SMOKE → clean.
 - [x] **Step 4: Commit**: `git add -A; git commit -m "T028b: bios carry traits that tune needs and courage" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
-- [ ] **Step 5: Human look:** run `godot --path .`, click a few citizens. Under the job line is a trait (for example "Hothead: short fuse"), and there's a 4th bar, Courage. Wait for their reply.
+- [x] **Step 5: Human look:** run `godot --path .`, click a few citizens. Under the job line is a trait (for example "Hothead: short fuse"), and there's a 4th bar, Courage. Wait for their reply.
 
 **Checkpoint (end of Phase 5):** TEST → `1877 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
@@ -6910,7 +6910,8 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T026 | Done | Bios drawn per profession from the seeded RNG, no repeats (`CitizenData.load_bios`). `1498 checks, 0 failed`, smoke clean. Next: T027 (inspector card). |
 | 2026-10-17 | T027 | Done | `Inspector` card, yellow selection ring, camera follow (drag stops it). `1498 checks, 0 failed`, smoke clean. Next: T028 (human: skim bios, try the inspector). |
 | 2026-10-17 | T028 | Done | Human: bios OK, inspector works. Asked for bios to change behavior and for a fight-or-flight scale: added T028b and T039c (change log v1.5). |
-| 2026-10-17 | T028b | Done (human look pending) | Six traits from the bios tune hunger, patience, bank and shop; courage 0-100 is on the card. `1877 checks, 0 failed`, smoke clean. Later counts bumped by +379. |
+| 2026-10-17 | T028b | Done | Six traits from the bios tune hunger, patience, bank and shop; courage 0-100 is on the card. `1877 checks, 0 failed`, smoke clean. Later counts bumped by +379. |
+| 2026-10-17 | Phase 5 | Done | Checkpoint: `1877 checks, 0 failed`, smoke clean. Human: card shows trait + courage, looks good. Pushed to GitHub. Next: T029 (hydrants and puddles). Start a fresh session. |
 
 ## Change log
 
