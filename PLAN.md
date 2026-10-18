@@ -3827,7 +3827,7 @@ func _set_state(s: State) -> void:
 - **Why:** R6, spec step 7 ("explode after a short fuse with a knockback impulse, a large-radius danger, and chaining to other barrels in range").
 - **Docs & gotchas:** chaining isn't scripted. A barrel ignites when it hears an `explosion` danger whose radius reaches it. Cars inside 60% of a blast radius crash (T036 upgrades this to a spinout).
 
-- [ ] **Step 1: Write the barrel**
+- [x] **Step 1: Write the barrel**
 
 Create `scripts/fuel_barrel.gd` with exactly this:
 
@@ -3908,7 +3908,7 @@ func _draw() -> void:
 		draw_line(Vector2(-6, 2), Vector2(6, 2), Color.BLACK, 1.0)
 ```
 
-- [ ] **Step 2: Cars caught in a blast**
+- [x] **Step 2: Cars caught in a blast**
 
 Edit `scripts/car.gd` (1 change). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3928,8 +3928,8 @@ replace with:
 	if kind in [&"crash", &"explosion", &"theft"] and d < radius * 1.5:
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T030: fuel barrels and gas pumps chain-explode" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T030: fuel barrels and gas pumps chain-explode" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T031 [R6] Traffic lights get knocked out
 - **Owner:** Agent
@@ -6913,6 +6913,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T028b | Done | Six traits from the bios tune hunger, patience, bank and shop; courage 0-100 is on the card. `1877 checks, 0 failed`, smoke clean. Later counts bumped by +379. |
 | 2026-10-17 | Phase 5 | Done | Checkpoint: `1877 checks, 0 failed`, smoke clean. Human: card shows trait + courage, looks good. Pushed to GitHub. Next: T029 (hydrants and puddles). Start a fresh session. |
 | 2026-10-17 | T029 | Done | `Hurtbox`, `Puddle`, `Hydrant` added (not placed yet; T032 places them); cars get weak brakes and fishtail in puddles. `1877 checks, 0 failed`, smoke clean. Next: T030 (barrels and pumps). |
+| 2026-10-17 | T030 | Done | `FuelBarrel` (barrel or pump) chain-explodes via `explosion` danger; cars inside 60% of a blast crash. `1877 checks, 0 failed`, smoke clean. Next: T031 (lights get knocked out). |
 
 ## Change log
 

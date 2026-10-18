@@ -287,7 +287,11 @@ func _update_patience(delta: float) -> void:
 func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 	if state in [State.CRASHED, State.PARKED]:
 		return
-	if kind in [&"crash", &"explosion", &"theft"] and global_position.distance_to(pos) < radius * 1.5:
+	var d := global_position.distance_to(pos)
+	if kind == &"explosion" and d < radius * 0.6:
+		crash(250.0)  # caught in the blast
+		return
+	if kind in [&"crash", &"explosion", &"theft"] and d < radius * 1.5:
 		_flee_left = FLEE_SECONDS
 
 
