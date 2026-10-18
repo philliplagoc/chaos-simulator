@@ -23,6 +23,8 @@ const PROFESSION_COLORS := {
 
 ## F3 toggles goal labels on every citizen.
 static var show_debug := false
+## Id of the citizen open in the inspector (-1 = none). It gets a ring.
+static var selected_id := -1
 
 var data: CitizenData
 var car: Car                  # this citizen's own car, or null
@@ -71,6 +73,9 @@ func _process(delta: float) -> void:
 			_walk(delta)
 		Mode.FLEEING:
 			_flee(delta)
+		Mode.DRIVING:
+			if is_instance_valid(car):
+				global_position = car.global_position  # so the camera can follow
 	_redraw_if_changed()
 
 
@@ -187,13 +192,25 @@ func _flee(delta: float) -> void:
 		_travel(target_dest if target_dest >= 0 else data.home)
 
 
+## Short status for the inspector card.
+func where_text() -> String:
+	match mode:
+		Mode.INSIDE:
+			return "at " + Sim.city.destinations[at_dest].label
+		Mode.DRIVING:
+			return "driving to " + Sim.city.destinations[target_dest].label
+		Mode.FLEEING:
+			return "running away!"
+	return "walking to " + Sim.city.destinations[target_dest].label
+
+
 func _show(on: bool) -> void:
 	visible = on
 	collision_layer = Sim.L_CITIZENS if on else 0
 
 
 func _redraw_if_changed() -> void:
-	var key := "%s%s%s" % [mode, goal, show_debug]
+	var key := "%s%s%s%s" % [mode, goal, show_debug, selected_id == data.id]
 	if key != _drawn:
 		_drawn = key
 		queue_redraw()
@@ -204,5 +221,7 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, 4.0, PROFESSION_COLORS[data.profession])
 	if mode == Mode.FLEEING:
 		draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 12, Color.RED, 1.5)
+	if selected_id == data.id:
+		draw_arc(Vector2.ZERO, 11.0, 0.0, TAU, 16, Color.YELLOW, 2.0)
 	if show_debug:
 		draw_string(ThemeDB.fallback_font, Vector2(-20, -10), "%s %s" % [goal, Mode.keys()[mode].to_lower()], HORIZONTAL_ALIGNMENT_LEFT, -1, 10)

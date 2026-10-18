@@ -3266,7 +3266,7 @@ replace with:
 - **Why:** R10, D3, spec step 6 ("name, profession, current goal, needs bars, and bio; it follows the selected citizen until closed").
 - **Docs & gotchas:** the card is a `CanvasLayer`, so it stays put while the camera moves. The camera follows the selected citizen until you drag or close the card. A driving citizen tracks its car's position so the follow still works. Clicks land within 14 screen pixels of a citizen.
 
-- [ ] **Step 1: Write the inspector**
+- [x] **Step 1: Write the inspector**
 
 Create `scripts/inspector.gd` with exactly this:
 
@@ -3354,7 +3354,7 @@ func _process(_delta: float) -> void:
 	_bars["patience"].value = citizen.data.patience
 ```
 
-- [ ] **Step 2: Selection ring and status text on the citizen**
+- [x] **Step 2: Selection ring and status text on the citizen**
 
 Edit `scripts/citizen.gd` (5 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3439,7 +3439,7 @@ replace with:
 		draw_arc(Vector2.ZERO, 11.0, 0.0, TAU, 16, Color.YELLOW, 2.0)
 ```
 
-- [ ] **Step 3: Camera follow**
+- [x] **Step 3: Camera follow**
 
 Edit `scripts/city_camera.gd` (3 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3491,7 +3491,7 @@ func _process(delta: float) -> void:
 		position = position.lerp(follow.global_position, minf(1.0, 5.0 * delta))
 ```
 
-- [ ] **Step 4: Click to select in the world**
+- [x] **Step 4: Click to select in the world**
 
 Edit `scripts/world.gd` (4 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3571,8 +3571,8 @@ func _citizen_at(at: Vector2) -> Citizen:
 	return best
 ```
 
-- [ ] **Step 5: Run tests and smoke**: TEST → `1498 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 6: Commit**: `git add -A; git commit -m "T027: click-to-inspect card with camera follow" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 5: Run tests and smoke**: TEST → `1498 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 6: Commit**: `git add -A; git commit -m "T027: click-to-inspect card with camera follow" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T028 🧑 HUMAN: Skim the bios and try the inspector
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -6869,6 +6869,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | Phase 4 | Done | Checkpoint: `546 checks, 0 failed`, smoke clean. Pushed to GitHub. Next: T025. Start a fresh session. |
 | 2026-10-17 | T025 | Done | 300 bios in `data/bios.json` (50 per profession, max 5 per opening word, ASCII). `1457 checks, 0 failed`. Next: T026 (give every citizen a bio). |
 | 2026-10-17 | T026 | Done | Bios drawn per profession from the seeded RNG, no repeats (`CitizenData.load_bios`). `1498 checks, 0 failed`, smoke clean. Next: T027 (inspector card). |
+| 2026-10-17 | T027 | Done | `Inspector` card, yellow selection ring, camera follow (drag stops it). `1498 checks, 0 failed`, smoke clean. Next: T028 (human: skim bios, try the inspector). |
 
 ## Change log
 

@@ -1,11 +1,12 @@
 class_name CityCamera
 extends Camera2D
 ## Drag (left or middle mouse) to pan, wheel to zoom toward the mouse.
-## The view never leaves the map.
+## The view never leaves the map. Set `follow` to track a node; dragging stops it.
 
 const MIN_ZOOM := 0.42
 const MAX_ZOOM := 2.0
 
+var follow: Node2D
 var _dragging := false
 
 
@@ -27,7 +28,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			position += before - get_global_mouse_position()
 			_clamp()
 	elif event is InputEventMouseMotion and _dragging:
-		position -= (event as InputEventMouseMotion).relative / zoom
+		var rel := (event as InputEventMouseMotion).relative
+		if rel.length() > 2.0:
+			follow = null
+		position -= rel / zoom
+		_clamp()
+
+
+func _process(delta: float) -> void:
+	if follow and is_instance_valid(follow):
+		position = position.lerp(follow.global_position, minf(1.0, 5.0 * delta))
 		_clamp()
 
 

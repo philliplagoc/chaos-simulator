@@ -1,6 +1,7 @@
 extends Node2D
 ## Root of the game. Draws the district and spawns everything in it.
-## Keys: F3 toggles citizen goal labels. Right-click drops a test danger.
+## Left-click a citizen to inspect them. F3 toggles goal labels.
+## Right-click drops a test danger.
 
 const COLORS := {
 	CityMap.Cell.BLOCK: Color("3f6b3a"),
@@ -24,9 +25,15 @@ const CAR_COLORS: Array[Color] = [
 ]
 
 
+var camera := CityCamera.new()
+var inspector := Inspector.new()
+
+
 func _ready() -> void:
-	add_child(CityCamera.new())
+	add_child(camera)
 	add_child(DesktopBanner.new())
+	add_child(inspector)
+	inspector.closed.connect(func() -> void: camera.follow = null)
 	_spawn_lights()
 	_spawn_people_and_cars()
 	queue_redraw()
@@ -71,10 +78,27 @@ func _new_car() -> Car:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
 		Citizen.show_debug = not Citizen.show_debug
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var c := _citizen_at(get_global_mouse_position())
+		if c:
+			inspector.show_citizen(c)
+			camera.follow = c
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		var at := get_global_mouse_position()
 		EventBus.danger.emit(at, 150.0, &"test")
 		FxRing.spawn(self, at, 150.0, Color.ORANGE_RED)
+
+
+## Nearest visible citizen within a few screen pixels of `at`.
+func _citizen_at(at: Vector2) -> Citizen:
+	var best: Citizen = null
+	var best_d := 14.0 / camera.zoom.x
+	for c: Citizen in get_tree().get_nodes_in_group("citizens"):
+		var d := c.global_position.distance_to(at)
+		if c.visible and d < best_d:
+			best = c
+			best_d = d
+	return best
 
 
 func _draw() -> void:
