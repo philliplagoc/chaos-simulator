@@ -6916,6 +6916,8 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T030 | Done | `FuelBarrel` (barrel or pump) chain-explodes via `explosion` danger; cars inside 60% of a blast crash. `1877 checks, 0 failed`, smoke clean. Next: T031 (lights get knocked out). |
 | 2026-10-17 | T031 | Done | Light pole (NE corner) + knock-out by hit, `take_hit` or explosion. Change 4 skipped (v1.6). `1877 checks, 0 failed`, smoke clean. Next: T032 (place objects, F debug car). |
 | 2026-10-17 | T032 | Done | 6 hydrants, 5 barrels, 3 pumps placed; F launches a temporary debug car at the nearest object. Runner got one new suite line (same as the full replace). `1893 checks, 0 failed`, smoke clean. Next: T033 (human: hydrant, double explosion, light). |
+| 2026-10-17 | T033 | Done | Human: hydrant puddle + fishtailing, double barrel explosion, knocked-out light flashing yellow: all three worked. |
+| 2026-10-17 | Phase 6 | Done | Checkpoint: `1893 checks, 0 failed`, smoke clean. Pushed to GitHub. Human asked when cars hit pedestrians: that is T035 (Phase 7). Next: T034 (ImpactBody and map walls). Start a fresh session. |
 
 ## Change log
 
