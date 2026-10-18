@@ -6923,6 +6923,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T035 | Done | Citizens tumble (car hurtbox at 40 px/s or inside 60% of a blast), see stars 3 s, fade, reappear at home after 30 s. `1893 checks, 0 failed`, smoke clean. Next: T036 (car spinouts). |
 | 2026-10-17 | T036 | Done | Car spinouts (130+ spin, 220+ wreck; fast into a puddle; inside 60% of a blast); cars `take_hit` each other, hydrants and barrels. `1893 checks, 0 failed`, smoke clean. Next: T037 (human: tumble check, Nov 5 rule, post 3). |
 | 2026-10-17 | T037 | Done (post pending) | Human: tumble and spinout look good. Feedback: spinning cars phased through buildings → buildings are now solid for impact bodies (change log v1.7); cars teleported back to the road after crashes → they drive back, and cars burnt by a blast are removed for good (v1.8); debug cars vanished when they spun out → fixed (v1.9). Today is Oct 17, before the Nov 5 cutoff: keep the Road Rager. Substack post 3 NOT published yet; ask the human for the URL later. |
+| 2026-10-17 | Phase 7 | Done | Checkpoint: `1893 checks, 0 failed`, smoke clean. Human: tumble, spinout, solid buildings, drive-back and husks all look good. Pushed to GitHub. Substack post 3 still pending (ask for the URL). Next: T038 (Car Thief). Start a fresh session. |
 
 ## Change log
 
