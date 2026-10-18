@@ -28,6 +28,16 @@ const SHIFTS := {
 	&"delivery_driver": [480, 960],
 	&"retiree": [-1, -1],
 }
+## Each bio carries one of these. Courage is 0 (flight) to 100 (fight), drawn
+## from the range. The other keys scale existing needs knobs (see trait_value()).
+const TRAITS := {
+	&"hothead": {"label": "Hothead: short fuse", "courage": [70.0, 95.0], "patience_regen": 0.4, "scare_loss": 2.0},
+	&"hero": {"label": "Hero: runs toward trouble", "courage": [80.0, 100.0]},
+	&"nervous": {"label": "Nervous: first to run", "courage": [0.0, 15.0]},
+	&"snacker": {"label": "Snacker: always hungry", "courage": [20.0, 60.0], "hunger_rate": 1.5},
+	&"penny_pincher": {"label": "Penny pincher: hates spending", "courage": [20.0, 60.0], "bank_below": 80.0, "shop_score": 15.0},
+	&"chill": {"label": "Chill: hard to rattle", "courage": [30.0, 70.0], "patience_regen": 2.0},
+}
 const FIRST_NAMES: Array[String] = [
 	"Ada", "Bo", "Cleo", "Dev", "Eli", "Fern", "Gus", "Hana", "Ira", "Jun",
 	"Kit", "Lena", "Milo", "Nia", "Otto", "Pia", "Quinn", "Rosa", "Sol", "Tess",
@@ -53,10 +63,12 @@ var money := 50.0      # 0-100, spent at the cafe and shop, refilled at the bank
 var hunger := 0.0      # 0-100, rises over time, reset at the cafe
 var patience := 100.0  # 0-100, drains when stuck, low = jaywalk / run yellows
 var bio := ""
+var personality: StringName = &""  # a TRAITS key, from the bio ("" = no trait)
+var courage := 50.0    # 0-100, flight to fight
 
 
 ## Build `count` citizens. At most `max_cars` of them own a car (~40% chance each).
-## `bios` maps profession name -> Array of bio strings (see load_bios()).
+## `bios` maps profession name -> Array of {trait, text} (see load_bios()).
 static func generate_all(count: int, city: CityMap, rng: RandomNumberGenerator, max_cars: int, bios := {}) -> Array[CitizenData]:
 	var jobs: Array[StringName] = []
 	for p: StringName in PROFESSION_MIX:
@@ -96,12 +108,16 @@ static func generate_all(count: int, city: CityMap, rng: RandomNumberGenerator, 
 		d.patience = rng.randf_range(70.0, 100.0)
 		var pool: Array = pools.get(String(d.profession), [])
 		if not pool.is_empty():
-			d.bio = pool.pop_at(rng.randi_range(0, pool.size() - 1))  # no repeats
+			var b: Dictionary = pool.pop_at(rng.randi_range(0, pool.size() - 1))  # no repeats
+			d.bio = b.text
+			d.personality = StringName(b.trait)
+			var r: Array = TRAITS[d.personality].courage
+			d.courage = rng.randf_range(r[0], r[1])
 		out.append(d)
 	return out
 
 
-## {"office_worker": ["...", ...], ...} from data/bios.json, or {} if missing.
+## {"office_worker": [{"trait": "chill", "text": "..."}, ...], ...} from data/bios.json, or {} if missing.
 static func load_bios(path := "res://data/bios.json") -> Dictionary:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	return parsed if parsed is Dictionary else {}
@@ -118,8 +134,13 @@ static func shuffle(arr: Array, rng: RandomNumberGenerator) -> void:
 
 ## One line that captures the starting state, for determinism checks.
 func summary() -> String:
-	return "%d|%s|%s|%d|%d|%s|%d|%.2f|%.2f|%.2f|%s" % [id, name, profession, home, work, has_car, shift_start, money, hunger, patience, bio]
+	return "%d|%s|%s|%d|%d|%s|%d|%.2f|%.2f|%.2f|%s|%s|%.2f" % [id, name, profession, home, work, has_car, shift_start, money, hunger, patience, bio, personality, courage]
 
 
 func profession_label() -> String:
 	return String(profession).replace("_", " ").capitalize()
+
+
+## A trait's tuning value, or `default` if this citizen's trait doesn't set it.
+func trait_value(key: String, default: float) -> float:
+	return TRAITS.get(personality, {}).get(key, default)

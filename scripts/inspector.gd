@@ -1,6 +1,6 @@
 class_name Inspector
 extends CanvasLayer
-## Click-to-inspect card: name, profession, goal, needs bars and bio.
+## Click-to-inspect card: name, profession, trait, goal, needs and courage bars, bio.
 ## It updates live while open; the camera follows the citizen until it's closed.
 
 signal closed
@@ -9,6 +9,7 @@ var citizen: Citizen
 var _panel := PanelContainer.new()
 var _title := Label.new()
 var _job := Label.new()
+var _trait := Label.new()
 var _goal := Label.new()
 var _bars := {}
 var _bio := Label.new()
@@ -33,7 +34,8 @@ func _ready() -> void:
 	head.add_child(close)
 	box.add_child(_job)
 	box.add_child(_goal)
-	for need in ["money", "hunger", "patience"]:
+	box.add_child(_trait)
+	for need in ["money", "hunger", "patience", "courage"]:
 		var row := HBoxContainer.new()
 		var l := Label.new()
 		l.text = need.capitalize()
@@ -57,6 +59,8 @@ func show_citizen(c: Citizen) -> void:
 	Citizen.selected_id = c.data.id
 	_title.text = c.data.name
 	_job.text = c.data.profession_label() + (" (has a car)" if c.data.has_car else "")
+	_trait.text = CitizenData.TRAITS.get(c.data.personality, {}).get("label", "")
+	_bars["courage"].value = c.data.courage
 	_bio.text = "\"%s\"" % c.data.bio
 	_panel.visible = true
 

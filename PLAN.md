@@ -3589,7 +3589,29 @@ Say to the human:
 **Ask them to report:** bios to replace, and the inspector result.
 **Agent, afterwards:** replace any bios the human flagged with new ones that follow the T025 rules, re-run TEST (expected `1498 checks, 0 failed`), and commit with `T028: bio edits from review`.
 
-**Checkpoint (end of Phase 5):** TEST → `1498 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+### T028b [R2] Bios carry traits: needs and courage (added in v1.5)
+- **Owner:** Agent, then 🧑 HUMAN look
+- **Depends on:** T028
+- **Files:** Modify `data/bios.json`, `tests/test_bios.gd`, `scripts/citizen_data.gd`, `scripts/citizen_brain.gd`, `scripts/citizen.gd`, `scripts/inspector.gd`, `tests/test_citizens.gd`
+- **Why:** human request at T028: bios should change how citizens act, and citizens should sit somewhere between fight and flight.
+- **Docs & gotchas:** each bio is now `{"trait": "...", "text": "..."}`; the text is unchanged and the trait was picked by hand from it. `CitizenData.TRAITS` holds the six traits: a courage range (0 = flight, 100 = fight) plus multipliers for knobs that already exist. Everything reads them through `CitizenData.trait_value(key, default)`. The field is called `personality`, not `trait`, to stay clear of a possible future GDScript `trait` keyword. Courage is drawn with the seeded RNG right after the bio, so same seed = same courage. Courage doesn't change behavior until T039c.
+
+| Trait | Changes (now) | Courage |
+|---|---|---|
+| `hothead` | patience refills 0.4x, scares cost 2x patience (jaywalks, runs yellows, tailgates sooner) | 70-95 |
+| `hero` | none | 80-100 |
+| `nervous` | none until T039c (scared from farther, runs longer) | 0-15 |
+| `snacker` | hunger rises 1.5x | 20-60 |
+| `penny_pincher` | bank below 80 money (default 60), shop score 15 (default 30) | 20-60 |
+| `chill` | patience refills 2x | 30-70 |
+
+- [x] **Step 1: Tag the 300 bios** (about 6 hero + 7 hothead per 50, so roughly a quarter are fighters), add `TRAITS`, `personality`, `courage`, `trait_value()`, and add trait and courage to `summary()`.
+- [x] **Step 2: Use the traits** in `CitizenBrain.scores` (bank, shop) and `Citizen._process` / `_on_danger` (hunger rate, patience refill, scare cost). The card shows the trait label and a 4th bar, **Courage**.
+- [x] **Step 3: Tests:** every bio has a known trait; every profession has 3+ of each trait; every citizen's courage is inside its trait's range; same seed = same traits; a penny pincher with 70 money wants the bank and a default citizen doesn't. TEST → `1877 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T028b: bios carry traits that tune needs and courage" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [ ] **Step 5: Human look:** run `godot --path .`, click a few citizens. Under the job line is a trait (for example "Hothead: short fuse"), and there's a 4th bar, Courage. Wait for their reply.
+
+**Checkpoint (end of Phase 5):** TEST → `1877 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -3795,7 +3817,7 @@ func set_slippery(on: bool) -> void:
 func _set_state(s: State) -> void:
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1498 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 3: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 4: Commit**: `git add -A; git commit -m "T029: hydrants burst into slippery puddles" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T030 [R6] Fuel barrels and gas pumps that chain-explode
@@ -3906,7 +3928,7 @@ replace with:
 	if kind in [&"crash", &"explosion", &"theft"] and d < radius * 1.5:
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1498 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 3: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 4: Commit**: `git add -A; git commit -m "T030: fuel barrels and gas pumps chain-explode" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T031 [R6] Traffic lights get knocked out
@@ -4005,7 +4027,7 @@ replace with:
 	draw_circle(Vector2(k, -k), 4.0, Color("2c3e50") if not knocked_out else Color("7f8c8d"))  # pole
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1498 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T031: traffic lights can be knocked out" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T032 [R6] Place the objects; F launches a debug car
@@ -4325,7 +4347,7 @@ func _launch_debug_car(at: Vector2) -> void:
 	car.launch(target.global_position - at, 220.0)
 ```
 
-- [ ] **Step 5: Run and confirm it passes**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 5: Run and confirm it passes**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 6: Commit**: `git add -A; git commit -m "T032: place hydrants, barrels, pumps; F launches a debug car" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T033 🧑 HUMAN: Hydrant puddle and a double explosion
@@ -4344,7 +4366,7 @@ Say to the human:
 **Ask them to report:** results of the three checks.
 **If something seems wrong:** if F does nothing, the mouse may be closest to an object that already exploded (exploded barrels drop out of the target list). Try near a different object.
 
-**Checkpoint (end of Phase 6):** TEST → `1514 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 6):** TEST → `1893 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -4500,7 +4522,7 @@ func _spawn_walls() -> void:
 		add_child(wall)
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 3: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 4: Commit**: `git add -A; git commit -m "T034: ImpactBody tumble/spinout body and map walls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T035 [R7] Citizens tumble, lie dazed, fade, respawn at home
@@ -4736,7 +4758,7 @@ func _draw_star(p: Vector2) -> void:
 	draw_line(p + Vector2(0, -3), p + Vector2(0, 3), Color.YELLOW, 1.5)
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T035: citizens tumble, see stars, fade and respawn at home" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T036 [R7] Car spinouts; objects feel direct hits
@@ -5015,7 +5037,7 @@ func take_hit(v: Vector2) -> void:
 		ignite()
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 3: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 4: Commit**: `git add -A; git commit -m "T036: car spinouts and direct hits on objects" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T037 🧑 HUMAN: The tumble check, the Nov 5 rule, and post 3
@@ -5036,7 +5058,7 @@ Say to the human:
 **Ask them to report:** tumble/spinout results, today's date, and later the post URL.
 **If something seems wrong:** a citizen that never comes back is stuck in `DOWN`: check `RESPAWN_SECONDS`. Bodies flying off-screen mean the walls are missing (T034 Step 2).
 
-**Checkpoint (end of Phase 7):** TEST → `1514 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 7):** TEST → `1893 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -5336,7 +5358,7 @@ func _on_ejected(at: Vector2) -> void:
 
 ```
 
-- [ ] **Step 4: Run tests and smoke**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 4: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 5: Commit**: `git add -A; git commit -m "T038: Car Thief steals a stopped car and races for the edge" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T039 [R8] The Road Rager
@@ -5522,7 +5544,7 @@ replace with:
 		draw_set_transform(Vector2.ZERO, 0.0)
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T039: Road Rager anger meter: tailgate, overtake, ram" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T039b [R4] Through-traffic leaves town instead of U-turning (added in v1.3)
@@ -5536,6 +5558,23 @@ replace with:
 - [ ] **Step 2: Run tests and smoke**: TEST → all pass (count goes up by the new checks; update the later checkpoint counts in this plan). SMOKE → clean.
 - [ ] **Step 3: Human check**: run the game for 2 minutes; ambient cars drive off the edges and new ones drive in; owned cars still park.
 - [ ] **Step 4: Commit**: `git add -A; git commit -m "T039b: through-traffic leaves town and new cars drive in" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+
+### T039c [R6] [R8] Fight or flight: brave citizens confront criminals (added in v1.5)
+- **Owner:** Agent
+- **Depends on:** T039b, T028b
+- **Files:** Modify `scripts/citizen.gd`, `scripts/car_thief.gd`, `tests/test_citizens.gd` (a new check)
+- **Why:** human request at T028: aggressive citizens should want to fight criminals, and timid ones should run.
+- **Docs & gotchas:** the code is **not written yet** on purpose: `citizen.gd` changes in T035 and T038, so write and test it against that version. Rules (no new danger kinds, no references between agents):
+  - While walking to a car, `CarThief` emits `danger(global_position, 80.0, &"theft")` once a second ("looks shifty").
+  - In `Citizen._on_danger`: if `data.courage >= 70` and kind is `theft` or `crash`, enter a new `Mode.CONFRONTING`: run toward the danger position at `FLEE_SPEED` for up to 4 s. A newer `theft` danger moves the target, so heroes chase the thief. Draw an orange ring; `where_text()` says "confronting!". Everyone else flees as now. `nervous` citizens use 1.5x the radius and 1.5x `FLEE_SECONDS`.
+  - Tackle (the touching exception): the thief's own overlap callback sees a touching `Citizen` whose mode is CONFRONTING and calls its own `_knocked_over`. That tumbles it, emits `ragdoll` and spreads panic.
+  - A hero who runs into the road at a stolen car or a crash site can be hit and tumble through the T035 hurtbox. That's the funny failure. The Road Rager is a car, so it isn't confronted directly.
+  - Check that the later find blocks (T046) in `citizen.gd` and `car_thief.gd` still match after this change, and fix them in this plan if not.
+
+- [ ] **Step 1: Agent writes the change**, then adds one headless check (a courage-90 citizen next to a `theft` danger switches to CONFRONTING and moves toward it; a courage-10 one flees). Show the human the diff before committing.
+- [ ] **Step 2: Run tests and smoke**: TEST → all pass (update the later checkpoint counts in this plan). SMOKE → clean.
+- [ ] **Step 3: Commit**: `git add -A; git commit -m "T039c: brave citizens confront criminals, timid ones run" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- **If it fails at T041** (thieves get tackled so often the chain reaction rarely happens): raise the courage cutoff from 70 to 85, or shorten the confront time.
 
 ### T040 [R8] Criminal menu: pick one, click to place
 - **Owner:** Agent
@@ -5678,7 +5717,7 @@ func place_criminal(kind: StringName, at: Vector2) -> void:
 	FxRing.spawn(self, at, 40.0, Color.WHITE)
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1514 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 3: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 4: Commit**: `git add -A; git commit -m "T040: criminal menu with click-to-place" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T041 🧑 HUMAN: One criminal, a chain reaction in 3 of 5 tries
@@ -5698,7 +5737,7 @@ Say to the human:
 **Ask them to report:** chain-reaction counts for each criminal.
 **If something seems wrong:** fewer than 3 of 5 for either one: tell Claude Code which part felt dull (thief never finds a car, the stolen car gets away cleanly, the rager never gets angry). T051 has the tuning knobs.
 
-**Checkpoint (end of Phase 8):** TEST → `1514 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. Week 4: start drafting the launch post. **Suggest a fresh session.**
+**Checkpoint (end of Phase 8):** TEST → `1893 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. Week 4: start drafting the launch post. **Suggest a fresh session.**
 
 ---
 
@@ -5830,7 +5869,7 @@ func label() -> String:
 	return "MAYHEM"
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `1523 checks, 0 failed`
+- [ ] **Step 4: Run and confirm it passes**: TEST → `1902 checks, 0 failed`
 - [ ] **Step 5: Commit**: `git add -A; git commit -m "T042: chaos meter logic" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T043 [R9] Top bar: meter, clock, speed, Reset, New Seed, seed
@@ -5947,7 +5986,7 @@ func done_placing() -> void:
 	_select(&"")
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1523 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1902 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T043: top bar with chaos meter, clock, speed, Reset, New Seed" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T044 [D6] Same seed, same city: an automated check
@@ -6038,7 +6077,7 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run it**: TEST → `1527 checks, 0 failed`
+- [ ] **Step 2: Run it**: TEST → `1906 checks, 0 failed`
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T044: automated same-seed check" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T045 🧑 HUMAN: Meter, speed, Reset and seed
@@ -6057,7 +6096,7 @@ Say to the human:
 
 **Ask them to report:** results of steps 2–5.
 
-**Checkpoint (end of Phase 9):** TEST → `1527 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 9):** TEST → `1906 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -6511,7 +6550,7 @@ replace with:
 	zoom = Vector2(0.8, 0.8)
 ```
 
-- [ ] **Step 7: Run tests and smoke**: TEST → `1527 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
+- [ ] **Step 7: Run tests and smoke**: TEST → `1906 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
 - [ ] **Step 8: Human look.** Ask the human to run `godot --path .`, zoom in, and confirm: cars are little top-down race cars pointing the way they drive, people are top-down figures facing the way they walk, the thief is a suited figure, the rager is the red car with an anger bar, and tumbling people and spinning cars keep their sprites. Wait for their reply.
 - [ ] **Step 9: Commit**: `git add -A; git commit -m "T046: Kenney sprites for cars, citizens, thief and ragdolls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
@@ -6588,7 +6627,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_fps.visible = not _fps.visible
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1527 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1906 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Export and zip**
   Run:
 ```powershell
@@ -6715,7 +6754,7 @@ Select-String -Path scripts\*.gd, data\*.json, README.md, docs\itch-page.md, pro
 Select-String -Path scripts\*.gd, project.godot, export_presets.cfg -Pattern 'api[_-]?key|sk-[a-z0-9]|anthropic|openai|secret|token' -CaseSensitive:$false
 ```
   Expected: **no output** from either command. If anything prints, remove it and tell the human what you found.
-- [ ] **Step 4: Run tests and smoke**: TEST → `1527 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 4: Run tests and smoke**: TEST → `1906 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 5: Commit and push**: `git add -A; git commit -m "T048: README, itch copy, remove spike, safety sweep" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"; git push`
 
 ### T049 🧑 HUMAN: Final web build on the itch draft, plus every "done when"
@@ -6739,7 +6778,7 @@ Say to the human:
 **Ask them to report:** FPS numbers and D-item results.
 **Decision (agent):** both browsers at 50+ FPS when calm and 30+ in the worst chaos is a pass. Otherwise apply the fallback from T047 (30 citizens, 15 cars), re-export, and ask the human to re-check. Record the result in the Progress log.
 
-**Checkpoint (end of Phase 10):** TEST → `1527 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 10):** TEST → `1906 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -6870,6 +6909,8 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T025 | Done | 300 bios in `data/bios.json` (50 per profession, max 5 per opening word, ASCII). `1457 checks, 0 failed`. Next: T026 (give every citizen a bio). |
 | 2026-10-17 | T026 | Done | Bios drawn per profession from the seeded RNG, no repeats (`CitizenData.load_bios`). `1498 checks, 0 failed`, smoke clean. Next: T027 (inspector card). |
 | 2026-10-17 | T027 | Done | `Inspector` card, yellow selection ring, camera follow (drag stops it). `1498 checks, 0 failed`, smoke clean. Next: T028 (human: skim bios, try the inspector). |
+| 2026-10-17 | T028 | Done | Human: bios OK, inspector works. Asked for bios to change behavior and for a fight-or-flight scale: added T028b and T039c (change log v1.5). |
+| 2026-10-17 | T028b | Done (human look pending) | Six traits from the bios tune hunger, patience, bank and shop; courage 0-100 is on the card. `1877 checks, 0 failed`, smoke clean. Later counts bumped by +379. |
 
 ## Change log
 
@@ -6878,3 +6919,4 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 - v1.2 (2026-10-17): T016 lamps moved from the road center lines to the four corners (each at its drivers' near right), because center-line lamps read as belonging to both directions. Drawing only; timing and tests unchanged. Agreed with the human.
 - v1.3 (2026-10-17): Added T039b (through-traffic drives off the map and new cars drive in, instead of U-turning at the edge). Placed after T039 because `car.gd` changes in 7 tasks before then; its code gets written and tested at that point. Agreed with the human.
 - v1.4 (2026-10-17): Fleeing citizens stop at building edges instead of running through them (T024 feedback, Option B). `Citizen._flee` skips a step that would land on a BLOCK cell; this also replaces the clamp to the map edge. No new tests, so the check counts are unchanged; a throwaway headless run (3,000 frames, ~70 scares) showed 0 fleeing frames on a building versus 14,794 before. Agreed with the human.
+- v1.5 (2026-10-17): Bios drive behavior (T028 feedback). Added T028b: each bio carries one of six traits (hothead, hero, nervous, snacker, penny_pincher, chill) that scale existing needs knobs, plus a seeded courage value (0 flight - 100 fight) shown on the card. Added T039c (after T039b): citizens with courage 70+ run at `theft`/`crash` dangers instead of fleeing and can tackle a thief on foot by touching it; the thief emits `theft` while walking to a car. No new danger kinds. Check counts from the Phase 5 checkpoint on went up by 379. Agreed with the human.

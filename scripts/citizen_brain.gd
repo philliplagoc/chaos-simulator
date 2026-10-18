@@ -17,10 +17,11 @@ static func scores(d: CitizenData, minute: float) -> Dictionary:
 	s[&"home"] = 90.0 if night else 15.0
 	if minute >= 6 * 60 + 30 and minute < 20 * 60:
 		s[&"cafe"] = d.hunger * 0.9
-	if d.money < 60.0 and minute >= 8 * 60 and minute < 18 * 60:
-		s[&"bank"] = (60.0 - d.money) * 1.5
+	var bank_below := d.trait_value("bank_below", 60.0)
+	if d.money < bank_below and minute >= 8 * 60 and minute < 18 * 60:
+		s[&"bank"] = (bank_below - d.money) * 1.5
 	if d.money > 50.0 and minute >= 9 * 60 and minute < 20 * 60:
-		s[&"shop"] = 30.0
+		s[&"shop"] = d.trait_value("shop_score", 30.0)
 	if minute >= 8 * 60 and minute < 19 * 60:
 		s[&"park"] = 45.0 if d.profession == &"retiree" else 25.0
 	return s

@@ -60,8 +60,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	data.hunger = minf(100.0, data.hunger + delta * Sim.SIM_MINUTES_PER_SECOND * HUNGER_PER_SIM_MINUTE)
-	data.patience = minf(100.0, data.patience + delta * 0.5)
+	data.hunger = minf(100.0, data.hunger + delta * Sim.SIM_MINUTES_PER_SECOND * HUNGER_PER_SIM_MINUTE * data.trait_value("hunger_rate", 1.0))
+	data.patience = minf(100.0, data.patience + delta * 0.5 * data.trait_value("patience_regen", 1.0))
 	match mode:
 		Mode.INSIDE:
 			_dwell -= delta
@@ -174,7 +174,7 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 	if mode != Mode.FLEEING:
 		mode = Mode.FLEEING
 		add_to_group("fleeing")
-		data.patience = maxf(0.0, data.patience - 15.0)
+		data.patience = maxf(0.0, data.patience - 15.0 * data.trait_value("scare_loss", 1.0))
 		if kind != &"panic":
 			# Panic spreads one step: bystanders who see us run also run.
 			EventBus.danger.emit.call_deferred(global_position, 50.0, &"panic")

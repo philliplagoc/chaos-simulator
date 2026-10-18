@@ -1,314 +1,1214 @@
 {
 	"office_worker": [
-		"Has a standing desk, a sitting desk, and a secret third desk nobody has ever seen.",
-		"Replies-all to every email out of pure principle and a little spite.",
-		"Owns forty mugs and insists each one has a different personality.",
-		"Schedules meetings to plan other meetings, then reschedules both.",
-		"Believes the office printer can smell fear and has proof.",
-		"Brings a label maker to potlucks and labels the potluck.",
-		"Once survived a three-hour budget meeting using only a granola bar and willpower.",
-		"Keeps a spare tie in every drawer in case of surprise promotions.",
-		"Talks to the office ficus every morning and says it gives better advice than management.",
-		"Color-codes the calendar so thoroughly that it now looks like modern art.",
-		"Pretends to understand spreadsheets and has fooled everyone for eleven years.",
-		"Microwaves fish on Fridays and refuses to apologize.",
-		"Wins the office chili cookoff every year with a recipe from a cereal box.",
-		"Sends emails at 4 a.m. to seem busy, then naps under the desk at noon.",
-		"Unironically loves team-building exercises, especially the trust falls.",
-		"Collects stress balls and squeezes a different one for each kind of stress.",
-		"Thinks \"circle back\" is a dance move and does it in the hallway.",
-		"Has been \"about to quit\" since the building had a different carpet.",
-		"Guards the good stapler like a dragon guards gold.",
-		"Quietly runs the office fantasy bowling league with an iron fist.",
-		"Wears a headset all day even though nobody has ever called.",
-		"Laughs at the boss's jokes a full second early, just to be safe.",
-		"Dreams in bullet points and wakes up with action items.",
-		"Hid a snack drawer so well that even they can't find it anymore.",
-		"Rides the elevator one floor to avoid small talk on the stairs.",
-		"Keeps a motivational poster of a cat hanging from a branch, ironically.",
-		"Considers the vending machine a close personal friend and a frequent rival.",
-		"Gave a forty-slide presentation about reducing the number of slides.",
-		"Never takes a lunch break but takes eleven coffee breaks.",
-		"Mutes every video call and then talks for ten minutes anyway.",
-		"Swears the thermostat is set to \"arctic\" by a secret office committee.",
-		"Practices handshakes in the bathroom mirror before every meeting.",
-		"Fills out expense reports for fun on weekends.",
-		"Owns a tiny zen garden and rakes it furiously when the wifi drops.",
-		"Learned to juggle using only sticky notes and a long quarterly review.",
-		"Calls everyone \"champ,\" including the regional manager and the janitor's dog.",
-		"Brought a sleeping bag to work once and never fully took it home.",
-		"Rearranges the desk every Monday to keep the week guessing.",
-		"Takes the stairs twice a day and talks about it constantly.",
-		"Is the only person who knows how to unjam the copier and charges in cookies.",
-		"Writes \"per my last email\" with the force of a thunderclap.",
-		"Can sleep with eyes open during any meeting longer than twenty minutes.",
-		"Loves Mondays, and the coworkers are still trying to figure out why.",
-		"Refers to the parking spot as \"my turf\" and means it.",
-		"Runs on cold brew, mild anxiety and a very ambitious to-do list.",
-		"Started a book club that has never once discussed a book.",
-		"Counts down to the weekend starting at 9:01 on Monday.",
-		"Organized the paperclips by size and is waiting for someone to notice.",
-		"Accidentally became the office's unofficial birthday cake coordinator years ago.",
-		"Speaks fluent corporate and can say \"synergy\" without blinking."
+		{
+			"trait": "chill",
+			"text": "Has a standing desk, a sitting desk, and a secret third desk nobody has ever seen."
+		},
+		{
+			"trait": "hothead",
+			"text": "Replies-all to every email out of pure principle and a little spite."
+		},
+		{
+			"trait": "chill",
+			"text": "Owns forty mugs and insists each one has a different personality."
+		},
+		{
+			"trait": "nervous",
+			"text": "Schedules meetings to plan other meetings, then reschedules both."
+		},
+		{
+			"trait": "nervous",
+			"text": "Believes the office printer can smell fear and has proof."
+		},
+		{
+			"trait": "snacker",
+			"text": "Brings a label maker to potlucks and labels the potluck."
+		},
+		{
+			"trait": "snacker",
+			"text": "Once survived a three-hour budget meeting using only a granola bar and willpower."
+		},
+		{
+			"trait": "nervous",
+			"text": "Keeps a spare tie in every drawer in case of surprise promotions."
+		},
+		{
+			"trait": "chill",
+			"text": "Talks to the office ficus every morning and says it gives better advice than management."
+		},
+		{
+			"trait": "nervous",
+			"text": "Color-codes the calendar so thoroughly that it now looks like modern art."
+		},
+		{
+			"trait": "nervous",
+			"text": "Pretends to understand spreadsheets and has fooled everyone for eleven years."
+		},
+		{
+			"trait": "hothead",
+			"text": "Microwaves fish on Fridays and refuses to apologize."
+		},
+		{
+			"trait": "snacker",
+			"text": "Wins the office chili cookoff every year with a recipe from a cereal box."
+		},
+		{
+			"trait": "chill",
+			"text": "Sends emails at 4 a.m. to seem busy, then naps under the desk at noon."
+		},
+		{
+			"trait": "hero",
+			"text": "Unironically loves team-building exercises, especially the trust falls."
+		},
+		{
+			"trait": "nervous",
+			"text": "Collects stress balls and squeezes a different one for each kind of stress."
+		},
+		{
+			"trait": "chill",
+			"text": "Thinks \"circle back\" is a dance move and does it in the hallway."
+		},
+		{
+			"trait": "hothead",
+			"text": "Has been \"about to quit\" since the building had a different carpet."
+		},
+		{
+			"trait": "hothead",
+			"text": "Guards the good stapler like a dragon guards gold."
+		},
+		{
+			"trait": "hothead",
+			"text": "Quietly runs the office fantasy bowling league with an iron fist."
+		},
+		{
+			"trait": "chill",
+			"text": "Wears a headset all day even though nobody has ever called."
+		},
+		{
+			"trait": "nervous",
+			"text": "Laughs at the boss's jokes a full second early, just to be safe."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Dreams in bullet points and wakes up with action items."
+		},
+		{
+			"trait": "snacker",
+			"text": "Hid a snack drawer so well that even they can't find it anymore."
+		},
+		{
+			"trait": "nervous",
+			"text": "Rides the elevator one floor to avoid small talk on the stairs."
+		},
+		{
+			"trait": "chill",
+			"text": "Keeps a motivational poster of a cat hanging from a branch, ironically."
+		},
+		{
+			"trait": "snacker",
+			"text": "Considers the vending machine a close personal friend and a frequent rival."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Gave a forty-slide presentation about reducing the number of slides."
+		},
+		{
+			"trait": "snacker",
+			"text": "Never takes a lunch break but takes eleven coffee breaks."
+		},
+		{
+			"trait": "chill",
+			"text": "Mutes every video call and then talks for ten minutes anyway."
+		},
+		{
+			"trait": "hothead",
+			"text": "Swears the thermostat is set to \"arctic\" by a secret office committee."
+		},
+		{
+			"trait": "hero",
+			"text": "Practices handshakes in the bathroom mirror before every meeting."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Fills out expense reports for fun on weekends."
+		},
+		{
+			"trait": "hothead",
+			"text": "Owns a tiny zen garden and rakes it furiously when the wifi drops."
+		},
+		{
+			"trait": "chill",
+			"text": "Learned to juggle using only sticky notes and a long quarterly review."
+		},
+		{
+			"trait": "hero",
+			"text": "Calls everyone \"champ,\" including the regional manager and the janitor's dog."
+		},
+		{
+			"trait": "chill",
+			"text": "Brought a sleeping bag to work once and never fully took it home."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Rearranges the desk every Monday to keep the week guessing."
+		},
+		{
+			"trait": "hero",
+			"text": "Takes the stairs twice a day and talks about it constantly."
+		},
+		{
+			"trait": "snacker",
+			"text": "Is the only person who knows how to unjam the copier and charges in cookies."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Writes \"per my last email\" with the force of a thunderclap."
+		},
+		{
+			"trait": "snacker",
+			"text": "Can sleep with eyes open during any meeting longer than twenty minutes."
+		},
+		{
+			"trait": "hero",
+			"text": "Loves Mondays, and the coworkers are still trying to figure out why."
+		},
+		{
+			"trait": "hero",
+			"text": "Refers to the parking spot as \"my turf\" and means it."
+		},
+		{
+			"trait": "nervous",
+			"text": "Runs on cold brew, mild anxiety and a very ambitious to-do list."
+		},
+		{
+			"trait": "snacker",
+			"text": "Started a book club that has never once discussed a book."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Counts down to the weekend starting at 9:01 on Monday."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Organized the paperclips by size and is waiting for someone to notice."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Accidentally became the office's unofficial birthday cake coordinator years ago."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Speaks fluent corporate and can say \"synergy\" without blinking."
+		}
 	],
 	"bank_teller": [
-		"Counts every coin twice and every compliment three times, just to be sure.",
-		"Can spot a fake bill from across the lobby and a fake smile from even farther.",
-		"Keeps a jar of lollipops for kids and a secret jar of better lollipops for adults.",
-		"Says \"have a nice day\" with such sincerity that people have cried.",
-		"Dreams of the vault at night, mostly about organizing it.",
-		"Stacks pennies into towers during slow afternoons and names each one.",
-		"Once balanced the drawer to the exact cent during a power outage, by candlelight.",
-		"Wears a little vest every day and considers it armor.",
-		"Remembers every customer's dog's name but none of the customers' names.",
-		"Knows the deposit slip pen chain is too short and has filed six complaints.",
-		"Practices stamping \"PAID\" with dramatic flair when nobody is watching.",
-		"Treats the coin counting machine like a temperamental racehorse.",
-		"Believes that crisp new bills smell like opportunity and slightly like toast.",
-		"Hums elevator music while counting, which makes everything take longer.",
-		"Collects misprinted receipts and frames the funniest ones.",
-		"Has never once lost a pen, which colleagues find deeply suspicious.",
-		"Takes the drive-through window very personally and waves at every car.",
-		"Rolls quarters faster than anyone in the county and has a trophy to prove it.",
-		"Gets a little thrill every time someone asks for change for a twenty.",
-		"Insists on calling the vault \"the big fella.\"",
-		"Tells customers about compound interest the way others tell ghost stories.",
-		"Volunteers to count the charity jar every year and enjoys it a bit too much.",
-		"Thinks the bank's free calendar is the best gift anyone can receive.",
-		"Smiles through every security drill like it's a surprise party.",
-		"Lives by the motto \"trust, but recount.\"",
-		"Gives out bank pens like they're limited edition collectibles.",
-		"Taps the counter bell just to hear it, three times a shift, never more.",
-		"Once found a dollar in the parking lot and deposited it immediately.",
-		"Saves every rubber band ever received in a ball the size of a melon.",
-		"Learned sign language just to chat with the quiet regular on Thursdays.",
-		"Writes thank-you notes to customers who bring exact change.",
-		"Keeps the lobby plant alive through sheer force of personality.",
-		"Speaks in a whisper near the vault, out of respect.",
-		"Can't walk past a loose coin on the sidewalk without picking it up.",
-		"Owns a tiny calculator keychain and uses it at restaurants.",
-		"Hates the sound of a dropped coin rolling under the counter more than anything.",
-		"Never takes off the name badge, even at the grocery store.",
-		"Was voted friendliest teller three years running and keeps the ribbons in a binder.",
-		"Approaches withdrawal slips with the focus of a brain surgeon.",
-		"Reads the fine print on everything, including cereal boxes.",
-		"Plans vacations with a budget spreadsheet that has its own budget.",
-		"Laughs nervously whenever anyone says the word \"audit.\"",
-		"Polishes the teller window every morning until it practically sparkles.",
-		"Greets the armored truck driver like a long-lost cousin.",
-		"Tracks the price of gold daily, despite owning zero gold.",
-		"Pretends the lobby queue rope is a velvet rope at a fancy club.",
-		"Always offers a lollipop and always takes one too.",
-		"Measures a good day in perfectly balanced drawers and free donuts.",
-		"Decorates the teller station with seasonal stickers, strictly by the calendar.",
-		"Swore never to bend a crisp bill and has kept that promise for decades."
+		{
+			"trait": "penny_pincher",
+			"text": "Counts every coin twice and every compliment three times, just to be sure."
+		},
+		{
+			"trait": "hero",
+			"text": "Can spot a fake bill from across the lobby and a fake smile from even farther."
+		},
+		{
+			"trait": "snacker",
+			"text": "Keeps a jar of lollipops for kids and a secret jar of better lollipops for adults."
+		},
+		{
+			"trait": "chill",
+			"text": "Says \"have a nice day\" with such sincerity that people have cried."
+		},
+		{
+			"trait": "chill",
+			"text": "Dreams of the vault at night, mostly about organizing it."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Stacks pennies into towers during slow afternoons and names each one."
+		},
+		{
+			"trait": "hero",
+			"text": "Once balanced the drawer to the exact cent during a power outage, by candlelight."
+		},
+		{
+			"trait": "hero",
+			"text": "Wears a little vest every day and considers it armor."
+		},
+		{
+			"trait": "chill",
+			"text": "Remembers every customer's dog's name but none of the customers' names."
+		},
+		{
+			"trait": "hothead",
+			"text": "Knows the deposit slip pen chain is too short and has filed six complaints."
+		},
+		{
+			"trait": "chill",
+			"text": "Practices stamping \"PAID\" with dramatic flair when nobody is watching."
+		},
+		{
+			"trait": "nervous",
+			"text": "Treats the coin counting machine like a temperamental racehorse."
+		},
+		{
+			"trait": "snacker",
+			"text": "Believes that crisp new bills smell like opportunity and slightly like toast."
+		},
+		{
+			"trait": "chill",
+			"text": "Hums elevator music while counting, which makes everything take longer."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Collects misprinted receipts and frames the funniest ones."
+		},
+		{
+			"trait": "nervous",
+			"text": "Has never once lost a pen, which colleagues find deeply suspicious."
+		},
+		{
+			"trait": "hothead",
+			"text": "Takes the drive-through window very personally and waves at every car."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Rolls quarters faster than anyone in the county and has a trophy to prove it."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Gets a little thrill every time someone asks for change for a twenty."
+		},
+		{
+			"trait": "chill",
+			"text": "Insists on calling the vault \"the big fella.\""
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Tells customers about compound interest the way others tell ghost stories."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Volunteers to count the charity jar every year and enjoys it a bit too much."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Thinks the bank's free calendar is the best gift anyone can receive."
+		},
+		{
+			"trait": "hero",
+			"text": "Smiles through every security drill like it's a surprise party."
+		},
+		{
+			"trait": "nervous",
+			"text": "Lives by the motto \"trust, but recount.\""
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Gives out bank pens like they're limited edition collectibles."
+		},
+		{
+			"trait": "nervous",
+			"text": "Taps the counter bell just to hear it, three times a shift, never more."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Once found a dollar in the parking lot and deposited it immediately."
+		},
+		{
+			"trait": "chill",
+			"text": "Saves every rubber band ever received in a ball the size of a melon."
+		},
+		{
+			"trait": "hero",
+			"text": "Learned sign language just to chat with the quiet regular on Thursdays."
+		},
+		{
+			"trait": "chill",
+			"text": "Writes thank-you notes to customers who bring exact change."
+		},
+		{
+			"trait": "hothead",
+			"text": "Keeps the lobby plant alive through sheer force of personality."
+		},
+		{
+			"trait": "nervous",
+			"text": "Speaks in a whisper near the vault, out of respect."
+		},
+		{
+			"trait": "snacker",
+			"text": "Can't walk past a loose coin on the sidewalk without picking it up."
+		},
+		{
+			"trait": "snacker",
+			"text": "Owns a tiny calculator keychain and uses it at restaurants."
+		},
+		{
+			"trait": "hothead",
+			"text": "Hates the sound of a dropped coin rolling under the counter more than anything."
+		},
+		{
+			"trait": "nervous",
+			"text": "Never takes off the name badge, even at the grocery store."
+		},
+		{
+			"trait": "chill",
+			"text": "Was voted friendliest teller three years running and keeps the ribbons in a binder."
+		},
+		{
+			"trait": "nervous",
+			"text": "Approaches withdrawal slips with the focus of a brain surgeon."
+		},
+		{
+			"trait": "snacker",
+			"text": "Reads the fine print on everything, including cereal boxes."
+		},
+		{
+			"trait": "nervous",
+			"text": "Plans vacations with a budget spreadsheet that has its own budget."
+		},
+		{
+			"trait": "nervous",
+			"text": "Laughs nervously whenever anyone says the word \"audit.\""
+		},
+		{
+			"trait": "hothead",
+			"text": "Polishes the teller window every morning until it practically sparkles."
+		},
+		{
+			"trait": "hero",
+			"text": "Greets the armored truck driver like a long-lost cousin."
+		},
+		{
+			"trait": "snacker",
+			"text": "Tracks the price of gold daily, despite owning zero gold."
+		},
+		{
+			"trait": "hothead",
+			"text": "Pretends the lobby queue rope is a velvet rope at a fancy club."
+		},
+		{
+			"trait": "snacker",
+			"text": "Always offers a lollipop and always takes one too."
+		},
+		{
+			"trait": "snacker",
+			"text": "Measures a good day in perfectly balanced drawers and free donuts."
+		},
+		{
+			"trait": "hothead",
+			"text": "Decorates the teller station with seasonal stickers, strictly by the calendar."
+		},
+		{
+			"trait": "hothead",
+			"text": "Swore never to bend a crisp bill and has kept that promise for decades."
+		}
 	],
 	"barista": [
-		"Writes customers' names wrong on purpose and calls it performance art.",
-		"Can draw a swan in latte foam, but only a sad swan.",
-		"Judges you silently for ordering decaf, then gives you extra foam anyway.",
-		"Has a different apron for every mood and a favorite for Tuesdays.",
-		"Steams milk with the intensity of a concert violinist.",
-		"Believes every bean has a story and will tell you all of them.",
-		"Once made three hundred lattes in a single morning and still talks about it.",
-		"Plays obscure jazz on the shop speakers and dares anyone to complain.",
-		"Keeps a tip jar labeled \"college fund\" and another labeled \"chaos fund.\"",
-		"Knows your order before you walk in and is offended when you change it.",
-		"Practices latte art on the weekends using only pancake batter.",
-		"Refuses to drink coffee after noon but makes it until closing.",
-		"Calls the espresso machine \"Big Bertha\" and pats it every morning.",
-		"Grows a tiny mustache every winter and calls it seasonal.",
-		"Thinks oat milk is a lifestyle, not a choice.",
-		"Hums along to the grinder like it's a favorite song.",
-		"Draws a tiny cartoon on every cup lid and has a loyal fan base.",
-		"Burnt a croissant once and has never forgiven the oven.",
-		"Pours drinks with the dramatic flair of a magician pulling a rabbit from a hat.",
-		"Says \"great choice\" to every order, even plain hot water.",
-		"Spent a summer learning to say \"espresso\" correctly and now corrects everyone.",
-		"Owns four bean grinders at home and none of them match.",
-		"Tells regulars their fortunes based on how the foam settles.",
-		"Survives on leftover pastries and an alarming amount of whipped cream.",
-		"Remembers every regular's birthday and sneaks them a free cookie.",
-		"Treats the morning rush like a sports final and stretches beforehand.",
-		"Insists the cinnamon shaker is haunted.",
-		"Ran out of cups once and served coffee in a soup bowl with pride.",
-		"Gets the jitters just walking past the bean sacks in the stockroom.",
-		"Wipes the counter in perfect circles, never squares.",
-		"Brews a secret blend for close friends and denies it exists.",
-		"Dyes their hair to match the seasonal drink menu.",
-		"Took a pottery class to make the perfect mug and made one terrible bowl.",
-		"Keeps dog treats behind the counter and knows every regular's dog by name.",
-		"Rates every rainy day by how many hot chocolates get ordered.",
-		"Wears tiny coffee bean earrings and gets compliments daily.",
-		"Writes bad poetry on the chalkboard menu every Monday.",
-		"Dreams of opening a cafe for cats, but only very calm cats.",
-		"Considers caramel drizzle a form of personal expression.",
-		"Taps every cup twice before handing it over, for luck.",
-		"Pronounces \"croissant\" four different ways depending on the customer.",
-		"Never spills a drop on the job but spills everything at home.",
-		"Quotes old movies while making cappuccinos.",
-		"Moonlights as a karaoke host and rehearses songs into the milk pitcher.",
-		"Debates foam density with coworkers like the fate of the cafe depends on it.",
-		"Collects lost umbrellas and lends them back to customers for a smile.",
-		"Smells permanently of espresso, which is honestly not a bad deal.",
-		"Laughs at every pun on the coffee cup sleeves, even the old ones.",
-		"Organizes the syrup bottles by color, then by flavor, then by vibe.",
-		"Hates pumpkin season and secretly loves it more than anyone."
+		{
+			"trait": "hothead",
+			"text": "Writes customers' names wrong on purpose and calls it performance art."
+		},
+		{
+			"trait": "chill",
+			"text": "Can draw a swan in latte foam, but only a sad swan."
+		},
+		{
+			"trait": "hothead",
+			"text": "Judges you silently for ordering decaf, then gives you extra foam anyway."
+		},
+		{
+			"trait": "chill",
+			"text": "Has a different apron for every mood and a favorite for Tuesdays."
+		},
+		{
+			"trait": "hothead",
+			"text": "Steams milk with the intensity of a concert violinist."
+		},
+		{
+			"trait": "chill",
+			"text": "Believes every bean has a story and will tell you all of them."
+		},
+		{
+			"trait": "hero",
+			"text": "Once made three hundred lattes in a single morning and still talks about it."
+		},
+		{
+			"trait": "hothead",
+			"text": "Plays obscure jazz on the shop speakers and dares anyone to complain."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Keeps a tip jar labeled \"college fund\" and another labeled \"chaos fund.\""
+		},
+		{
+			"trait": "hothead",
+			"text": "Knows your order before you walk in and is offended when you change it."
+		},
+		{
+			"trait": "snacker",
+			"text": "Practices latte art on the weekends using only pancake batter."
+		},
+		{
+			"trait": "nervous",
+			"text": "Refuses to drink coffee after noon but makes it until closing."
+		},
+		{
+			"trait": "chill",
+			"text": "Calls the espresso machine \"Big Bertha\" and pats it every morning."
+		},
+		{
+			"trait": "chill",
+			"text": "Grows a tiny mustache every winter and calls it seasonal."
+		},
+		{
+			"trait": "chill",
+			"text": "Thinks oat milk is a lifestyle, not a choice."
+		},
+		{
+			"trait": "chill",
+			"text": "Hums along to the grinder like it's a favorite song."
+		},
+		{
+			"trait": "hero",
+			"text": "Draws a tiny cartoon on every cup lid and has a loyal fan base."
+		},
+		{
+			"trait": "hothead",
+			"text": "Burnt a croissant once and has never forgiven the oven."
+		},
+		{
+			"trait": "hero",
+			"text": "Pours drinks with the dramatic flair of a magician pulling a rabbit from a hat."
+		},
+		{
+			"trait": "chill",
+			"text": "Says \"great choice\" to every order, even plain hot water."
+		},
+		{
+			"trait": "hothead",
+			"text": "Spent a summer learning to say \"espresso\" correctly and now corrects everyone."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Owns four bean grinders at home and none of them match."
+		},
+		{
+			"trait": "nervous",
+			"text": "Tells regulars their fortunes based on how the foam settles."
+		},
+		{
+			"trait": "snacker",
+			"text": "Survives on leftover pastries and an alarming amount of whipped cream."
+		},
+		{
+			"trait": "hero",
+			"text": "Remembers every regular's birthday and sneaks them a free cookie."
+		},
+		{
+			"trait": "hero",
+			"text": "Treats the morning rush like a sports final and stretches beforehand."
+		},
+		{
+			"trait": "nervous",
+			"text": "Insists the cinnamon shaker is haunted."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Ran out of cups once and served coffee in a soup bowl with pride."
+		},
+		{
+			"trait": "nervous",
+			"text": "Gets the jitters just walking past the bean sacks in the stockroom."
+		},
+		{
+			"trait": "nervous",
+			"text": "Wipes the counter in perfect circles, never squares."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Brews a secret blend for close friends and denies it exists."
+		},
+		{
+			"trait": "chill",
+			"text": "Dyes their hair to match the seasonal drink menu."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Took a pottery class to make the perfect mug and made one terrible bowl."
+		},
+		{
+			"trait": "hero",
+			"text": "Keeps dog treats behind the counter and knows every regular's dog by name."
+		},
+		{
+			"trait": "snacker",
+			"text": "Rates every rainy day by how many hot chocolates get ordered."
+		},
+		{
+			"trait": "chill",
+			"text": "Wears tiny coffee bean earrings and gets compliments daily."
+		},
+		{
+			"trait": "nervous",
+			"text": "Writes bad poetry on the chalkboard menu every Monday."
+		},
+		{
+			"trait": "nervous",
+			"text": "Dreams of opening a cafe for cats, but only very calm cats."
+		},
+		{
+			"trait": "snacker",
+			"text": "Considers caramel drizzle a form of personal expression."
+		},
+		{
+			"trait": "nervous",
+			"text": "Taps every cup twice before handing it over, for luck."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Pronounces \"croissant\" four different ways depending on the customer."
+		},
+		{
+			"trait": "nervous",
+			"text": "Never spills a drop on the job but spills everything at home."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Quotes old movies while making cappuccinos."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Moonlights as a karaoke host and rehearses songs into the milk pitcher."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Debates foam density with coworkers like the fate of the cafe depends on it."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Collects lost umbrellas and lends them back to customers for a smile."
+		},
+		{
+			"trait": "snacker",
+			"text": "Smells permanently of espresso, which is honestly not a bad deal."
+		},
+		{
+			"trait": "snacker",
+			"text": "Laughs at every pun on the coffee cup sleeves, even the old ones."
+		},
+		{
+			"trait": "snacker",
+			"text": "Organizes the syrup bottles by color, then by flavor, then by vibe."
+		},
+		{
+			"trait": "snacker",
+			"text": "Hates pumpkin season and secretly loves it more than anyone."
+		}
 	],
 	"shop_clerk": [
-		"Knows exactly which aisle everything is in except the thing you're holding.",
-		"Rings up items at lightning speed and bags them at a glacial pace.",
-		"Has memorized every price in the store and recites them while falling asleep.",
-		"Straightens the candy rack every hour whether it needs it or not.",
-		"Says \"paper or plastic\" like a game show host asking the final question.",
-		"Once restocked the entire soup aisle alphabetically just to feel something.",
-		"Wears the name tag upside down on Fridays to see who notices.",
-		"Can price-check a melon by weight alone and is usually right.",
-		"Believes the self-checkout machines are plotting something.",
-		"Keeps a list of the weirdest things ever bought together, and it is long.",
-		"Folds shirts so perfectly that customers are afraid to touch them.",
-		"Greets every customer with a fun fact about the store's history.",
-		"Hums the store radio jingle so often that it's now stuck in everyone's head.",
-		"Treats coupon day like a holiday and prepares for it all week.",
-		"Pretends the price scanner is a laser blaster when the store is empty.",
-		"Loves a good return policy debate more than most people love pizza.",
-		"Survived the great glitter spill in aisle seven and still finds sparkles.",
-		"Considers the store mascot a close coworker and personal hero.",
-		"Thinks the mop bucket has a personality, mostly grumpy.",
-		"Collects the rubber bands from vegetable bunches and has a plan for them.",
-		"Takes inventory counts very seriously and very loudly.",
-		"Gives customers directions by naming nearby snacks.",
-		"Practices the perfect receipt fold during lunch breaks.",
-		"Tells kids the store cat is the real manager, and the store cat agrees.",
-		"Learned to stock shelves blindfolded on a dare and never stopped.",
-		"Rates every customer's cart like a judge at a cooking show.",
-		"Owns a vest with more pockets than anyone could ever need.",
-		"Never forgets a face but always forgets where the mop is.",
-		"Swears the frozen aisle is at least ten degrees colder on Tuesdays.",
-		"Wins every argument about which register is fastest.",
-		"Rearranges the impulse-buy rack to tell a little story every week.",
-		"Waves goodbye to every customer, even the grumpy ones, especially the grumpy ones.",
-		"Gets genuinely excited about new shipments of tape.",
-		"Spends breaks reading the ingredients on snack bags out loud.",
-		"Calls the shopping carts \"the herd\" and rounds them up at dusk.",
-		"Dreams of a store where every barcode actually scans on the first try.",
-		"Was employee of the month nine times and keeps a spot on the wall warm.",
-		"Bags groceries like it's a giant three-dimensional puzzle.",
-		"Laughs politely at the \"if it doesn't scan, it's free\" joke every single time.",
-		"Writes the sale signs in handwriting so fancy nobody can read them.",
-		"Tracks the store's busiest hours in a notebook, like a weather scientist.",
-		"Remembers the regulars' usual items and quietly sets them aside.",
-		"Insists the store music gets worse after 3 p.m.",
-		"Organizes the lost and found by color and emotional value.",
-		"Hates the squeaky cart wheel with a passion usually reserved for cartoon villains.",
-		"Mops the floor in a figure eight pattern for good luck.",
-		"Taught the new hire to stack cans into a pyramid, and it was beautiful.",
-		"Is suspicious of anyone who buys only one banana.",
-		"Counts the minutes until the closing announcement and reads it with feeling.",
-		"Speaks to the security camera every morning like a friendly neighbor."
+		{
+			"trait": "chill",
+			"text": "Knows exactly which aisle everything is in except the thing you're holding."
+		},
+		{
+			"trait": "chill",
+			"text": "Rings up items at lightning speed and bags them at a glacial pace."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Has memorized every price in the store and recites them while falling asleep."
+		},
+		{
+			"trait": "nervous",
+			"text": "Straightens the candy rack every hour whether it needs it or not."
+		},
+		{
+			"trait": "hero",
+			"text": "Says \"paper or plastic\" like a game show host asking the final question."
+		},
+		{
+			"trait": "nervous",
+			"text": "Once restocked the entire soup aisle alphabetically just to feel something."
+		},
+		{
+			"trait": "chill",
+			"text": "Wears the name tag upside down on Fridays to see who notices."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Can price-check a melon by weight alone and is usually right."
+		},
+		{
+			"trait": "nervous",
+			"text": "Believes the self-checkout machines are plotting something."
+		},
+		{
+			"trait": "snacker",
+			"text": "Keeps a list of the weirdest things ever bought together, and it is long."
+		},
+		{
+			"trait": "nervous",
+			"text": "Folds shirts so perfectly that customers are afraid to touch them."
+		},
+		{
+			"trait": "hero",
+			"text": "Greets every customer with a fun fact about the store's history."
+		},
+		{
+			"trait": "chill",
+			"text": "Hums the store radio jingle so often that it's now stuck in everyone's head."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Treats coupon day like a holiday and prepares for it all week."
+		},
+		{
+			"trait": "hero",
+			"text": "Pretends the price scanner is a laser blaster when the store is empty."
+		},
+		{
+			"trait": "hothead",
+			"text": "Loves a good return policy debate more than most people love pizza."
+		},
+		{
+			"trait": "nervous",
+			"text": "Survived the great glitter spill in aisle seven and still finds sparkles."
+		},
+		{
+			"trait": "hero",
+			"text": "Considers the store mascot a close coworker and personal hero."
+		},
+		{
+			"trait": "hothead",
+			"text": "Thinks the mop bucket has a personality, mostly grumpy."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Collects the rubber bands from vegetable bunches and has a plan for them."
+		},
+		{
+			"trait": "hothead",
+			"text": "Takes inventory counts very seriously and very loudly."
+		},
+		{
+			"trait": "snacker",
+			"text": "Gives customers directions by naming nearby snacks."
+		},
+		{
+			"trait": "chill",
+			"text": "Practices the perfect receipt fold during lunch breaks."
+		},
+		{
+			"trait": "chill",
+			"text": "Tells kids the store cat is the real manager, and the store cat agrees."
+		},
+		{
+			"trait": "hero",
+			"text": "Learned to stock shelves blindfolded on a dare and never stopped."
+		},
+		{
+			"trait": "snacker",
+			"text": "Rates every customer's cart like a judge at a cooking show."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Owns a vest with more pockets than anyone could ever need."
+		},
+		{
+			"trait": "chill",
+			"text": "Never forgets a face but always forgets where the mop is."
+		},
+		{
+			"trait": "nervous",
+			"text": "Swears the frozen aisle is at least ten degrees colder on Tuesdays."
+		},
+		{
+			"trait": "hothead",
+			"text": "Wins every argument about which register is fastest."
+		},
+		{
+			"trait": "snacker",
+			"text": "Rearranges the impulse-buy rack to tell a little story every week."
+		},
+		{
+			"trait": "hero",
+			"text": "Waves goodbye to every customer, even the grumpy ones, especially the grumpy ones."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Gets genuinely excited about new shipments of tape."
+		},
+		{
+			"trait": "snacker",
+			"text": "Spends breaks reading the ingredients on snack bags out loud."
+		},
+		{
+			"trait": "chill",
+			"text": "Calls the shopping carts \"the herd\" and rounds them up at dusk."
+		},
+		{
+			"trait": "nervous",
+			"text": "Dreams of a store where every barcode actually scans on the first try."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Was employee of the month nine times and keeps a spot on the wall warm."
+		},
+		{
+			"trait": "chill",
+			"text": "Bags groceries like it's a giant three-dimensional puzzle."
+		},
+		{
+			"trait": "nervous",
+			"text": "Laughs politely at the \"if it doesn't scan, it's free\" joke every single time."
+		},
+		{
+			"trait": "chill",
+			"text": "Writes the sale signs in handwriting so fancy nobody can read them."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Tracks the store's busiest hours in a notebook, like a weather scientist."
+		},
+		{
+			"trait": "snacker",
+			"text": "Remembers the regulars' usual items and quietly sets them aside."
+		},
+		{
+			"trait": "hothead",
+			"text": "Insists the store music gets worse after 3 p.m."
+		},
+		{
+			"trait": "snacker",
+			"text": "Organizes the lost and found by color and emotional value."
+		},
+		{
+			"trait": "hothead",
+			"text": "Hates the squeaky cart wheel with a passion usually reserved for cartoon villains."
+		},
+		{
+			"trait": "nervous",
+			"text": "Mops the floor in a figure eight pattern for good luck."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Taught the new hire to stack cans into a pyramid, and it was beautiful."
+		},
+		{
+			"trait": "nervous",
+			"text": "Is suspicious of anyone who buys only one banana."
+		},
+		{
+			"trait": "hothead",
+			"text": "Counts the minutes until the closing announcement and reads it with feeling."
+		},
+		{
+			"trait": "snacker",
+			"text": "Speaks to the security camera every morning like a friendly neighbor."
+		}
 	],
 	"delivery_driver": [
-		"Has a personal rivalry with one specific mailbox on Birch Court.",
-		"Knows every pothole in town by name and greets them as old friends.",
-		"Can parallel park a van in a space meant for a bicycle.",
-		"Waves at every dog on the route, and most of the dogs wave back.",
-		"Once delivered a package to the wrong house and made a lifelong friend.",
-		"Keeps a stash of dog biscuits in the glovebox for diplomatic purposes.",
-		"Believes the map app is jealous of their sense of direction.",
-		"Sings along to the radio so loudly that customers request songs.",
-		"Rings the doorbell exactly once and then waits with heroic patience.",
-		"Treats every staircase as a personal fitness challenge.",
-		"Carries a clipboard purely for the confidence it brings.",
-		"Drives the same route every day but insists it's different each time.",
-		"Leaves packages in the most creative hiding spots in the neighborhood.",
-		"Swears the hill on Maple Street gets steeper every year.",
-		"Wears shorts in every season, including during last winter's snowstorm.",
-		"Counts steps every day and has walked to the moon twice, on paper.",
-		"Calls the delivery van \"the beast\" and gives it a pep talk each morning.",
-		"Gets along with every cat on the route except one very orange one.",
-		"Dreams of a world with no \"sorry we missed you\" slips.",
-		"Times every delivery with a stopwatch and tries to beat yesterday.",
-		"Eats lunch in the van with the precision of a racing pit crew.",
-		"Never uses the horn, believing it is rude to the street.",
-		"Learned to sign for packages with either hand after an unfortunate wrist sprain.",
-		"Thinks porches tell you everything you need to know about a person.",
-		"Stacks boxes so neatly that the warehouse uses photos of them for training.",
-		"Rates every doormat on a scale from \"welcome\" to \"go away.\"",
-		"Tells stories about the great box avalanche of last December.",
-		"Hums the same three notes all day and nobody knows the song.",
-		"Wins the warehouse snack draft every week through careful strategy.",
-		"Owns six pairs of the same comfortable shoes and rotates them carefully.",
-		"Talks to the packages, telling them to be brave on the journey.",
-		"Remembers which houses have the nicest garden gnomes.",
-		"Collects unusual return addresses and imagines the senders' lives.",
-		"Prefers the scenic route, even when the scenic route is a parking lot.",
-		"Survives entirely on gas station coffee and sheer determination.",
-		"Practices the gentle porch drop on quiet streets, aiming for a perfect landing.",
-		"Took a wrong turn once and discovered the best taco truck in town.",
-		"Is on a first-name basis with every crossing guard in the district.",
-		"Uses the turn signal so faithfully that other drivers find it suspicious.",
-		"Considers heavy boxes a compliment from the universe.",
-		"Brakes for squirrels, ducks and the occasional confused goose.",
-		"Smiles at doorbell cameras like they're old friends.",
-		"Laughs off rainy days and then complains about wet socks for hours.",
-		"Spends weekends washing the van while listening to delivery podcasts.",
-		"Plans the perfect route on a paper map, then ignores it.",
-		"Insists the van smells like adventure, not old cardboard.",
-		"Rides a bicycle on days off, just to see the route from a new angle.",
-		"Writes thank-you notes to porches with cozy chairs.",
-		"Mastered the art of carrying seven boxes and a coffee at once.",
-		"Whistles at the end of every shift so the van knows it did well."
+		{
+			"trait": "hothead",
+			"text": "Has a personal rivalry with one specific mailbox on Birch Court."
+		},
+		{
+			"trait": "chill",
+			"text": "Knows every pothole in town by name and greets them as old friends."
+		},
+		{
+			"trait": "hero",
+			"text": "Can parallel park a van in a space meant for a bicycle."
+		},
+		{
+			"trait": "chill",
+			"text": "Waves at every dog on the route, and most of the dogs wave back."
+		},
+		{
+			"trait": "chill",
+			"text": "Once delivered a package to the wrong house and made a lifelong friend."
+		},
+		{
+			"trait": "nervous",
+			"text": "Keeps a stash of dog biscuits in the glovebox for diplomatic purposes."
+		},
+		{
+			"trait": "hothead",
+			"text": "Believes the map app is jealous of their sense of direction."
+		},
+		{
+			"trait": "chill",
+			"text": "Sings along to the radio so loudly that customers request songs."
+		},
+		{
+			"trait": "chill",
+			"text": "Rings the doorbell exactly once and then waits with heroic patience."
+		},
+		{
+			"trait": "hero",
+			"text": "Treats every staircase as a personal fitness challenge."
+		},
+		{
+			"trait": "nervous",
+			"text": "Carries a clipboard purely for the confidence it brings."
+		},
+		{
+			"trait": "chill",
+			"text": "Drives the same route every day but insists it's different each time."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Leaves packages in the most creative hiding spots in the neighborhood."
+		},
+		{
+			"trait": "hothead",
+			"text": "Swears the hill on Maple Street gets steeper every year."
+		},
+		{
+			"trait": "hero",
+			"text": "Wears shorts in every season, including during last winter's snowstorm."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Counts steps every day and has walked to the moon twice, on paper."
+		},
+		{
+			"trait": "hero",
+			"text": "Calls the delivery van \"the beast\" and gives it a pep talk each morning."
+		},
+		{
+			"trait": "hothead",
+			"text": "Gets along with every cat on the route except one very orange one."
+		},
+		{
+			"trait": "nervous",
+			"text": "Dreams of a world with no \"sorry we missed you\" slips."
+		},
+		{
+			"trait": "hothead",
+			"text": "Times every delivery with a stopwatch and tries to beat yesterday."
+		},
+		{
+			"trait": "snacker",
+			"text": "Eats lunch in the van with the precision of a racing pit crew."
+		},
+		{
+			"trait": "nervous",
+			"text": "Never uses the horn, believing it is rude to the street."
+		},
+		{
+			"trait": "nervous",
+			"text": "Learned to sign for packages with either hand after an unfortunate wrist sprain."
+		},
+		{
+			"trait": "chill",
+			"text": "Thinks porches tell you everything you need to know about a person."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Stacks boxes so neatly that the warehouse uses photos of them for training."
+		},
+		{
+			"trait": "hothead",
+			"text": "Rates every doormat on a scale from \"welcome\" to \"go away.\""
+		},
+		{
+			"trait": "nervous",
+			"text": "Tells stories about the great box avalanche of last December."
+		},
+		{
+			"trait": "chill",
+			"text": "Hums the same three notes all day and nobody knows the song."
+		},
+		{
+			"trait": "snacker",
+			"text": "Wins the warehouse snack draft every week through careful strategy."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Owns six pairs of the same comfortable shoes and rotates them carefully."
+		},
+		{
+			"trait": "hero",
+			"text": "Talks to the packages, telling them to be brave on the journey."
+		},
+		{
+			"trait": "chill",
+			"text": "Remembers which houses have the nicest garden gnomes."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Collects unusual return addresses and imagines the senders' lives."
+		},
+		{
+			"trait": "chill",
+			"text": "Prefers the scenic route, even when the scenic route is a parking lot."
+		},
+		{
+			"trait": "snacker",
+			"text": "Survives entirely on gas station coffee and sheer determination."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Practices the gentle porch drop on quiet streets, aiming for a perfect landing."
+		},
+		{
+			"trait": "snacker",
+			"text": "Took a wrong turn once and discovered the best taco truck in town."
+		},
+		{
+			"trait": "hero",
+			"text": "Is on a first-name basis with every crossing guard in the district."
+		},
+		{
+			"trait": "nervous",
+			"text": "Uses the turn signal so faithfully that other drivers find it suspicious."
+		},
+		{
+			"trait": "hothead",
+			"text": "Considers heavy boxes a compliment from the universe."
+		},
+		{
+			"trait": "nervous",
+			"text": "Brakes for squirrels, ducks and the occasional confused goose."
+		},
+		{
+			"trait": "nervous",
+			"text": "Smiles at doorbell cameras like they're old friends."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Laughs off rainy days and then complains about wet socks for hours."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Spends weekends washing the van while listening to delivery podcasts."
+		},
+		{
+			"trait": "snacker",
+			"text": "Plans the perfect route on a paper map, then ignores it."
+		},
+		{
+			"trait": "snacker",
+			"text": "Insists the van smells like adventure, not old cardboard."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Rides a bicycle on days off, just to see the route from a new angle."
+		},
+		{
+			"trait": "snacker",
+			"text": "Writes thank-you notes to porches with cozy chairs."
+		},
+		{
+			"trait": "snacker",
+			"text": "Mastered the art of carrying seven boxes and a coffee at once."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Whistles at the end of every shift so the van knows it did well."
+		}
 	],
 	"retiree": [
-		"Feeds the park pigeons on a strict schedule and keeps a spreadsheet of their moods.",
-		"Walks the same loop every morning and reports any changes to the neighbors.",
-		"Has opinions about every hedge on the block and shares them freely.",
-		"Sits on the porch and waves at cars like they're in a parade.",
-		"Once won a pie contest so decisively that the contest was retired too.",
-		"Keeps a crossword in every pocket and a pencil behind each ear.",
-		"Tells the same fishing story weekly, and the fish grows every time.",
-		"Knows the bus schedule by heart and corrects the bus drivers.",
-		"Believes kids these days are fine, actually, but loves to grumble anyway.",
-		"Gardens with the focus of a chess grandmaster.",
-		"Takes a nap every afternoon at exactly 2:15 and calls it a meeting.",
-		"Collects postcards from places they have never been.",
-		"Can still do a cartwheel and will prove it at any family event.",
-		"Reads the newspaper front to back, including the ads, twice.",
-		"Learned to text last year and now sends forty emojis per message.",
-		"Drives exactly five under the speed limit, with both hands, always.",
-		"Wears socks with sandals proudly and considers it a fashion statement.",
-		"Bakes cookies for the whole street and expects detailed reviews.",
-		"Thinks the mail carrier is the most important person in town.",
-		"Plays cards at the community center and hasn't lost since spring.",
-		"Calls the hardware store just to chat about bolts.",
-		"Spends hours on the bench outside the bakery, people-watching like a pro.",
-		"Remembers when this whole district was a cornfield, or claims to.",
-		"Organizes the neighborhood watch, which mostly watches birds.",
-		"Treats the weather forecast like a thrilling soap opera.",
-		"Swims laps at dawn and brags about it by breakfast.",
-		"Owns a tiny dog with a big attitude and an even bigger sweater collection.",
-		"Writes strongly worded letters to the newspaper about squirrels.",
-		"Started learning the accordion at seventy, and the neighbors have noticed.",
-		"Never misses an early bird dinner special, ever.",
-		"Gives unsolicited but surprisingly good advice about tomatoes.",
-		"Dances in the kitchen to old records whenever nobody is looking.",
-		"Volunteers at the library and shushes people with real joy.",
-		"Insists on paying with exact change, counted slowly.",
-		"Rides a three-wheeled bicycle with a basket full of library books.",
-		"Hosts a weekly puzzle night where the puzzle is never finished.",
-		"Laughs at their own jokes before the punchline, every time.",
-		"Practices tai chi in the park and ignores the curious ducks.",
-		"Gets the mail the very second it arrives, as if expecting a fortune.",
-		"Mows the lawn in perfect diagonal stripes and expects compliments.",
-		"Retired after forty years of accounting and now counts birds instead.",
-		"Hums old show tunes in the grocery line and occasionally takes requests.",
-		"Saves every twist tie and rubber band, just in case.",
-		"Was a champion yo-yo player as a kid and still carries one.",
-		"Rearranges the lawn flamingos every season to tell a new story.",
-		"Complains about the cold, then sits outside in it for hours.",
-		"Visits the farmers market daily, mostly for the free samples.",
-		"Talks to the tomato plants and swears they grow faster for it.",
-		"Admires every passing dog loudly and asks for its name, not the owner's.",
-		"Considers a good bench the finest invention in human history."
+		{
+			"trait": "penny_pincher",
+			"text": "Feeds the park pigeons on a strict schedule and keeps a spreadsheet of their moods."
+		},
+		{
+			"trait": "nervous",
+			"text": "Walks the same loop every morning and reports any changes to the neighbors."
+		},
+		{
+			"trait": "hothead",
+			"text": "Has opinions about every hedge on the block and shares them freely."
+		},
+		{
+			"trait": "chill",
+			"text": "Sits on the porch and waves at cars like they're in a parade."
+		},
+		{
+			"trait": "snacker",
+			"text": "Once won a pie contest so decisively that the contest was retired too."
+		},
+		{
+			"trait": "chill",
+			"text": "Keeps a crossword in every pocket and a pencil behind each ear."
+		},
+		{
+			"trait": "chill",
+			"text": "Tells the same fishing story weekly, and the fish grows every time."
+		},
+		{
+			"trait": "hothead",
+			"text": "Knows the bus schedule by heart and corrects the bus drivers."
+		},
+		{
+			"trait": "hothead",
+			"text": "Believes kids these days are fine, actually, but loves to grumble anyway."
+		},
+		{
+			"trait": "chill",
+			"text": "Gardens with the focus of a chess grandmaster."
+		},
+		{
+			"trait": "chill",
+			"text": "Takes a nap every afternoon at exactly 2:15 and calls it a meeting."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Collects postcards from places they have never been."
+		},
+		{
+			"trait": "hero",
+			"text": "Can still do a cartwheel and will prove it at any family event."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Reads the newspaper front to back, including the ads, twice."
+		},
+		{
+			"trait": "chill",
+			"text": "Learned to text last year and now sends forty emojis per message."
+		},
+		{
+			"trait": "nervous",
+			"text": "Drives exactly five under the speed limit, with both hands, always."
+		},
+		{
+			"trait": "hero",
+			"text": "Wears socks with sandals proudly and considers it a fashion statement."
+		},
+		{
+			"trait": "snacker",
+			"text": "Bakes cookies for the whole street and expects detailed reviews."
+		},
+		{
+			"trait": "nervous",
+			"text": "Thinks the mail carrier is the most important person in town."
+		},
+		{
+			"trait": "hothead",
+			"text": "Plays cards at the community center and hasn't lost since spring."
+		},
+		{
+			"trait": "chill",
+			"text": "Calls the hardware store just to chat about bolts."
+		},
+		{
+			"trait": "snacker",
+			"text": "Spends hours on the bench outside the bakery, people-watching like a pro."
+		},
+		{
+			"trait": "chill",
+			"text": "Remembers when this whole district was a cornfield, or claims to."
+		},
+		{
+			"trait": "hero",
+			"text": "Organizes the neighborhood watch, which mostly watches birds."
+		},
+		{
+			"trait": "nervous",
+			"text": "Treats the weather forecast like a thrilling soap opera."
+		},
+		{
+			"trait": "hero",
+			"text": "Swims laps at dawn and brags about it by breakfast."
+		},
+		{
+			"trait": "hothead",
+			"text": "Owns a tiny dog with a big attitude and an even bigger sweater collection."
+		},
+		{
+			"trait": "hothead",
+			"text": "Writes strongly worded letters to the newspaper about squirrels."
+		},
+		{
+			"trait": "chill",
+			"text": "Started learning the accordion at seventy, and the neighbors have noticed."
+		},
+		{
+			"trait": "snacker",
+			"text": "Never misses an early bird dinner special, ever."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Gives unsolicited but surprisingly good advice about tomatoes."
+		},
+		{
+			"trait": "chill",
+			"text": "Dances in the kitchen to old records whenever nobody is looking."
+		},
+		{
+			"trait": "hothead",
+			"text": "Volunteers at the library and shushes people with real joy."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Insists on paying with exact change, counted slowly."
+		},
+		{
+			"trait": "nervous",
+			"text": "Rides a three-wheeled bicycle with a basket full of library books."
+		},
+		{
+			"trait": "snacker",
+			"text": "Hosts a weekly puzzle night where the puzzle is never finished."
+		},
+		{
+			"trait": "hero",
+			"text": "Laughs at their own jokes before the punchline, every time."
+		},
+		{
+			"trait": "nervous",
+			"text": "Practices tai chi in the park and ignores the curious ducks."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Gets the mail the very second it arrives, as if expecting a fortune."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Mows the lawn in perfect diagonal stripes and expects compliments."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Retired after forty years of accounting and now counts birds instead."
+		},
+		{
+			"trait": "hero",
+			"text": "Hums old show tunes in the grocery line and occasionally takes requests."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Saves every twist tie and rubber band, just in case."
+		},
+		{
+			"trait": "nervous",
+			"text": "Was a champion yo-yo player as a kid and still carries one."
+		},
+		{
+			"trait": "nervous",
+			"text": "Rearranges the lawn flamingos every season to tell a new story."
+		},
+		{
+			"trait": "nervous",
+			"text": "Complains about the cold, then sits outside in it for hours."
+		},
+		{
+			"trait": "snacker",
+			"text": "Visits the farmers market daily, mostly for the free samples."
+		},
+		{
+			"trait": "penny_pincher",
+			"text": "Talks to the tomato plants and swears they grow faster for it."
+		},
+		{
+			"trait": "snacker",
+			"text": "Admires every passing dog loudly and asks for its name, not the owner's."
+		},
+		{
+			"trait": "snacker",
+			"text": "Considers a good bench the finest invention in human history."
+		}
 	]
 }

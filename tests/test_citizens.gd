@@ -29,7 +29,16 @@ func run(t) -> bool:
 	for p in with_bios:
 		t.check(p.bio != "", "%s has a bio" % p.name)
 		bios_seen[p.bio] = true
+		var r: Array = CitizenData.TRAITS.get(p.personality, {}).get("courage", [-1.0, -1.0])
+		t.check(p.courage >= r[0] and p.courage <= r[1], "%s (%s) has courage in range" % [p.name, p.personality])
 	t.check(bios_seen.size() == 40, "no two citizens share a bio")
+	var bios_again := CitizenData.generate_all(40, city, Sim.make_rng(7), 16, CitizenData.load_bios())
+	t.check(bios_again[39].summary() == with_bios[39].summary(), "same seed gives the same traits and courage")
+	var pincher := CitizenData.new()
+	pincher.money = 70.0
+	t.check(CitizenBrain.scores(pincher, 10 * 60)[&"bank"] == 0.0, "70 money: no bank trip by default")
+	pincher.personality = &"penny_pincher"
+	t.check(CitizenBrain.scores(pincher, 10 * 60)[&"bank"] > 0.0, "70 money: a penny pincher wants the bank")
 
 	var d := CitizenData.new()
 	d.profession = &"office_worker"
