@@ -4037,7 +4037,7 @@ replace with:
 - **Why:** spec step 7 ("place ~6 hydrants and ~5 barrels plus the pumps; a debug key that drops a speeding car at the mouse aimed at the nearest object").
 - **Docs & gotchas:** debug cars are `temporary`: they vanish instead of being towed. Right after a crash, a car keeps reporting its impact velocity for 0.2 s, so whatever it hit still knows how hard the hit was even if its hurtbox checks a frame late.
 
-- [ ] **Step 1: Write the failing layout test and register it**
+- [x] **Step 1: Write the failing layout test and register it**
 
 Create `tests/test_layout.gd` with exactly this:
 
@@ -4104,8 +4104,8 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_layout.gd ...`
-- [ ] **Step 3: Debug launch in the car**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_layout.gd ...`
+- [x] **Step 3: Debug launch in the car**
 
 Edit `scripts/car.gd` (7 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -4226,7 +4226,7 @@ func _tow() -> void:
 		return
 ```
 
-- [ ] **Step 4: Place objects and add the F key**
+- [x] **Step 4: Place objects and add the F key**
 
 Edit `scripts/world.gd` (6 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -4347,8 +4347,8 @@ func _launch_debug_car(at: Vector2) -> void:
 	car.launch(target.global_position - at, 220.0)
 ```
 
-- [ ] **Step 5: Run and confirm it passes**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 6: Commit**: `git add -A; git commit -m "T032: place hydrants, barrels, pumps; F launches a debug car" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 5: Run and confirm it passes**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 6: Commit**: `git add -A; git commit -m "T032: place hydrants, barrels, pumps; F launches a debug car" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T033 🧑 HUMAN: Hydrant puddle and a double explosion
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -6915,6 +6915,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T029 | Done | `Hurtbox`, `Puddle`, `Hydrant` added (not placed yet; T032 places them); cars get weak brakes and fishtail in puddles. `1877 checks, 0 failed`, smoke clean. Next: T030 (barrels and pumps). |
 | 2026-10-17 | T030 | Done | `FuelBarrel` (barrel or pump) chain-explodes via `explosion` danger; cars inside 60% of a blast crash. `1877 checks, 0 failed`, smoke clean. Next: T031 (lights get knocked out). |
 | 2026-10-17 | T031 | Done | Light pole (NE corner) + knock-out by hit, `take_hit` or explosion. Change 4 skipped (v1.6). `1877 checks, 0 failed`, smoke clean. Next: T032 (place objects, F debug car). |
+| 2026-10-17 | T032 | Done | 6 hydrants, 5 barrels, 3 pumps placed; F launches a temporary debug car at the nearest object. Runner got one new suite line (same as the full replace). `1893 checks, 0 failed`, smoke clean. Next: T033 (human: hydrant, double explosion, light). |
 
 ## Change log
 

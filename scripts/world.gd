@@ -1,7 +1,8 @@
 extends Node2D
 ## Root of the game. Draws the district and spawns everything in it.
 ## Left-click a citizen to inspect them. F3 toggles goal labels.
-## Right-click drops a test danger.
+## Right-click drops a test danger. F launches a speeding debug car from the
+## mouse at the nearest object.
 
 const COLORS := {
 	CityMap.Cell.BLOCK: Color("3f6b3a"),
@@ -19,6 +20,14 @@ const BLOCK_COLORS := {
 	&"park": Color("4e9a3f"),
 	&"lot": Color("55555c"),
 }
+const HYDRANT_CELLS: Array[Vector2i] = [
+	Vector2i(31, 15), Vector2i(65, 21), Vector2i(33, 39),
+	Vector2i(63, 33), Vector2i(20, 19), Vector2i(80, 35),
+]
+const BARREL_CELLS: Array[Vector2i] = [
+	Vector2i(41, 37), Vector2i(56, 37), Vector2i(58, 37), Vector2i(31, 25), Vector2i(65, 10),
+]
+const PUMP_CELLS: Array[Vector2i] = [Vector2i(44, 40), Vector2i(48, 40), Vector2i(52, 40)]
 const CAR_COLORS: Array[Color] = [
 	Color("e74c3c"), Color("3498db"), Color("f1c40f"), Color("ecf0f1"),
 	Color("2ecc71"), Color("e67e22"), Color("9b59b6"), Color("1abc9c"),
@@ -35,6 +44,7 @@ func _ready() -> void:
 	add_child(inspector)
 	inspector.closed.connect(func() -> void: camera.follow = null)
 	_spawn_lights()
+	_spawn_objects()
 	_spawn_people_and_cars()
 	queue_redraw()
 
@@ -47,6 +57,18 @@ func _spawn_lights() -> void:
 		light.offset_s = i * 6.5
 		add_child(light)
 		i += 1
+
+
+func _spawn_objects() -> void:
+	for cell in HYDRANT_CELLS:
+		var h := Hydrant.new()
+		h.position = CityMap.cell_to_world(cell)
+		add_child(h)
+	for cell in BARREL_CELLS + PUMP_CELLS:
+		var b := FuelBarrel.new()
+		b.is_pump = cell in PUMP_CELLS
+		b.position = CityMap.cell_to_world(cell)
+		add_child(b)
 
 
 ## Citizens first (so the seed decides who owns a car), then their cars parked
@@ -78,6 +100,8 @@ func _new_car() -> Car:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
 		Citizen.show_debug = not Citizen.show_debug
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F:
+		_launch_debug_car(get_global_mouse_position())
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var c := _citizen_at(get_global_mouse_position())
 		if c:
@@ -87,6 +111,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		var at := get_global_mouse_position()
 		EventBus.danger.emit(at, 150.0, &"test")
 		FxRing.spawn(self, at, 150.0, Color.ORANGE_RED)
+
+
+## Debug: a speeding car from `at` aimed at the nearest object.
+func _launch_debug_car(at: Vector2) -> void:
+	var target: Node2D = null
+	for o: Node2D in get_tree().get_nodes_in_group("objects"):
+		if target == null or o.global_position.distance_to(at) < target.global_position.distance_to(at):
+			target = o
+	if target == null:
+		return
+	var car := _new_car()
+	car.temporary = true
+	car.global_position = at
+	car.center = at
+	car.launch(target.global_position - at, 220.0)
 
 
 ## Nearest visible citizen within a few screen pixels of `at`.

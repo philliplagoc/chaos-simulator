@@ -30,6 +30,7 @@ var path_i := 0
 var lane_side := 1.0          # +1 = right lane, -1 = oncoming lane
 var patience := 100.0
 var owner_id := -1            # citizen id, -1 = ambient traffic
+var temporary := false        # debug cars vanish instead of being towed
 var parked_at := -1           # destination index while PARKED
 var _goal_dest := -1          # destination index an owner asked for
 var _lane_offset := Vector2.ZERO
@@ -37,6 +38,8 @@ var _state_time := 0.0
 var _flee_left := 0.0
 var _stuck := 0.0
 var _slippery := 0            # how many puddles we're in
+var _launch_left := 0.0       # seconds left flying straight (debug launch)
+var _impact_velocity := Vector2.ZERO
 var _drawn_state := -1
 var _sensor := ShapeCast2D.new()
 
@@ -88,6 +91,15 @@ func drive_to(dest_index: int, driver_patience: float) -> void:
 	patience = driver_patience
 
 
+## Debug: fly straight along `dir`, ignoring lanes and lights, for 3 seconds.
+func launch(dir: Vector2, launch_speed: float) -> void:
+	heading = dir.normalized()
+	speed = launch_speed
+	rotation = heading.angle()
+	_launch_left = 3.0
+	_set_state(State.FLEEING)
+
+
 ## Route to the owner's goal if there is one, otherwise wander.
 func _route() -> void:
 	if _goal_dest < 0:
@@ -124,6 +136,14 @@ func _physics_process(delta: float) -> void:
 				_tow()
 			_redraw_if_changed()
 			return
+	if _launch_left > 0.0:
+		_launch_left -= delta
+		velocity = heading * speed
+		move_and_slide()
+		_check_crash()
+		if _launch_left <= 0.0 and state != State.CRASHED:
+			queue_free()
+		return
 	if path_i >= path.size():
 		if _goal_dest >= 0:
 			park(_goal_dest)
@@ -247,14 +267,20 @@ func _check_crash() -> void:
 
 
 ## Velocity along the lane, ignoring the sideways slide of lane changes.
+## Just after a crash it still reports the impact speed, so whatever we hit
+## notices how hard it was hit even if it checks a frame late.
 func lane_velocity() -> Vector2:
+	if state == State.CRASHED and _state_time < 0.2:
+		return _impact_velocity
 	return heading * speed
 
 
 func crash(_impact: float) -> void:
 	if state == State.CRASHED:
 		return
+	_impact_velocity = heading * speed
 	_set_state(State.CRASHED)
+	_launch_left = 0.0
 	speed = 0.0
 	velocity = Vector2.ZERO
 	EventBus.danger.emit(global_position, 110.0, &"crash")
@@ -262,6 +288,9 @@ func crash(_impact: float) -> void:
 
 ## Clear a crashed car: it reappears on a free road cell and drives on.
 func _tow() -> void:
+	if temporary:
+		queue_free()
+		return
 	_set_state(State.DRIVING)
 	lane_side = 1.0
 	_lane_offset = Vector2.ZERO
