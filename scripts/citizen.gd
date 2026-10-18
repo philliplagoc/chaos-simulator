@@ -66,6 +66,7 @@ func _ready() -> void:
 	EventBus.danger.connect(_on_danger)
 	if car:
 		car.arrived.connect(_on_car_arrived)
+		car.burnt.connect(_on_car_burnt)
 	_enter(data.home)
 	_think = Sim.rng.randf() * THINK_SECONDS  # don't all think on the same frame
 
@@ -174,6 +175,14 @@ func _enter(dest: int) -> void:
 func _on_car_arrived() -> void:
 	data.patience = car.patience
 	_enter(target_dest)
+
+
+## Our car blew up. If we were in it, we're thrown out seeing stars.
+func _on_car_burnt(at: Vector2) -> void:
+	car = null
+	data.has_car = false
+	if mode == Mode.DRIVING:
+		_on_settled(at, 0.0)
 
 
 func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:

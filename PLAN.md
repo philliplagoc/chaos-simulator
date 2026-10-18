@@ -5069,7 +5069,7 @@ Say to the human:
 - **Depends on:** T036
 - **Files:** Create `scripts/car_thief.gd` · Modify `scripts/car.gd`, `scripts/citizen.gd`
 - **Why:** R8, D5, spec step 9 ("walks to the nearest stopped car, pulls the driver out (driver becomes a fleeing citizen; emit a theft danger), then drives at high speed toward a random map exit ignoring lights and braking late; despawns at the map edge").
-- **Docs & gotchas:** the thief calls `steal()` only when touching the car. An owner who gets pulled out hears about it through the car's `driver_ejected` signal, then flees from the `theft` danger like anyone else. A stolen car is `temporary`: it's gone after the map edge or a tow, and its owner walks from then on.
+- **Docs & gotchas:** the thief calls `steal()` only when touching the car. An owner who gets pulled out hears about it through the car's `driver_ejected` signal, then flees from the `theft` danger like anyone else. A stolen car is `temporary`: it's gone after the map edge or a crash, and its owner walks from then on.
 
 - [ ] **Step 1: Stolen-car mode in the car**
 
@@ -5131,7 +5131,7 @@ replace with:
 func steal() -> void:
 	if stolen or _spinning or state == State.CRASHED:
 		return
-	if owner_id >= 0 and parked_at < 0:
+	if owner_id >= 0 and parked_at < 0 and not _homing:
 		driver_ejected.emit(global_position)
 	if parked_at >= 0:
 		center = CityMap.cell_to_world(Sim.city.destinations[parked_at].curb)
@@ -5552,7 +5552,7 @@ replace with:
 - **Depends on:** T039 (or T038 if T039 was skipped)
 - **Files:** Modify `scripts/car.gd` · maybe `tests/` (a new check)
 - **Why:** human request at T019: cars U-turning at the city limits looks fake. Ambient cars should drive off the map, disappear, and a new car should drive in from another random edge.
-- **Docs & gotchas:** the code is **not written yet** on purpose: `car.gd` changes in T022–T039, so write and test it against the T039 version. Rules: only ambient cars (`owner_id == -1`) and never a stolen car or the Road Rager mid-rage; owned cars still park at home. Exits come from `Sim.city.edge_exits()`. The new car enters at a random edge exit with no car within 2.5 cells, facing inward; use `Sim.rng` only (seeded). Keep the car count at `Sim.CAR_COUNT` (reuse the same node: re-`place()` it, as `_tow()` does). Check that T046's later find blocks in `car.gd` still match after this change, and fix them in this plan if not.
+- **Docs & gotchas:** the code is **not written yet** on purpose: `car.gd` changes in T022–T039, so write and test it against the T039 version. Rules: only ambient cars (`owner_id == -1`) and never a stolen car or the Road Rager mid-rage; owned cars still park at home. Exits come from `Sim.city.edge_exits()`. The new car enters at a random edge exit with no car within 2.5 cells, facing inward; use `Sim.rng` only (seeded). Keep the car count at `Sim.CAR_COUNT` (reuse the same node: re-`place()` it). Since v1.8 a burnt car is removed for good: also drive a new ambient car in from an edge so the count returns to `Sim.CAR_COUNT`. Check that T046's later find blocks in `car.gd` still match after this change, and fix them in this plan if not.
 
 - [ ] **Step 1: Agent writes the change**, then adds one headless check (an ambient car routed to an edge exit re-enters at an edge cell, and the car count stays the same). Show the human the diff before committing.
 - [ ] **Step 2: Run tests and smoke**: TEST → all pass (count goes up by the new checks; update the later checkpoint counts in this plan). SMOKE → clean.
@@ -6237,7 +6237,7 @@ replace with:
 
 ```gdscript
 	body.color = color
-	body.texture = sprite
+	body.texture = null if _burnt else sprite  # a husk spins as a black box
 ```
 
 Change 5, find:
@@ -6253,6 +6253,7 @@ replace with:
 ```gdscript
 	if _sprite:
 		_sprite.modulate = Color(0.45, 0.45, 0.45) if state == State.CRASHED else Color.WHITE
+		_sprite.visible = not _burnt  # the charred husk box is drawn instead
 	else:
 		var body := color.darkened(0.55) if state == State.CRASHED else color
 		draw_rect(Rect2(-SIZE / 2.0, SIZE), body)
@@ -6921,7 +6922,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T034 | Done | `ImpactBody` (not used yet) + invisible map walls on `L_WALLS`. `1893 checks, 0 failed`, smoke clean. Next: T035 (citizens tumble). |
 | 2026-10-17 | T035 | Done | Citizens tumble (car hurtbox at 40 px/s or inside 60% of a blast), see stars 3 s, fade, reappear at home after 30 s. `1893 checks, 0 failed`, smoke clean. Next: T036 (car spinouts). |
 | 2026-10-17 | T036 | Done | Car spinouts (130+ spin, 220+ wreck; fast into a puddle; inside 60% of a blast); cars `take_hit` each other, hydrants and barrels. `1893 checks, 0 failed`, smoke clean. Next: T037 (human: tumble check, Nov 5 rule, post 3). |
-| 2026-10-17 | T037 | Done (post pending) | Human: tumble and spinout look good. Feedback: spinning cars phased through buildings → buildings are now solid for impact bodies (change log v1.7). Today is Oct 17, before the Nov 5 cutoff: keep the Road Rager. Substack post 3 NOT published yet; ask the human for the URL later. |
+| 2026-10-17 | T037 | Done (post pending) | Human: tumble and spinout look good. Feedback: spinning cars phased through buildings → buildings are now solid for impact bodies (change log v1.7); cars teleported back to the road after crashes → they drive back, and cars burnt by a blast are removed for good (v1.8). Today is Oct 17, before the Nov 5 cutoff: keep the Road Rager. Substack post 3 NOT published yet; ask the human for the URL later. |
 
 ## Change log
 
@@ -6933,4 +6934,5 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 - v1.5 (2026-10-17): Bios drive behavior (T028 feedback). Added T028b: each bio carries one of six traits (hothead, hero, nervous, snacker, penny_pincher, chill) that scale existing needs knobs, plus a seeded courage value (0 flight - 100 fight) shown on the card. Added T039c (after T039b): citizens with courage 70+ run at `theft`/`crash` dangers instead of fleeing and can tackle a thief on foot by touching it; the thief emits `theft` while walking to a car. No new danger kinds. Check counts from the Phase 5 checkpoint on went up by 379. Agreed with the human.
 - v1.6 (2026-10-17): T031 Change 4 (draw a pole dot) dropped: since v1.2 the NE lamp sits exactly on the pole spot and would hide the dot, so the NE lamp marks the pole. Collision, hurtbox and knock-out unchanged.
 - v1.7 (2026-10-17): Buildings are solid for tumbling and spinning bodies (T037 feedback: spinning cars passed through buildings, then snapped back to the road). `World._spawn_walls` also puts an `L_WALLS` box on each block's drawn building, leaving the 3 entrance-side rows open for the parking slots and gas pumps. Agents on paths are unaffected (cars and citizens don't mask `L_WALLS`). No new tests, so check counts are unchanged; a throwaway headless run fired 5 spinning car bodies at buildings: 0 ended inside one with the walls, versus 3 of 5 without. Agreed with the human.
+- v1.8 (2026-10-17): No teleporting after a collision (T037 feedback). A crashed car sits for `CRASH_SECONDS`, then drives on from where it stopped (`Car._recover`, which replaces `_tow`); off its lane it drives back to the nearest road cell (`_drive_back`) instead of snapping there. A blast inside 30% of its radius burns a car: a charred husk that is removed after `CRASH_SECONDS` and never comes back. Its owner loses the car (`burnt` signal) and, if aboard, is thrown out seeing stars. From 30% to 60% the car spins out as before. A spun parked car stays parked and rolls back into its slot, or drives back to its lot by road if it landed on the road. Every arrival now rolls into the slot (`park(dest, true)`) instead of appearing there. Plan text updated: T038 `steal()` skips `driver_ejected` for a car driving home empty (`_homing`), T039b refills burnt cars, T046 hides the sprite on a husk. Later find blocks re-checked: all still match exactly once. No new tests, so check counts are unchanged; a throwaway headless run (3 sim hours, all cars watched, 3 parked + 1 driving spun out, 2 blasts, one with the owner driving) saw 0 jumps over 15 px in a frame, versus 79-147 px parking hops before. Agreed with the human.
 - v1.5 (2026-10-17): Bios drive behavior (T028 feedback). Added T028b: each bio carries one of six traits (hothead, hero, nervous, snacker, penny_pincher, chill) that scale existing needs knobs, plus a seeded courage value (0 flight - 100 fight) shown on the card. Added T039c (after T039b): citizens with courage 70+ run at `theft`/`crash` dangers instead of fleeing and can tackle a thief on foot by touching it; the thief emits `theft` while walking to a car. No new danger kinds. Check counts from the Phase 5 checkpoint on went up by 379. Agreed with the human.

@@ -6,8 +6,11 @@ extends CharacterBody2D
 ## Ambient cars wander. An owned car stays PARKED until its owner calls drive_to().
 ## A hard hit swaps it for a spinning ImpactBody; once that settles the car
 ## drives back to the nearest lane, or stays CRASHED if the hit was huge.
+## A crashed car sits for a while, then drives on from where it stopped.
+## A blast close by burns it: a charred husk that is removed for good.
 
 signal arrived  # an owned car reached its goal and parked
+signal burnt(at: Vector2)  # blown up: the owner can't use it any more
 
 enum State { DRIVING, STOPPED_AT_LIGHT, BRAKING, CRASHED, FLEEING, PARKED }
 
@@ -20,7 +23,9 @@ const TURN_SPEED := 40.0
 const CRASH_SPEED := 75.0     # fender-bender: stop and sit there
 const SPINOUT_SPEED := 130.0  # spin out, then drive on
 const WRECK_SPEED := 220.0    # spin out and stay wrecked
-const CRASH_SECONDS := 20.0   # 40 sim minutes, then the car is towed
+const CRASH_SECONDS := 20.0   # 40 sim minutes, then the car drives on (a husk is removed)
+const HUSK := Color(0.08, 0.08, 0.08)
+const PARK_SPEED := 40.0      # rolling into a parking slot
 const STUCK_SECONDS := 40.0   # longer than a full light cycle (38 s)
 const FLEE_SECONDS := 3.0
 
@@ -47,7 +52,8 @@ var _impact_velocity := Vector2.ZERO
 var _since_impact := 99.0
 var _spinning := false
 var _spin_hard := false
-var _spun_from_lot := -1
+var _burnt := false
+var _homing := false          # driving back to our lot empty after a spin
 var _drawn_state := -1
 var _sensor := ShapeCast2D.new()
 
@@ -79,14 +85,16 @@ func place(cell: Vector2i) -> void:
 	_route()
 
 
-## Park in this destination's lot (slot picked by owner id).
-func park(dest_index: int) -> void:
+## Park in this destination's lot (slot picked by owner id). With `roll_in`
+## the car rolls into the slot from where it is instead of appearing there.
+func park(dest_index: int, roll_in := false) -> void:
 	_set_state(State.PARKED)
 	parked_at = dest_index
 	_goal_dest = -1
 	center = CityMap.cell_to_world(Sim.city.parking_slot(dest_index, maxi(owner_id, 0)))
-	global_position = center
-	rotation = 0.0
+	if not roll_in:
+		global_position = center
+		rotation = 0.0
 	speed = 0.0
 	velocity = Vector2.ZERO
 	_lane_offset = Vector2.ZERO
@@ -136,15 +144,16 @@ func _physics_process(delta: float) -> void:
 		return  # the ImpactBody is doing the moving
 	match state:
 		State.PARKED:
+			if global_position.distance_to(center) > 0.5:
+				global_position = global_position.move_toward(center, PARK_SPEED * delta)  # roll into the slot
+				rotation = lerp_angle(rotation, 0.0, minf(1.0, 4.0 * delta))
 			if _goal_dest >= 0 and Sim.is_road_clear(Sim.city.destinations[parked_at].curb):
-				center = CityMap.cell_to_world(Sim.city.destinations[parked_at].curb)
 				parked_at = -1
-				_set_state(State.DRIVING)
-				_route()
+				_drive_back()
 			return
 		State.CRASHED:
 			if _state_time > CRASH_SECONDS:
-				_tow()
+				_recover()
 			_redraw_if_changed()
 			return
 	if _launch_left > 0.0:
@@ -157,8 +166,11 @@ func _physics_process(delta: float) -> void:
 		return
 	if path_i >= path.size():
 		if _goal_dest >= 0:
-			park(_goal_dest)
-			arrived.emit()
+			park(_goal_dest, true)
+			if _homing:
+				_homing = false  # nobody aboard to tell
+			else:
+				arrived.emit()
 			return
 		new_route()
 	_flee_left = maxf(0.0, _flee_left - delta)
@@ -328,7 +340,6 @@ func spinout(impulse: Vector2, hard: bool) -> void:
 		return
 	_spinning = true
 	_spin_hard = hard
-	_spun_from_lot = parked_at
 	_launch_left = 0.0
 	visible = false
 	collision_layer = 0
@@ -336,6 +347,8 @@ func spinout(impulse: Vector2, hard: bool) -> void:
 	body.is_car = true
 	body.size = SIZE
 	body.color = color
+	if _burnt:
+		body.color = HUSK
 	body.position = global_position
 	body.rotation = rotation
 	body.linear_velocity = heading * speed
@@ -352,29 +365,56 @@ func _on_spin_settled(at: Vector2, angle: float) -> void:
 	collision_layer = Sim.L_CARS
 	global_position = at
 	rotation = angle
+	velocity = Vector2.ZERO
 	_lane_offset = Vector2.ZERO
+	queue_redraw()
 	if _spin_hard:
 		_set_state(State.DRIVING)
 		crash(0.0)
 		return
-	if _spun_from_lot >= 0:
-		park(_spun_from_lot)  # a parked car rolls back into its slot
-		return
-	center = CityMap.cell_to_world(Sim.city.nearest_road_cell(CityMap.world_to_cell(at)))
-	_set_state(State.DRIVING)
-	_route()
+	_recover()
 
 
-## Clear a crashed car: it reappears on a free road cell and drives on.
-func _tow() -> void:
-	if temporary:
+## Back to normal from where we stand (no teleporting). A parked car stays
+## parked wherever it ended up; a car still on its lane drives on; anything
+## else drives back to the nearest road first. Husks and debug cars go away.
+func _recover() -> void:
+	if temporary or _burnt:
 		queue_free()
 		return
+	if parked_at >= 0:
+		if _goal_dest < 0 and Sim.city.is_road(CityMap.world_to_cell(global_position)):
+			_goal_dest = parked_at  # knocked into the road: drive back to the lot
+			_homing = true
+			parked_at = -1
+			_drive_back()
+		else:
+			_set_state(State.PARKED)  # a waiting owner pulls out from here
+		return
 	_set_state(State.DRIVING)
+	if global_position.distance_to(center) > 12.0 or not Sim.city.is_road(CityMap.world_to_cell(global_position)):
+		_drive_back()
+
+
+## Drive (not jump) to the nearest road cell, then on along a fresh route.
+func _drive_back() -> void:
+	center = CityMap.cell_to_world(Sim.city.nearest_road_cell(CityMap.world_to_cell(global_position)))
+	_route()  # routes from the road cell...
+	center = global_position  # ...but we start from where we actually are
+	path_i = 0  # path[0] is that road cell
+	heading = Vector2.from_angle(rotation)
 	lane_side = 1.0
 	_lane_offset = Vector2.ZERO
-	rotation = 0.0
-	place(Sim.free_road_cell())
+	speed = 0.0
+	_set_state(State.DRIVING)
+
+
+## Caught near the middle of a blast: burnt out for good.
+func _burn() -> void:
+	_burnt = true
+	_state_time = 0.0  # a car that was already crashed smoulders for the full time
+	queue_redraw()
+	burnt.emit(global_position)
 
 
 ## Patience drains while stuck and recovers while moving. When it has been
@@ -393,11 +433,15 @@ func _update_patience(delta: float) -> void:
 
 
 func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
-	if state == State.CRASHED or _spinning:
+	if _spinning or _burnt:
 		return
 	var d := global_position.distance_to(pos)
+	if kind == &"explosion" and d < radius * 0.3:
+		_burn()
+	if state == State.CRASHED:
+		return
 	if kind == &"explosion" and d < radius * 0.6:
-		spinout((global_position - pos).normalized() * 380.0, d < radius * 0.3)  # caught in the blast
+		spinout((global_position - pos).normalized() * 380.0, _burnt)  # caught in the blast
 		return
 	if state == State.PARKED:
 		return
@@ -434,3 +478,7 @@ func _draw() -> void:
 		draw_rect(Rect2(Vector2(-10, 3), Vector2(2, 3)), Color.RED)
 	if state == State.CRASHED:
 		draw_circle(Vector2(0, 0), 7.0, Color(0.3, 0.3, 0.3, 0.7))
+	if _burnt:
+		draw_rect(Rect2(-SIZE / 2.0, SIZE), HUSK)  # charred husk with a little smoke
+		draw_circle(Vector2(-3, -2), 4.0, Color(0.4, 0.4, 0.4, 0.6))
+		draw_circle(Vector2(4, 2), 3.0, Color(0.4, 0.4, 0.4, 0.6))
