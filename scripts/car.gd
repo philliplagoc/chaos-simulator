@@ -36,6 +36,7 @@ var _lane_offset := Vector2.ZERO
 var _state_time := 0.0
 var _flee_left := 0.0
 var _stuck := 0.0
+var _slippery := 0            # how many puddles we're in
 var _drawn_state := -1
 var _sensor := ShapeCast2D.new()
 
@@ -133,10 +134,14 @@ func _physics_process(delta: float) -> void:
 	var target := _target_speed()
 	if global_position.distance_to(center + _lane_offset) > 10.0:
 		target = 0.0  # body got shoved or blocked: let it catch up before moving on
-	speed = move_toward(speed, target, (ACCEL if target > speed else DECEL) * delta)
+	var grip := 0.25 if _slippery > 0 else 1.0  # wet road: weak brakes
+	speed = move_toward(speed, target, (ACCEL if target > speed else DECEL * grip) * delta)
 	_advance(speed * delta)
 	var right := Vector2(-heading.y, heading.x)
-	_lane_offset = _lane_offset.lerp(right * LANE_OFFSET * lane_side, minf(1.0, 8.0 * delta))
+	var drift := 0.0
+	if _slippery > 0 and speed > 30.0:
+		drift = sin(_state_time * 9.0) * 12.0  # fishtail across the lane
+	_lane_offset = _lane_offset.lerp(right * (LANE_OFFSET * lane_side + drift), minf(1.0, 8.0 * delta))
 	# Capped so a shove from a collision doesn't snap back at crazy speed.
 	velocity = ((center + _lane_offset - global_position) / delta).limit_length(250.0)
 	move_and_slide()
@@ -284,6 +289,11 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 		return
 	if kind in [&"crash", &"explosion", &"theft"] and global_position.distance_to(pos) < radius * 1.5:
 		_flee_left = FLEE_SECONDS
+
+
+## Called by a Puddle when we drive in or out of it.
+func set_slippery(on: bool) -> void:
+	_slippery = maxi(0, _slippery + (1 if on else -1))
 
 
 func _set_state(s: State) -> void:

@@ -3627,7 +3627,7 @@ Say to the human:
   - A puddle calls `set_slippery()` on cars that enter and leave. That's allowed, because the two bodies are touching.
   - Before a puddle frees itself, it un-slips any car still inside, because `body_exited` isn't guaranteed when an area is freed.
 
-- [ ] **Step 1: Write the hurtbox, puddle and hydrant**
+- [x] **Step 1: Write the hurtbox, puddle and hydrant**
 
 Create `scripts/hurtbox.gd` with exactly this:
 
@@ -3759,7 +3759,7 @@ func _draw() -> void:
 			draw_line(Vector2.ZERO, Vector2.from_angle(i * TAU / 6.0) * 12.0, Color.DEEP_SKY_BLUE, 2.0)
 ```
 
-- [ ] **Step 2: Wet roads in the car (weak brakes, fishtailing)**
+- [x] **Step 2: Wet roads in the car (weak brakes, fishtailing)**
 
 Edit `scripts/car.gd` (3 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -3817,8 +3817,8 @@ func set_slippery(on: bool) -> void:
 func _set_state(s: State) -> void:
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T029: hydrants burst into slippery puddles" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `1877 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T029: hydrants burst into slippery puddles" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T030 [R6] Fuel barrels and gas pumps that chain-explode
 - **Owner:** Agent
@@ -6912,6 +6912,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T028 | Done | Human: bios OK, inspector works. Asked for bios to change behavior and for a fight-or-flight scale: added T028b and T039c (change log v1.5). |
 | 2026-10-17 | T028b | Done | Six traits from the bios tune hunger, patience, bank and shop; courage 0-100 is on the card. `1877 checks, 0 failed`, smoke clean. Later counts bumped by +379. |
 | 2026-10-17 | Phase 5 | Done | Checkpoint: `1877 checks, 0 failed`, smoke clean. Human: card shows trait + courage, looks good. Pushed to GitHub. Next: T029 (hydrants and puddles). Start a fresh session. |
+| 2026-10-17 | T029 | Done | `Hurtbox`, `Puddle`, `Hydrant` added (not placed yet; T032 places them); cars get weak brakes and fishtail in puddles. `1877 checks, 0 failed`, smoke clean. Next: T030 (barrels and pumps). |
 
 ## Change log
 
