@@ -43,10 +43,33 @@ func _ready() -> void:
 	add_child(DesktopBanner.new())
 	add_child(inspector)
 	inspector.closed.connect(func() -> void: camera.follow = null)
+	_spawn_walls()
 	_spawn_lights()
 	_spawn_objects()
 	_spawn_people_and_cars()
 	queue_redraw()
+
+
+## Invisible walls around the map so tumbling bodies bounce back in.
+func _spawn_walls() -> void:
+	var m := CityMap.map_rect()
+	var t := 64.0
+	for r: Rect2 in [
+		Rect2(m.position.x - t, m.position.y - t, m.size.x + 2 * t, t),
+		Rect2(m.position.x - t, m.end.y, m.size.x + 2 * t, t),
+		Rect2(m.position.x - t, m.position.y, t, m.size.y),
+		Rect2(m.end.x, m.position.y, t, m.size.y),
+	]:
+		var wall := StaticBody2D.new()
+		wall.collision_layer = Sim.L_WALLS
+		wall.collision_mask = 0
+		wall.position = r.get_center()
+		var shape := CollisionShape2D.new()
+		var rect := RectangleShape2D.new()
+		rect.size = r.size
+		shape.shape = rect
+		wall.add_child(shape)
+		add_child(wall)
 
 
 func _spawn_lights() -> void:

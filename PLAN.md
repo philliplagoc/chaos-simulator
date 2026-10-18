@@ -4379,7 +4379,7 @@ Say to the human:
 - **Why:** R7, spec step 8 ("RigidBody2D, no gravity, moderate linear and angular damping, bouncy physics material"), risk #5 ("cap impulse strength, clamp to map bounds, force-settle after 4 seconds"), web constraint "at most about 5 ragdolls at once".
 - **Docs & gotchas:** https://docs.godotengine.org/en/stable/classes/class_rigidbody2d.html. Use impulses for one-time hits, never every frame. `apply_torque_impulse` uses the inertia computed from the shape. A static `active` counter enforces the limit of 5. Invisible walls around the map (layer `L_WALLS`) keep bodies inside.
 
-- [ ] **Step 1: Write the body**
+- [x] **Step 1: Write the body**
 
 Create `scripts/impact_body.gd` with exactly this:
 
@@ -4471,7 +4471,7 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, 4.0, color)
 ```
 
-- [ ] **Step 2: Add walls around the map**
+- [x] **Step 2: Add walls around the map**
 
 Edit `scripts/world.gd` (2 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -6918,6 +6918,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T032 | Done | 6 hydrants, 5 barrels, 3 pumps placed; F launches a temporary debug car at the nearest object. Runner got one new suite line (same as the full replace). `1893 checks, 0 failed`, smoke clean. Next: T033 (human: hydrant, double explosion, light). |
 | 2026-10-17 | T033 | Done | Human: hydrant puddle + fishtailing, double barrel explosion, knocked-out light flashing yellow: all three worked. |
 | 2026-10-17 | Phase 6 | Done | Checkpoint: `1893 checks, 0 failed`, smoke clean. Pushed to GitHub. Human asked when cars hit pedestrians: that is T035 (Phase 7). Next: T034 (ImpactBody and map walls). Start a fresh session. |
+| 2026-10-17 | T034 | Done | `ImpactBody` (not used yet) + invisible map walls on `L_WALLS`. `1893 checks, 0 failed`, smoke clean. Next: T035 (citizens tumble). |
 
 ## Change log
 
