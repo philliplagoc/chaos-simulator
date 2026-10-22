@@ -163,13 +163,13 @@ func _route() -> void:
 
 
 ## Pick a road cell and path to it: ambient traffic heads for a random map exit
-## (it leaves town there), owned cars wander. Prefer routes that don't start
+## (it leaves town there), owned cars and the Road Rager wander. Prefer routes that don't start
 ## with a U-turn (dead ends at the map edge still need one).
 func new_route() -> void:
 	var from := CityMap.world_to_cell(center)
 	var exits := Sim.city.edge_exits()
 	for attempt in 10:
-		var goal: Vector2i = exits[Sim.rng.randi_range(0, exits.size() - 1)] if owner_id < 0 else Sim.free_road_cell()
+		var goal: Vector2i = exits[Sim.rng.randi_range(0, exits.size() - 1)] if owner_id < 0 and not rager else Sim.free_road_cell()
 		path = Sim.nav.road_path(from, goal)
 		if path.size() > 1 and (path[1] - center).normalized().dot(heading) > -0.5:
 			break
@@ -215,7 +215,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				arrived.emit()
 			return
-		if owner_id < 0 and CityMap.world_to_cell(center) in Sim.city.edge_exits() and not (rager and anger > ANGER_TAILGATE):
+		if owner_id < 0 and not rager and CityMap.world_to_cell(center) in Sim.city.edge_exits():
 			if temporary:
 				queue_free()  # a debug car that joined the traffic: it's extra
 			else:
