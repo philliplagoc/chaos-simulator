@@ -1,5 +1,6 @@
 extends Node2D
 ## Root of the game. Draws the district and spawns everything in it.
+## Pick a criminal in the bottom bar and click the map to drop it.
 ## Left-click a citizen to inspect them. F3 toggles goal labels.
 ## Right-click drops a test danger. F launches a speeding debug car from the
 ## mouse at the nearest object.
@@ -36,12 +37,14 @@ const CAR_COLORS: Array[Color] = [
 
 var camera := CityCamera.new()
 var inspector := Inspector.new()
+var hud := Hud.new()
 
 
 func _ready() -> void:
 	add_child(camera)
 	add_child(DesktopBanner.new())
 	add_child(inspector)
+	add_child(hud)
 	inspector.closed.connect(func() -> void: camera.follow = null)
 	_spawn_walls()
 	_spawn_lights()
@@ -132,6 +135,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		Citizen.show_debug = not Citizen.show_debug
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F:
 		_launch_debug_car(get_global_mouse_position())
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and hud.placing != &"":
+		place_criminal(hud.placing, get_global_mouse_position())
+		hud.done_placing()
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var c := _citizen_at(get_global_mouse_position())
 		if c:
@@ -141,6 +147,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		var at := get_global_mouse_position()
 		EventBus.danger.emit(at, 150.0, &"test")
 		FxRing.spawn(self, at, 150.0, Color.ORANGE_RED)
+
+
+## Drop a criminal at `at`. A Road Rager is a red car on the nearest road.
+func place_criminal(kind: StringName, at: Vector2) -> void:
+	if kind == &"thief":
+		var t := CarThief.new()
+		t.position = at
+		add_child(t)
+	elif kind == &"rager":
+		var car := _new_car()
+		car.rager = true
+		car.temporary = true
+		car.color = Color("ff1f1f")
+		car.place(Sim.city.nearest_road_cell(CityMap.world_to_cell(at)))
+	FxRing.spawn(self, at, 40.0, Color.WHITE)
 
 
 ## Debug: a speeding car from `at` aimed at the nearest object.

@@ -5583,7 +5583,7 @@ replace with:
 - **Why:** R8, spec step 9 ("a bottom menu with two criminal types; select one and click the map to place it").
 - **Docs & gotchas:** GUI buttons swallow their clicks, so clicking a button never also places a criminal. A Road Rager is a red car placed on the road cell nearest the click. **If T039 was skipped,** leave out the `&"rager"` entry in `_build_criminal_bar`'s loop and the `elif kind == &"rager":` branch in `place_criminal`.
 
-- [ ] **Step 1: Write the bottom bar**
+- [x] **Step 1: Write the bottom bar**
 
 Create `scripts/hud.gd` with exactly this:
 
@@ -5632,7 +5632,7 @@ func done_placing() -> void:
 	_select(&"")
 ```
 
-- [ ] **Step 2: Place criminals from the world**
+- [x] **Step 2: Place criminals from the world**
 
 Edit `scripts/world.gd` (5 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -5717,8 +5717,8 @@ func place_criminal(kind: StringName, at: Vector2) -> void:
 	FxRing.spawn(self, at, 40.0, Color.WHITE)
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1902 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T040: criminal menu with click-to-place" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 3: Run tests and smoke**: TEST → `1902 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T040: criminal menu with click-to-place" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T041 🧑 HUMAN: One criminal, a chain reaction in 3 of 5 tries
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -6952,6 +6952,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T039 | Done | Road Rager mode in `Car` (`rager`, `anger` 0-100): tailgates and runs yellows at 30, overtakes through the oncoming lane at 60, rams at 85; anger bar drawn above the car. Not placeable until T040. `1893 checks, 0 failed`, smoke clean. Next: T039b (through-traffic leaves town). |
 | 2026-10-22 | T039b | Done | Ambient cars drive to a map exit and re-enter at another; burnt or stolen regular cars are replaced from an edge (count stays 20). New `tests/test_cars.gd`. `1898 checks, 0 failed`, smoke clean. Human: cars leave and come back in fine. Next: T039c (fight or flight). |
 | 2026-10-22 | T039c | Done | Courage 70+ citizens confront `theft`/`crash` (orange ring, up to 4 s) and can be hit by cars; thief looks shifty once a second and gets tackled by a touching hero; nervous citizens react from 1.5x farther, flee 1.5x longer. `1902 checks, 0 failed`, smoke clean. Human reviewed the diff. Next: T040 (criminal menu). |
+| 2026-10-22 | T040 | Done | `Hud` bottom bar (Car Thief / Road Rager toggles); left-click drops the picked criminal (`World.place_criminal`). `1902 checks, 0 failed`, smoke clean. Found: since T039b a calm Rager is through-traffic and leaves the map in 5-32 s (4 of 5 throwaway runs); fix proposed to the human before T041. |
 
 ## Change log
 
