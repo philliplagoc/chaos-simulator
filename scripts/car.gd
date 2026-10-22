@@ -3,7 +3,8 @@ extends CharacterBody2D
 ## A lane-following car. It drives along a road path of cell centers and sits
 ## LANE_OFFSET px to the right of its heading, so oncoming cars never touch.
 ## A forward shape sensor brakes for anything ahead; Sim.lights says when to stop.
-## Ambient cars wander. An owned car stays PARKED until its owner calls drive_to().
+## Ambient cars drive through town, leave at a map exit and come back in at
+## another. An owned car stays PARKED until its owner calls drive_to().
 ## A hard hit swaps it for a spinning ImpactBody; once that settles the car
 ## drives back to the nearest lane, or stays CRASHED if the hit was huge.
 ## A crashed car sits for a while, then drives on from where it stopped.
@@ -161,12 +162,14 @@ func _route() -> void:
 	path_i = 1
 
 
-## Pick a random road cell and path to it. Prefer routes that don't start
+## Pick a road cell and path to it: ambient traffic heads for a random map exit
+## (it leaves town there), owned cars wander. Prefer routes that don't start
 ## with a U-turn (dead ends at the map edge still need one).
 func new_route() -> void:
 	var from := CityMap.world_to_cell(center)
+	var exits := Sim.city.edge_exits()
 	for attempt in 10:
-		var goal := Sim.free_road_cell()
+		var goal: Vector2i = exits[Sim.rng.randi_range(0, exits.size() - 1)] if owner_id < 0 else Sim.free_road_cell()
 		path = Sim.nav.road_path(from, goal)
 		if path.size() > 1 and (path[1] - center).normalized().dot(heading) > -0.5:
 			break
@@ -202,6 +205,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if path_i >= path.size():
 		if stolen:
+			_replace_me()
 			queue_free()  # off the edge of the map with the loot
 			return
 		if _goal_dest >= 0:
@@ -210,6 +214,12 @@ func _physics_process(delta: float) -> void:
 				_homing = false  # nobody aboard to tell
 			else:
 				arrived.emit()
+			return
+		if owner_id < 0 and CityMap.world_to_cell(center) in Sim.city.edge_exits() and not (rager and anger > ANGER_TAILGATE):
+			if temporary:
+				queue_free()  # a debug car that joined the traffic: it's extra
+			else:
+				enter_from_edge()  # left town; come back in somewhere else
 			return
 		new_route()
 	_flee_left = maxf(0.0, _flee_left - delta)
@@ -432,6 +442,7 @@ func _on_spin_settled(at: Vector2, angle: float) -> void:
 ## else drives back to the nearest road first. Husks go away.
 func _recover() -> void:
 	if _burnt:
+		_replace_me()
 		queue_free()
 		return
 	if parked_at >= 0:
@@ -459,6 +470,56 @@ func _drive_back() -> void:
 	_lane_offset = Vector2.ZERO
 	speed = 0.0
 	_set_state(State.DRIVING)
+
+
+## Drive in from a random map exit with no car near it, facing into town.
+func enter_from_edge() -> void:
+	var exits := Sim.city.edge_exits()
+	var open: Array[Vector2i] = []
+	for e in exits:
+		var p := CityMap.cell_to_world(e)
+		var clear := true
+		for c: Node2D in get_tree().get_nodes_in_group("cars"):
+			if c != self and c.global_position.distance_to(p) < CityMap.CELL * 2.5:
+				clear = false
+		if clear:
+			open.append(e)
+	if open.is_empty():
+		open = exits
+	var cell := open[Sim.rng.randi_range(0, open.size() - 1)]
+	if cell.x == 0 or cell.x == CityMap.W - 1:
+		heading = Vector2(signf(CityMap.W / 2.0 - cell.x), 0.0)
+	else:
+		heading = Vector2(0.0, signf(CityMap.H / 2.0 - cell.y))
+	center = CityMap.cell_to_world(cell)
+	rotation = heading.angle()
+	lane_side = 1.0
+	_lane_offset = Vector2(-heading.y, heading.x) * LANE_OFFSET
+	global_position = center + _lane_offset
+	velocity = Vector2.ZERO
+	speed = CRUISE * 0.5
+	patience = 100.0
+	anger = 0.0
+	_flee_left = 0.0
+	_stuck = 0.0
+	_set_state(State.DRIVING)
+	_route()
+	queue_redraw()
+
+
+## A regular car left for good (burnt or stolen): drive a new ambient one in
+## so the district keeps Sim.CAR_COUNT cars. Debug cars are extra: no refill.
+func _replace_me() -> void:
+	var regular := 0
+	for c: Car in get_tree().get_nodes_in_group("cars"):
+		if not c.temporary and not c._burnt:
+			regular += 1
+	if regular >= Sim.CAR_COUNT:
+		return
+	var car := Car.new()
+	car.color = color
+	get_parent().add_child.call_deferred(car)
+	car.enter_from_edge.call_deferred()
 
 
 ## Caught near the middle of a blast: burnt out for good.
