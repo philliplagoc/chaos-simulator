@@ -6967,6 +6967,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T040 | Done | `Hud` bottom bar (Car Thief / Road Rager toggles); left-click drops the picked criminal (`World.place_criminal`). `1902 checks, 0 failed`, smoke clean. Found: since T039b a calm Rager is through-traffic and leaves the map in 5-32 s (4 of 5 throwaway runs); fix proposed to the human before T041. |
 | 2026-10-22 | T041 | Done | Human: Thief 3/5, Rager 3/5 (pass). Feedback: a stolen car waited in traffic → stolen cars now overtake through the oncoming lane as soon as they are blocked (v1.13). |
 | 2026-10-22 | T041b | Done | Getaway cars (stolen, Rager) ride the curb-side sidewalk for an overtake when an oncoming car is close. `1904 checks, 0 failed`, smoke clean. Human: looks right. |
+| 2026-10-22 | Phase 8 | Done | Checkpoint: `1904 checks, 0 failed`, smoke clean. Human check passed (Thief 3/5, Rager 3/5). Pushed to GitHub. Substack post 3 still pending (ask for the URL); week 4: start drafting the launch post. Next: T042 (chaos meter logic). Start a fresh session. |
 
 ## Change log
 
