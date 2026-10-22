@@ -3,14 +3,17 @@ extends CharacterBody2D
 ## A citizen with a job, needs and a schedule. Every couple of sim minutes it
 ## asks CitizenBrain what to do next, then walks (or drives its own car) there.
 ## It reacts to EventBus.danger by fleeing; nothing else tells it what to do.
+## Brave ones (courage 70+) run at a theft or crash instead, to confront it.
 ## A fast car or a blast sends it tumbling (an ImpactBody); then it lies dazed,
 ## fades out, and reappears at home 60 sim minutes later.
 
-enum Mode { INSIDE, WALKING, DRIVING, FLEEING, TUMBLING, DAZED, DOWN }
+enum Mode { INSIDE, WALKING, DRIVING, FLEEING, TUMBLING, DAZED, DOWN, CONFRONTING }
 
 const WALK_SPEED := 45.0
 const FLEE_SPEED := 95.0
 const FLEE_SECONDS := 2.5
+const BRAVE := 70.0           # courage at which we run at trouble instead of away
+const CONFRONT_SECONDS := 4.0
 const THINK_SECONDS := 1.0    # 2 sim minutes between decisions
 const DWELL_SECONDS := 10.0   # stay at least 20 sim minutes after arriving
 const HUNGER_PER_SIM_MINUTE := 100.0 / 480.0  # starving after 8 sim hours
@@ -44,6 +47,7 @@ var _think := 0.0
 var _dwell := 0.0
 var _flee_left := 0.0
 var _flee_dir := Vector2.ZERO
+var _confront_at := Vector2.ZERO
 var _deliver_i := 0
 var _drawn := ""
 var _down_left := 0.0
@@ -86,6 +90,8 @@ func _process(delta: float) -> void:
 			_walk(delta)
 		Mode.FLEEING:
 			_flee(delta)
+		Mode.CONFRONTING:
+			_confront(delta)
 		Mode.DRIVING:
 			if is_instance_valid(car):
 				global_position = car.global_position  # so the camera can follow
@@ -199,16 +205,26 @@ func _on_car_burnt(at: Vector2) -> void:
 
 
 func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
-	if mode != Mode.WALKING and mode != Mode.FLEEING:
+	if mode != Mode.WALKING and mode != Mode.FLEEING and mode != Mode.CONFRONTING:
 		return
+	var nervous := data.personality == &"nervous"
 	var away := global_position - pos
-	if away.length() > radius:
+	if away.length() > radius * (1.5 if nervous else 1.0):
 		return
 	if kind == &"explosion" and away.length() < radius * 0.6:
 		tumble(away.normalized() * 420.0)  # knocked flat by the blast
 		return
+	if data.courage >= BRAVE and (kind == &"theft" or kind == &"crash"):
+		_confront_at = pos  # a newer theft moves the target: heroes chase the thief
+		if mode != Mode.CONFRONTING:
+			mode = Mode.CONFRONTING
+			_flee_left = CONFRONT_SECONDS
+			remove_from_group("fleeing")
+		return
+	if mode == Mode.CONFRONTING:
+		return  # too busy being a hero to notice
 	_flee_dir = away.normalized() if away.length() > 1.0 else Vector2.from_angle(Sim.rng.randf() * TAU)
-	_flee_left = FLEE_SECONDS
+	_flee_left = FLEE_SECONDS * (1.5 if nervous else 1.0)
 	if mode != Mode.FLEEING:
 		mode = Mode.FLEEING
 		add_to_group("fleeing")
@@ -220,7 +236,7 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 
 ## Knocked over: hand our body to the physics engine for a tumble.
 func tumble(impulse: Vector2) -> void:
-	if mode != Mode.WALKING and mode != Mode.FLEEING:
+	if mode != Mode.WALKING and mode != Mode.FLEEING and mode != Mode.CONFRONTING:
 		return
 	remove_from_group("fleeing")
 	_show(false)
@@ -274,6 +290,17 @@ func _flee(delta: float) -> void:
 		_travel(target_dest if target_dest >= 0 else data.home)
 
 
+## Run at the trouble (into the road if that's where it is) for a few seconds.
+func _confront(delta: float) -> void:
+	var next := global_position.move_toward(_confront_at, FLEE_SPEED * delta)
+	if Sim.city.cell(CityMap.world_to_cell(next)) != CityMap.Cell.BLOCK:
+		global_position = next
+	_flee_left -= delta
+	if _flee_left <= 0.0:
+		mode = Mode.WALKING
+		_travel(target_dest if target_dest >= 0 else data.home)
+
+
 ## Short status for the inspector card.
 func where_text() -> String:
 	match mode:
@@ -283,6 +310,8 @@ func where_text() -> String:
 			return "driving to " + Sim.city.destinations[target_dest].label
 		Mode.FLEEING:
 			return "running away!"
+		Mode.CONFRONTING:
+			return "confronting!"
 		Mode.TUMBLING:
 			return "tumbling!"
 		Mode.DAZED:
@@ -313,6 +342,8 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, 4.0, PROFESSION_COLORS[data.profession])
 	if mode == Mode.FLEEING:
 		draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 12, Color.RED, 1.5)
+	elif mode == Mode.CONFRONTING:
+		draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 12, Color.ORANGE, 1.5)
 	if selected_id == data.id:
 		draw_arc(Vector2.ZERO, 11.0, 0.0, TAU, 16, Color.YELLOW, 2.0)
 	if show_debug:

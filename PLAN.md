@@ -5571,9 +5571,9 @@ replace with:
   - A hero who runs into the road at a stolen car or a crash site can be hit and tumble through the T035 hurtbox. That's the funny failure. The Road Rager is a car, so it isn't confronted directly.
   - Check that the later find blocks (T046) in `citizen.gd` and `car_thief.gd` still match after this change, and fix them in this plan if not.
 
-- [ ] **Step 1: Agent writes the change**, then adds one headless check (a courage-90 citizen next to a `theft` danger switches to CONFRONTING and moves toward it; a courage-10 one flees). Show the human the diff before committing.
-- [ ] **Step 2: Run tests and smoke**: TEST → all pass (update the later checkpoint counts in this plan). SMOKE → clean.
-- [ ] **Step 3: Commit**: `git add -A; git commit -m "T039c: brave citizens confront criminals, timid ones run" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 1: Agent writes the change**, then adds one headless check (a courage-90 citizen next to a `theft` danger switches to CONFRONTING and moves toward it; a courage-10 one flees). Show the human the diff before committing.
+- [x] **Step 2: Run tests and smoke**: TEST → all pass (update the later checkpoint counts in this plan). SMOKE → clean.
+- [x] **Step 3: Commit**: `git add -A; git commit -m "T039c: brave citizens confront criminals, timid ones run" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 - **If it fails at T041** (thieves get tackled so often the chain reaction rarely happens): raise the courage cutoff from 70 to 85, or shorten the confront time.
 
 ### T040 [R8] Criminal menu: pick one, click to place
@@ -5717,7 +5717,7 @@ func place_criminal(kind: StringName, at: Vector2) -> void:
 	FxRing.spawn(self, at, 40.0, Color.WHITE)
 ```
 
-- [ ] **Step 3: Run tests and smoke**: TEST → `1898 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 3: Run tests and smoke**: TEST → `1902 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 4: Commit**: `git add -A; git commit -m "T040: criminal menu with click-to-place" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T041 🧑 HUMAN: One criminal, a chain reaction in 3 of 5 tries
@@ -5737,7 +5737,7 @@ Say to the human:
 **Ask them to report:** chain-reaction counts for each criminal.
 **If something seems wrong:** fewer than 3 of 5 for either one: tell Claude Code which part felt dull (thief never finds a car, the stolen car gets away cleanly, the rager never gets angry). T051 has the tuning knobs.
 
-**Checkpoint (end of Phase 8):** TEST → `1898 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. Week 4: start drafting the launch post. **Suggest a fresh session.**
+**Checkpoint (end of Phase 8):** TEST → `1902 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. Week 4: start drafting the launch post. **Suggest a fresh session.**
 
 ---
 
@@ -5869,7 +5869,7 @@ func label() -> String:
 	return "MAYHEM"
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `1907 checks, 0 failed`
+- [ ] **Step 4: Run and confirm it passes**: TEST → `1911 checks, 0 failed`
 - [ ] **Step 5: Commit**: `git add -A; git commit -m "T042: chaos meter logic" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T043 [R9] Top bar: meter, clock, speed, Reset, New Seed, seed
@@ -5986,7 +5986,7 @@ func done_placing() -> void:
 	_select(&"")
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1907 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1911 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T043: top bar with chaos meter, clock, speed, Reset, New Seed" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T044 [D6] Same seed, same city: an automated check
@@ -6077,7 +6077,7 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run it**: TEST → `1911 checks, 0 failed`
+- [ ] **Step 2: Run it**: TEST → `1915 checks, 0 failed`
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T044: automated same-seed check" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T045 🧑 HUMAN: Meter, speed, Reset and seed
@@ -6096,7 +6096,7 @@ Say to the human:
 
 **Ask them to report:** results of steps 2–5.
 
-**Checkpoint (end of Phase 9):** TEST → `1911 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 9):** TEST → `1915 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -6312,7 +6312,7 @@ func _draw() -> void:
 
 - [ ] **Step 5: Citizens and the thief use sprites**
 
-Edit `scripts/citizen.gd` (8 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
+Edit `scripts/citizen.gd` (9 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
 Change 1, find:
 
@@ -6438,6 +6438,19 @@ replace with:
 		draw_circle(Vector2.ZERO, 4.0, PROFESSION_COLORS[data.profession])
 ```
 
+Change 9 (added in v1.11: heroes face the trouble they run at), find:
+
+```gdscript
+func _confront(delta: float) -> void:
+```
+
+replace with:
+
+```gdscript
+func _confront(delta: float) -> void:
+	_face(_confront_at - global_position)
+```
+
 Edit `scripts/car_thief.gd` (4 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
 Change 1, find:
@@ -6472,14 +6485,12 @@ replace with:
 Change 3, find:
 
 ```gdscript
-		return
 	global_position = global_position.move_toward(_target.global_position, SPEED * delta)
 ```
 
 replace with:
 
 ```gdscript
-		return
 	if _sprite:
 		_sprite.rotation = (_target.global_position - global_position).angle()
 	global_position = global_position.move_toward(_target.global_position, SPEED * delta)
@@ -6564,7 +6575,7 @@ replace with:
 	zoom = Vector2(0.8, 0.8)
 ```
 
-- [ ] **Step 7: Run tests and smoke**: TEST → `1911 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
+- [ ] **Step 7: Run tests and smoke**: TEST → `1915 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
 - [ ] **Step 8: Human look.** Ask the human to run `godot --path .`, zoom in, and confirm: cars are little top-down race cars pointing the way they drive, people are top-down figures facing the way they walk, the thief is a suited figure, the rager is the red car with an anger bar, and tumbling people and spinning cars keep their sprites. Wait for their reply.
 - [ ] **Step 9: Commit**: `git add -A; git commit -m "T046: Kenney sprites for cars, citizens, thief and ragdolls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
@@ -6641,7 +6652,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_fps.visible = not _fps.visible
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1911 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1915 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Export and zip**
   Run:
 ```powershell
@@ -6768,7 +6779,7 @@ Select-String -Path scripts\*.gd, data\*.json, README.md, docs\itch-page.md, pro
 Select-String -Path scripts\*.gd, project.godot, export_presets.cfg -Pattern 'api[_-]?key|sk-[a-z0-9]|anthropic|openai|secret|token' -CaseSensitive:$false
 ```
   Expected: **no output** from either command. If anything prints, remove it and tell the human what you found.
-- [ ] **Step 4: Run tests and smoke**: TEST → `1911 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 4: Run tests and smoke**: TEST → `1915 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 5: Commit and push**: `git add -A; git commit -m "T048: README, itch copy, remove spike, safety sweep" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"; git push`
 
 ### T049 🧑 HUMAN: Final web build on the itch draft, plus every "done when"
@@ -6792,7 +6803,7 @@ Say to the human:
 **Ask them to report:** FPS numbers and D-item results.
 **Decision (agent):** both browsers at 50+ FPS when calm and 30+ in the worst chaos is a pass. Otherwise apply the fallback from T047 (30 citizens, 15 cars), re-export, and ask the human to re-check. Record the result in the Progress log.
 
-**Checkpoint (end of Phase 10):** TEST → `1911 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 10):** TEST → `1915 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -6940,6 +6951,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T038 | Done | `CarThief` walks to the nearest stopped car and calls `steal()`; the stolen car races for a random edge exit (no lights, late braking) and is freed there; a driving owner is pulled out and walks. Thief not placeable until T040. `1893 checks, 0 failed`, smoke clean. Next: T039 (Road Rager). |
 | 2026-10-22 | T039 | Done | Road Rager mode in `Car` (`rager`, `anger` 0-100): tailgates and runs yellows at 30, overtakes through the oncoming lane at 60, rams at 85; anger bar drawn above the car. Not placeable until T040. `1893 checks, 0 failed`, smoke clean. Next: T039b (through-traffic leaves town). |
 | 2026-10-22 | T039b | Done | Ambient cars drive to a map exit and re-enter at another; burnt or stolen regular cars are replaced from an edge (count stays 20). New `tests/test_cars.gd`. `1898 checks, 0 failed`, smoke clean. Human: cars leave and come back in fine. Next: T039c (fight or flight). |
+| 2026-10-22 | T039c | Done | Courage 70+ citizens confront `theft`/`crash` (orange ring, up to 4 s) and can be hit by cars; thief looks shifty once a second and gets tackled by a touching hero; nervous citizens react from 1.5x farther, flee 1.5x longer. `1902 checks, 0 failed`, smoke clean. Human reviewed the diff. Next: T040 (criminal menu). |
 
 ## Change log
 
@@ -6954,4 +6966,5 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 - v1.8 (2026-10-17): No teleporting after a collision (T037 feedback). A crashed car sits for `CRASH_SECONDS`, then drives on from where it stopped (`Car._recover`, which replaces `_tow`); off its lane it drives back to the nearest road cell (`_drive_back`) instead of snapping there. A blast inside 30% of its radius burns a car: a charred husk that is removed after `CRASH_SECONDS` and never comes back. Its owner loses the car (`burnt` signal) and, if aboard, is thrown out seeing stars. From 30% to 60% the car spins out as before. A spun parked car stays parked and rolls back into its slot, or drives back to its lot by road if it landed on the road. Every arrival now rolls into the slot (`park(dest, true)`) instead of appearing there. Plan text updated: T038 `steal()` skips `driver_ejected` for a car driving home empty (`_homing`), T039b refills burnt cars, T046 hides the sprite on a husk. Later find blocks re-checked: all still match exactly once. No new tests, so check counts are unchanged; a throwaway headless run (3 sim hours, all cars watched, 3 parked + 1 driving spun out, 2 blasts, one with the owner driving) saw 0 jumps over 15 px in a frame, versus 79-147 px parking hops before. Agreed with the human.
 - v1.9 (2026-10-17): Debug (F) cars no longer vanish when they spin out (T037 feedback). The launch timer freed a car as soon as a spinout cleared its launch, and `_recover` also freed `temporary` cars. Now only a launch that hits nothing ends in a vanish; a debug car that hits something spins, sits out a crash if it was a wreck, drives back to the road and joins the traffic. T038's `temporary` comment (find and replace) and the T038/T039b notes are updated to match. A throwaway run fired 5 debug cars at objects: all 5 spun and, after the crash wait, were driving on the road again, with no jump over 8.3 px in a frame (at 2x speed).
 - v1.10 (2026-10-22): T039b written. Ambient cars are through-traffic: `Car.new_route` sends them to a random map exit, and at the exit the same node re-enters at another exit with no car within 2.5 cells, facing inward (`enter_from_edge`). Debug cars are freed at the exit; a Road Rager with anger over 30 stays in town. A regular car that leaves for good (burnt husk removed, or stolen car gone off the edge) is replaced by a new ambient car from an edge (`_replace_me`), so the count stays at `Sim.CAR_COUNT`; refilling stolen cars too follows the "keep the count" rule. New suite `tests/test_cars.gd` (+5 checks): later counts 1893→1898, 1902→1907, 1906→1911. T046 Step 3 got a Change 6 so the replacement car copies the sprite. T046 find blocks in `car.gd` re-checked: all match once. A throwaway headless minute saw 2 cars leave and re-enter with the count steady at 20.
+- v1.11 (2026-10-22): T039c written. `Citizen.Mode.CONFRONTING`: courage 70+ (`BRAVE`) citizens run at a `theft` or `crash` for up to 4 s (`CONFRONT_SECONDS`), a newer one moves the target, other dangers are ignored meanwhile; orange ring, "confronting!", and a car can still knock them flat. `nervous` citizens hear danger at 1.5x radius and flee 1.5x longer. `CarThief` emits `theft` (80 px) once a second while walking, and is tackled when its own touch area overlaps a CONFRONTING citizen (`_fall`, shared with the car knock-over). +4 checks in `tests/test_citizens.gd`: later counts 1898→1902, 1907→1911, 1911→1915. T046: thief Change 3 find shortened to one line (the shifty timer now sits above it), citizen Change 9 added (heroes face their target). Throwaway run, a thief dropped by a walker every 5 s (16 drops): 12 confronts, 3 tackles, 11 steals, 6 heroes hit by cars.
 - v1.5 (2026-10-17): Bios drive behavior (T028 feedback). Added T028b: each bio carries one of six traits (hothead, hero, nervous, snacker, penny_pincher, chill) that scale existing needs knobs, plus a seeded courage value (0 flight - 100 fight) shown on the card. Added T039c (after T039b): citizens with courage 70+ run at `theft`/`crash` dangers instead of fleeing and can tackle a thief on foot by touching it; the thief emits `theft` while walking to a car. No new danger kinds. Check counts from the Phase 5 checkpoint on went up by 379. Agreed with the human.

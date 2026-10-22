@@ -64,4 +64,27 @@ func run(t) -> bool:
 	d.shift_start = 480
 	d.shift_end = 960
 	t.check(CitizenBrain.choose(d, 9 * 60) == &"deliver", "driver delivers during shift")
+	# Fight or flight: on a road, a theft 30 px down the street.
+	var at := CityMap.cell_to_world(Vector2i(CityMap.ROAD_X[0], 10))
+	var danger := at + Vector2(0, 30)
+	var walkers: Array[Citizen] = []
+	for courage in [90.0, 10.0]:
+		var c := Citizen.new()
+		c.data = CitizenData.generate_all(1, city, Sim.make_rng(7), 0)[0]
+		c.data.personality = &""
+		c.data.courage = courage
+		t.add_child(c)
+		c.mode = Citizen.Mode.WALKING
+		c.global_position = at
+		walkers.append(c)
+	EventBus.danger.emit(danger, 80.0, &"theft")
+	for c in walkers:
+		c._process(0.1)
+	t.check(walkers[0].mode == Citizen.Mode.CONFRONTING, "courage 90: confronts the thief")
+	t.check(walkers[0].global_position.distance_to(danger) < at.distance_to(danger), "and runs toward him")
+	t.check(walkers[1].mode == Citizen.Mode.FLEEING, "courage 10: flees")
+	t.check(walkers[1].global_position.distance_to(danger) > at.distance_to(danger), "and runs away")
+	for c in walkers:
+		c.remove_from_group("fleeing")
+		c.free()
 	return true
