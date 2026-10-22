@@ -5368,7 +5368,7 @@ func _on_ejected(at: Vector2) -> void:
 - **Why:** R8, D5, spec step 9 ("an anger meter that rises when blocked; above thresholds he tailgates, then overtakes into oncoming lanes, then deliberately rams the car ahead"). **Skip this task if T037 recorded the Nov 5 checkpoint rule.**
 - **Docs & gotchas:** anger rises 18/s while blocked and falls 4/s while moving. Thresholds: 30 tailgate and run yellows, 60 overtake through the oncoming lane for 2.5 s (ignoring the sensor and lights), 85 ram the car ahead when moving. A crash resets anger to 40.
 
-- [ ] **Step 1: Add road rage to the car**
+- [x] **Step 1: Add road rage to the car**
 
 Edit `scripts/car.gd` (10 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -5544,8 +5544,8 @@ replace with:
 		draw_set_transform(Vector2.ZERO, 0.0)
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 3: Commit**: `git add -A; git commit -m "T039: Road Rager anger meter: tailgate, overtake, ram" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 2: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 3: Commit**: `git add -A; git commit -m "T039: Road Rager anger meter: tailgate, overtake, ram" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T039b [R4] Through-traffic leaves town instead of U-turning (added in v1.3)
 - **Owner:** Agent
@@ -6925,6 +6925,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T037 | Done (post pending) | Human: tumble and spinout look good. Feedback: spinning cars phased through buildings → buildings are now solid for impact bodies (change log v1.7); cars teleported back to the road after crashes → they drive back, and cars burnt by a blast are removed for good (v1.8); debug cars vanished when they spun out → fixed (v1.9). Today is Oct 17, before the Nov 5 cutoff: keep the Road Rager. Substack post 3 NOT published yet; ask the human for the URL later. |
 | 2026-10-17 | Phase 7 | Done | Checkpoint: `1893 checks, 0 failed`, smoke clean. Human: tumble, spinout, solid buildings, drive-back and husks all look good. Pushed to GitHub. Substack post 3 still pending (ask for the URL). Next: T038 (Car Thief). Start a fresh session. |
 | 2026-10-22 | T038 | Done | `CarThief` walks to the nearest stopped car and calls `steal()`; the stolen car races for a random edge exit (no lights, late braking) and is freed there; a driving owner is pulled out and walks. Thief not placeable until T040. `1893 checks, 0 failed`, smoke clean. Next: T039 (Road Rager). |
+| 2026-10-22 | T039 | Done | Road Rager mode in `Car` (`rager`, `anger` 0-100): tailgates and runs yellows at 30, overtakes through the oncoming lane at 60, rams at 85; anger bar drawn above the car. Not placeable until T040. `1893 checks, 0 failed`, smoke clean. Next: T039b (through-traffic leaves town). |
 
 ## Change log
 

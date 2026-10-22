@@ -9,6 +9,8 @@ extends CharacterBody2D
 ## A crashed car sits for a while, then drives on from where it stopped.
 ## A blast close by burns it: a charred husk that is removed for good.
 ## A Car Thief can steal() it: then it races for the map edge, ignoring lights.
+## A Road Rager car (rager = true) gets angrier while blocked: it tailgates,
+## then overtakes through the oncoming lane, then rams the car ahead.
 
 signal arrived  # an owned car reached its goal and parked
 signal driver_ejected(at: Vector2)  # a thief pulled the owner out
@@ -31,6 +33,9 @@ const PARK_SPEED := 40.0      # rolling into a parking slot
 const STUCK_SECONDS := 40.0   # longer than a full light cycle (38 s)
 const FLEE_SECONDS := 3.0
 const THIEF_CRUISE := 200.0
+const ANGER_TAILGATE := 30.0
+const ANGER_OVERTAKE := 60.0
+const ANGER_RAM := 85.0
 
 var state: State = State.DRIVING
 var color := Color.WHITE
@@ -44,6 +49,10 @@ var patience := 100.0
 var owner_id := -1            # citizen id, -1 = ambient traffic
 var temporary := false        # debug and stolen cars: not regular traffic
 var stolen := false
+var rager := false
+var anger := 0.0              # 0-100, rager only
+var _overtake_left := 0.0
+var _ram_left := 0.0
 var parked_at := -1           # destination index while PARKED
 var _goal_dest := -1          # destination index an owner asked for
 var _lane_offset := Vector2.ZERO
@@ -204,6 +213,8 @@ func _physics_process(delta: float) -> void:
 			return
 		new_route()
 	_flee_left = maxf(0.0, _flee_left - delta)
+	if rager:
+		_update_anger(delta)
 	var target := _target_speed()
 	if global_position.distance_to(center + _lane_offset) > 10.0:
 		target = 0.0  # body got shoved or blocked: let it catch up before moving on
@@ -232,16 +243,23 @@ func _target_speed() -> float:
 		t = THIEF_CRUISE
 		_set_state(State.FLEEING)
 	t = minf(t, _turn_limit() * (1.6 if stolen else 1.0))
-	var light := INF if stolen else _light_limit()
+	var reckless := _overtake_left > 0.0 or _ram_left > 0.0
+	if _ram_left > 0.0:
+		t = CRUISE * 1.7
+	var light := INF if (stolen or reckless) else _light_limit()
 	if light < t:
 		t = light
 		_set_state(State.STOPPED_AT_LIGHT)
+	if reckless:
+		return t  # eyes on nothing but the gap
 	var look := 30.0 + speed * (0.25 if stolen else 0.6)  # thieves brake late
 	_sensor.rotation = heading.angle() - rotation  # look where we're going, not where we point
 	_sensor.target_position = Vector2(look, 0)
 	_sensor.force_shapecast_update()
 	if _sensor.is_colliding():
 		var gap := _sensor.get_closest_collision_safe_fraction() * look - 4.0
+		if rager and anger > ANGER_TAILGATE:
+			gap -= 6.0  # tailgate
 		var obstacle := maxf(0.0, gap) * 3.0
 		if obstacle < t:
 			t = obstacle
@@ -281,7 +299,7 @@ func _light_limit() -> float:
 			TrafficLight.Light.RED:
 				return _stop_speed(dist) if _flee_left <= 0.0 else INF
 			TrafficLight.Light.YELLOW:
-				if patience < 30.0 or _flee_left > 0.0 or dist < 12.0:
+				if patience < 30.0 or _flee_left > 0.0 or dist < 12.0 or anger > ANGER_TAILGATE:
 					return INF  # run the yellow
 				return _stop_speed(dist)
 			TrafficLight.Light.FLASHING:
@@ -353,6 +371,7 @@ func lane_velocity() -> Vector2:
 func crash(_impact: float) -> void:
 	if state == State.CRASHED:
 		return
+	anger = 40.0
 	_impact_velocity = heading * speed
 	_since_impact = 0.0
 	_set_state(State.CRASHED)
@@ -482,6 +501,22 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 		_flee_left = FLEE_SECONDS
 
 
+## Road rage: blocked = angrier. Past each threshold it does something worse.
+func _update_anger(delta: float) -> void:
+	_overtake_left = maxf(0.0, _overtake_left - delta)
+	_ram_left = maxf(0.0, _ram_left - delta)
+	var blocked := speed < 20.0 and (state == State.BRAKING or state == State.STOPPED_AT_LIGHT)
+	anger = clampf(anger + (18.0 if blocked else -4.0) * delta, 0.0, 100.0)
+	if _overtake_left <= 0.0:
+		lane_side = 1.0
+	if anger > ANGER_OVERTAKE and blocked and _overtake_left <= 0.0:
+		_overtake_left = 2.5
+		lane_side = -1.0  # swing into the oncoming lane
+	if anger > ANGER_RAM and speed > 40.0 and state == State.BRAKING and _ram_left <= 0.0:
+		_ram_left = 2.0  # floor it into the car ahead
+	queue_redraw()
+
+
 ## Called by a Puddle when we drive in or out of it.
 ## Hitting water fast spins us out.
 func set_slippery(on: bool) -> void:
@@ -513,6 +548,13 @@ func _draw() -> void:
 		draw_circle(Vector2(0, 0), 7.0, Color(0.3, 0.3, 0.3, 0.7))
 	if stolen:
 		draw_rect(Rect2(Vector2(-6, -3), Vector2(6, 6)), Color.BLACK)  # masked driver
+	if rager:
+		draw_line(Vector2(-3, -4), Vector2(1, -2), Color.BLACK, 1.5)  # angry eyebrows
+		draw_line(Vector2(-3, 4), Vector2(1, 2), Color.BLACK, 1.5)
+		draw_set_transform(Vector2.ZERO, -rotation)  # anger bar stays level
+		draw_rect(Rect2(-12, -18, 24, 4), Color.BLACK)
+		draw_rect(Rect2(-12, -18, 24 * anger / 100.0, 4), Color.ORANGE_RED)
+		draw_set_transform(Vector2.ZERO, 0.0)
 	if _burnt:
 		draw_rect(Rect2(-SIZE / 2.0, SIZE), HUSK)  # charred husk with a little smoke
 		draw_circle(Vector2(-3, -2), 4.0, Color(0.4, 0.4, 0.4, 0.6))
