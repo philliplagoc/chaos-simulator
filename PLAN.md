@@ -5891,7 +5891,7 @@ func label() -> String:
 - **Why:** R9, spec scope ("chaos meter, pause / 1× / 3×, Reset, New Seed, visible seed"), spec step 10.
 - **Docs & gotchas:** speed is `Engine.time_scale` (0, 1 or 3). Godot accepts 0, and the clock, timers and physics all scale with it. Reset calls `Sim.start_city(same seed)`, which re-seeds the RNG, clears the light board and resets the clock and speed, and then reloads the scene. New Seed derives a seed from the system time; that's not gameplay randomness, so it doesn't go through `Sim.rng`.
 
-- [ ] **Step 1: Add the top bar**
+- [x] **Step 1: Add the top bar**
 
 Replace the whole file `scripts/hud.gd` with exactly this:
 
@@ -5998,8 +5998,8 @@ func done_placing() -> void:
 	_select(&"")
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1913 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 3: Commit**: `git add -A; git commit -m "T043: top bar with chaos meter, clock, speed, Reset, New Seed" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 2: Run tests and smoke**: TEST → `1913 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 3: Commit**: `git add -A; git commit -m "T043: top bar with chaos meter, clock, speed, Reset, New Seed" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T044 [D6] Same seed, same city: an automated check
 - **Owner:** Agent
@@ -6969,6 +6969,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T041b | Done | Getaway cars (stolen, Rager) ride the curb-side sidewalk for an overtake when an oncoming car is close. `1904 checks, 0 failed`, smoke clean. Human: looks right. |
 | 2026-10-22 | Phase 8 | Done | Checkpoint: `1904 checks, 0 failed`, smoke clean. Human check passed (Thief 3/5, Rager 3/5). Pushed to GitHub. Substack post 3 still pending (ask for the URL); week 4: start drafting the launch post. Next: T042 (chaos meter logic). Start a fresh session. |
 | 2026-10-22 | T042 | Done | `ChaosMeter` (pure logic) + `tests/test_chaos_meter.gd`. Runner got one new suite line (the full replace would have dropped `test_cars.gd`). `1913 checks, 0 failed`. Next: T043 (top bar). |
+| 2026-10-22 | T043 | Done | Top bar in `Hud`: chaos meter + label, clock, Pause/1x/3x, Reset, New Seed, seed. `1913 checks, 0 failed`, smoke clean. Next: T044 (same-seed check). |
 
 ## Change log
 
