@@ -11,7 +11,8 @@ extends CharacterBody2D
 ## A blast close by burns it: a charred husk that is removed for good.
 ## A Car Thief can steal() it: then it races for the map edge, ignoring lights.
 ## A Road Rager car (rager = true) gets angrier while blocked: it tailgates,
-## then overtakes through the oncoming lane, then rams the car ahead.
+## then overtakes through the oncoming lane (or the sidewalk, if that's busy),
+## then rams the car ahead.
 
 signal arrived  # an owned car reached its goal and parked
 signal driver_ejected(at: Vector2)  # a thief pulled the owner out
@@ -37,6 +38,8 @@ const THIEF_CRUISE := 200.0
 const ANGER_TAILGATE := 30.0
 const ANGER_OVERTAKE := 60.0
 const ANGER_RAM := 85.0
+const SIDEWALK_SIDE := 4.0     # lane_side that puts us on the curb-side sidewalk (32 px)
+const ONCOMING_LOOK := 150.0
 
 var state: State = State.DRIVING
 var color := Color.WHITE
@@ -573,10 +576,26 @@ func _update_anger(delta: float) -> void:
 		lane_side = 1.0
 	if (anger > ANGER_OVERTAKE or stolen) and blocked and _overtake_left <= 0.0:  # a thief won't wait
 		_overtake_left = 2.5
-		lane_side = -1.0  # swing into the oncoming lane
+		lane_side = -1.0  # swing into the oncoming lane...
+		if _oncoming_ahead() and _curb_is_sidewalk():
+			lane_side = SIDEWALK_SIDE  # ...or, if that's busy, up onto the sidewalk
 	if anger > ANGER_RAM and speed > 40.0 and state == State.BRAKING and _ram_left <= 0.0:
 		_ram_left = 2.0  # floor it into the car ahead
 	queue_redraw()
+
+
+## Is a car coming the other way just ahead of us?
+func _oncoming_ahead() -> bool:
+	for c: Car in get_tree().get_nodes_in_group("cars"):
+		var to := c.global_position - global_position
+		if c != self and to.length() < ONCOMING_LOOK and to.dot(heading) > 0.0 and c.heading.dot(heading) < -0.5:
+			return true
+	return false
+
+
+func _curb_is_sidewalk() -> bool:
+	var side := CityMap.world_to_cell(center + Vector2(-heading.y, heading.x) * CityMap.CELL)
+	return Sim.city.cell(side) == CityMap.Cell.SIDEWALK
 
 
 ## Called by a Puddle when we drive in or out of it.

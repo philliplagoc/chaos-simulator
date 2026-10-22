@@ -5737,7 +5737,19 @@ Say to the human:
 **Ask them to report:** chain-reaction counts for each criminal.
 **If something seems wrong:** fewer than 3 of 5 for either one: tell Claude Code which part felt dull (thief never finds a car, the stolen car gets away cleanly, the rager never gets angry). T051 has the tuning knobs.
 
-**Checkpoint (end of Phase 8):** TEST → `1902 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. Week 4: start drafting the launch post. **Suggest a fresh session.**
+### T041b [R8] Getaway cars mount the sidewalk (added in v1.14)
+- **Owner:** Agent
+- **Depends on:** T041
+- **Files:** Modify `scripts/car.gd`, `tests/test_cars.gd` (new checks)
+- **Why:** human request at T041: stolen cars and the Road Rager should drive on the sidewalk when they need to get away.
+- **Docs & gotchas:** roads are one cell wide with a one-cell sidewalk on each side, so a car rides the sidewalk by using `lane_side` = `SIDEWALK_SIDE` (4 x `LANE_OFFSET` = 32 px, the sidewalk center) on its normal road path. Only when an overtake starts (stolen car blocked, or a Rager past 60 anger): if an oncoming car is within 150 px ahead and the curb-side cell is `SIDEWALK`, mount the sidewalk for the 2.5 s instead of the oncoming lane. The sensor is ignored as for any overtake, so walkers get knocked over and hydrants/barrels get hit. Normal traffic never does it. Seeing nearby cars is a perception loop over the `cars` group (like `Sim.is_road_clear`), not a reference between agents.
+
+- [x] **Step 1: Agent writes the change**, then adds headless checks (a blocked stolen car with an oncoming car ahead picks the sidewalk; with no oncoming car it picks the oncoming lane). Show the human the diff before committing.
+- [x] **Step 2: Run tests and smoke**: TEST → all pass (update the later checkpoint counts in this plan). SMOKE → clean.
+- [x] **Step 3: Human check**: drop a Car Thief near a queue and a Road Rager in traffic; when the oncoming lane is busy they mount the sidewalk, knocking over walkers and objects, then return to their lane.
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T041b: getaway cars mount the sidewalk" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+
+**Checkpoint (end of Phase 8):** TEST → `1904 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. Week 4: start drafting the launch post. **Suggest a fresh session.**
 
 ---
 
@@ -5869,7 +5881,7 @@ func label() -> String:
 	return "MAYHEM"
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `1911 checks, 0 failed`
+- [ ] **Step 4: Run and confirm it passes**: TEST → `1913 checks, 0 failed`
 - [ ] **Step 5: Commit**: `git add -A; git commit -m "T042: chaos meter logic" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T043 [R9] Top bar: meter, clock, speed, Reset, New Seed, seed
@@ -5986,7 +5998,7 @@ func done_placing() -> void:
 	_select(&"")
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1911 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1913 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T043: top bar with chaos meter, clock, speed, Reset, New Seed" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T044 [D6] Same seed, same city: an automated check
@@ -6077,7 +6089,7 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run it**: TEST → `1915 checks, 0 failed`
+- [ ] **Step 2: Run it**: TEST → `1917 checks, 0 failed`
 - [ ] **Step 3: Commit**: `git add -A; git commit -m "T044: automated same-seed check" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T045 🧑 HUMAN: Meter, speed, Reset and seed
@@ -6096,7 +6108,7 @@ Say to the human:
 
 **Ask them to report:** results of steps 2–5.
 
-**Checkpoint (end of Phase 9):** TEST → `1915 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 9):** TEST → `1917 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -6575,7 +6587,7 @@ replace with:
 	zoom = Vector2(0.8, 0.8)
 ```
 
-- [ ] **Step 7: Run tests and smoke**: TEST → `1915 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
+- [ ] **Step 7: Run tests and smoke**: TEST → `1917 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
 - [ ] **Step 8: Human look.** Ask the human to run `godot --path .`, zoom in, and confirm: cars are little top-down race cars pointing the way they drive, people are top-down figures facing the way they walk, the thief is a suited figure, the rager is the red car with an anger bar, and tumbling people and spinning cars keep their sprites. Wait for their reply.
 - [ ] **Step 9: Commit**: `git add -A; git commit -m "T046: Kenney sprites for cars, citizens, thief and ragdolls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
@@ -6652,7 +6664,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_fps.visible = not _fps.visible
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1915 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 2: Run tests and smoke**: TEST → `1917 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 3: Export and zip**
   Run:
 ```powershell
@@ -6779,7 +6791,7 @@ Select-String -Path scripts\*.gd, data\*.json, README.md, docs\itch-page.md, pro
 Select-String -Path scripts\*.gd, project.godot, export_presets.cfg -Pattern 'api[_-]?key|sk-[a-z0-9]|anthropic|openai|secret|token' -CaseSensitive:$false
 ```
   Expected: **no output** from either command. If anything prints, remove it and tell the human what you found.
-- [ ] **Step 4: Run tests and smoke**: TEST → `1915 checks, 0 failed`. SMOKE → clean.
+- [ ] **Step 4: Run tests and smoke**: TEST → `1917 checks, 0 failed`. SMOKE → clean.
 - [ ] **Step 5: Commit and push**: `git add -A; git commit -m "T048: README, itch copy, remove spike, safety sweep" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"; git push`
 
 ### T049 🧑 HUMAN: Final web build on the itch draft, plus every "done when"
@@ -6803,7 +6815,7 @@ Say to the human:
 **Ask them to report:** FPS numbers and D-item results.
 **Decision (agent):** both browsers at 50+ FPS when calm and 30+ in the worst chaos is a pass. Otherwise apply the fallback from T047 (30 citizens, 15 cars), re-export, and ask the human to re-check. Record the result in the Progress log.
 
-**Checkpoint (end of Phase 10):** TEST → `1915 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
+**Checkpoint (end of Phase 10):** TEST → `1917 checks, 0 failed`. Human check passed. Commit, push, add Progress log and DEVLOG entries. **Suggest a fresh session.**
 
 ---
 
@@ -6954,6 +6966,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T039c | Done | Courage 70+ citizens confront `theft`/`crash` (orange ring, up to 4 s) and can be hit by cars; thief looks shifty once a second and gets tackled by a touching hero; nervous citizens react from 1.5x farther, flee 1.5x longer. `1902 checks, 0 failed`, smoke clean. Human reviewed the diff. Next: T040 (criminal menu). |
 | 2026-10-22 | T040 | Done | `Hud` bottom bar (Car Thief / Road Rager toggles); left-click drops the picked criminal (`World.place_criminal`). `1902 checks, 0 failed`, smoke clean. Found: since T039b a calm Rager is through-traffic and leaves the map in 5-32 s (4 of 5 throwaway runs); fix proposed to the human before T041. |
 | 2026-10-22 | T041 | Done | Human: Thief 3/5, Rager 3/5 (pass). Feedback: a stolen car waited in traffic → stolen cars now overtake through the oncoming lane as soon as they are blocked (v1.13). |
+| 2026-10-22 | T041b | Done | Getaway cars (stolen, Rager) ride the curb-side sidewalk for an overtake when an oncoming car is close. `1904 checks, 0 failed`, smoke clean. Human: looks right. |
 
 ## Change log
 
@@ -6971,4 +6984,5 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 - v1.11 (2026-10-22): T039c written. `Citizen.Mode.CONFRONTING`: courage 70+ (`BRAVE`) citizens run at a `theft` or `crash` for up to 4 s (`CONFRONT_SECONDS`), a newer one moves the target, other dangers are ignored meanwhile; orange ring, "confronting!", and a car can still knock them flat. `nervous` citizens hear danger at 1.5x radius and flee 1.5x longer. `CarThief` emits `theft` (80 px) once a second while walking, and is tackled when its own touch area overlaps a CONFRONTING citizen (`_fall`, shared with the car knock-over). +4 checks in `tests/test_citizens.gd`: later counts 1898→1902, 1907→1911, 1911→1915. T046: thief Change 3 find shortened to one line (the shifty timer now sits above it), citizen Change 9 added (heroes face their target). Throwaway run, a thief dropped by a walker every 5 s (16 drops): 12 confronts, 3 tackles, 11 steals, 6 heroes hit by cars.
 - v1.12 (2026-10-22): The Road Rager never leaves town (T040 finding). Since v1.10 a calm Rager was through-traffic and drove off the map in 5-32 s in 4 of 5 throwaway runs, before its anger could build. Now `Car.new_route` lets it wander and it never takes the exit, which is stricter than the T039b rule ("never mid-rage"). No new tests, so check counts are unchanged; 5 throwaway 2-minute runs: it stayed in all 5 and overtook 2-4 times each, but never rammed (ramming needs anger 85+ while braking at speed; T051 tuning if T041 finds it dull). Agreed with the human.
 - v1.13 (2026-10-22): Stolen cars overtake (T041 feedback: a stolen car sat still in traffic). `Car._update_anger` now also runs for stolen cars, and a stolen car swings into the oncoming lane for 2.5 s as soon as it is blocked, ignoring its sensor (the Rager move); its anger can still build to a ram. No new tests, so check counts are unchanged. Throwaway 3-minute runs with a thief every 5 s: 23 stolen-car overtakes versus 0 before; crashes 4 vs 3 and getaways 4 vs 5 (small samples). Agreed with the human.
+- v1.14 (2026-10-22): Added T041b (human request at T041): getaway cars mount the sidewalk. When a stolen car or the Rager starts an overtake and an oncoming car is within 150 px ahead (`Car._oncoming_ahead`), it rides the curb-side sidewalk (`lane_side = SIDEWALK_SIDE`, 32 px) for the 2.5 s instead, if that cell is `SIDEWALK` (`_curb_is_sidewalk`). +2 checks in `tests/test_cars.gd`: later counts 1902→1904, 1911→1913, 1915→1917. Throwaway 3-minute run (a thief every 5 s plus one Rager): 16 overtakes, 9 of them on the sidewalk (7 thief, 2 Rager), 22 citizen tumbles. Agreed with the human.
 - v1.5 (2026-10-17): Bios drive behavior (T028 feedback). Added T028b: each bio carries one of six traits (hothead, hero, nervous, snacker, penny_pincher, chill) that scale existing needs knobs, plus a seeded courage value (0 flight - 100 fight) shown on the card. Added T039c (after T039b): citizens with courage 70+ run at `theft`/`crash` dangers instead of fleeing and can tackle a thief on foot by touching it; the thief emits `theft` while walking to a car. No new danger kinds. Check counts from the Phase 5 checkpoint on went up by 379. Agreed with the human.
