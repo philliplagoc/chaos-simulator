@@ -6682,7 +6682,7 @@ Get-Item build\chaos-web.zip | Select-Object Name, Length
 - **Files:** Create `README.md`, `docs/itch-page.md` · Delete `scenes/spike/`, `scripts/spike.gd`
 - **Why:** S1 (no GTA names anywhere), S3 (no API keys in the build), S4 (cartoon-violence tag ready for the page), final-phase polish.
 
-- [ ] **Step 1: Write the README and the itch page copy**
+- [x] **Step 1: Write the README and the itch page copy**
 
 Create `README.md` with exactly this:
 
@@ -6781,18 +6781,18 @@ Create `docs/itch-page.md` with exactly this:
 **Screenshots to take:** a rush-hour overview, the inspector card open on a citizen, a mid-explosion moment, a thief driving off, and a short GIF of a chain reaction.
 ```
 
-- [ ] **Step 2: Delete the spike**
+- [x] **Step 2: Delete the spike**
   Run: `git rm -r scenes/spike scripts/spike.gd`
   Expected: `rm 'scenes/spike/spike.tscn'`, `rm 'scripts/spike.gd'` (plus a `.uid` file if Godot made one).
-- [ ] **Step 3: Safety sweep**
+- [x] **Step 3: Safety sweep**
   Run:
 ```powershell
 Select-String -Path scripts\*.gd, data\*.json, README.md, docs\itch-page.md, project.godot -Pattern 'gta|grand theft|rockstar|vice city|los santos|liberty city' -CaseSensitive:$false
 Select-String -Path scripts\*.gd, project.godot, export_presets.cfg -Pattern 'api[_-]?key|sk-[a-z0-9]|anthropic|openai|secret|token' -CaseSensitive:$false
 ```
   Expected: **no output** from either command. If anything prints, remove it and tell the human what you found.
-- [ ] **Step 4: Run tests and smoke**: TEST → `1917 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 5: Commit and push**: `git add -A; git commit -m "T048: README, itch copy, remove spike, safety sweep" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"; git push`
+- [x] **Step 4: Run tests and smoke**: TEST → `1917 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 5: Commit and push**: `git add -A; git commit -m "T048: README, itch copy, remove spike, safety sweep" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"; git push`
 
 ### T049 🧑 HUMAN: Final web build on the itch draft, plus every "done when"
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -6975,6 +6975,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | Phase 9 | Done | Checkpoint: `1917 checks, 0 failed`, smoke clean. Human check passed. Pushed to GitHub. Substack posts 2 and 3 still pending (ask for the URLs). Next: T046 (Kenney sprites). Start a fresh session. |
 | 2026-10-22 | T046 | Done | 12 Kenney sprites in `art/sprites/`, `Art` helper; cars, citizens, thief and impact bodies use them (shape fallback if missing); camera starts at zoom 0.8. `1917 checks, 0 failed`, smoke clean. Human: looks good. Next: T047 (F2 readout, web build). |
 | 2026-10-22 | T047 | Done | F2 toggles an FPS / agents / bodies readout in the top bar. `1917 checks, 0 failed`, smoke clean. Web export clean, `build/chaos-web.zip` 10.5 MB. Next: T048 (README, itch copy, cleanup, safety sweep). |
+| 2026-10-22 | T048 | Done | `README.md` and `docs/itch-page.md` written; spike removed (`scenes/spike/`, `scripts/spike.gd` + `.uid`); both safety sweeps (S1 names, S3 secrets) print nothing. `1917 checks, 0 failed`, smoke clean. Pushed. Next: T049 (human: itch draft upload, FPS, done-when pass). |
 
 ## Change log
 
