@@ -8,8 +8,10 @@ extends CharacterBody2D
 ## drives back to the nearest lane, or stays CRASHED if the hit was huge.
 ## A crashed car sits for a while, then drives on from where it stopped.
 ## A blast close by burns it: a charred husk that is removed for good.
+## A Car Thief can steal() it: then it races for the map edge, ignoring lights.
 
 signal arrived  # an owned car reached its goal and parked
+signal driver_ejected(at: Vector2)  # a thief pulled the owner out
 signal burnt(at: Vector2)  # blown up: the owner can't use it any more
 
 enum State { DRIVING, STOPPED_AT_LIGHT, BRAKING, CRASHED, FLEEING, PARKED }
@@ -28,6 +30,7 @@ const HUSK := Color(0.08, 0.08, 0.08)
 const PARK_SPEED := 40.0      # rolling into a parking slot
 const STUCK_SECONDS := 40.0   # longer than a full light cycle (38 s)
 const FLEE_SECONDS := 3.0
+const THIEF_CRUISE := 200.0
 
 var state: State = State.DRIVING
 var color := Color.WHITE
@@ -39,7 +42,8 @@ var path_i := 0
 var lane_side := 1.0          # +1 = right lane, -1 = oncoming lane
 var patience := 100.0
 var owner_id := -1            # citizen id, -1 = ambient traffic
-var temporary := false        # a debug car: vanishes if its launch hits nothing
+var temporary := false        # debug and stolen cars: not regular traffic
+var stolen := false
 var parked_at := -1           # destination index while PARKED
 var _goal_dest := -1          # destination index an owner asked for
 var _lane_offset := Vector2.ZERO
@@ -116,8 +120,31 @@ func launch(dir: Vector2, launch_speed: float) -> void:
 	_set_state(State.FLEEING)
 
 
+## A thief touched us: kick the driver out and race for a random map exit.
+func steal() -> void:
+	if stolen or _spinning or state == State.CRASHED:
+		return
+	if owner_id >= 0 and parked_at < 0 and not _homing:
+		driver_ejected.emit(global_position)
+	if parked_at >= 0:
+		center = CityMap.cell_to_world(Sim.city.destinations[parked_at].curb)
+		parked_at = -1
+	stolen = true
+	temporary = true
+	_goal_dest = -1
+	_set_state(State.FLEEING)
+	EventBus.danger.emit(global_position, 120.0, &"theft")
+	_route()
+	queue_redraw()
+
+
 ## Route to the owner's goal if there is one, otherwise wander.
 func _route() -> void:
+	if stolen:
+		var exits := Sim.city.edge_exits()
+		path = Sim.nav.road_path(CityMap.world_to_cell(center), exits[Sim.rng.randi_range(0, exits.size() - 1)])
+		path_i = 1
+		return
 	if _goal_dest < 0:
 		new_route()
 		return
@@ -165,6 +192,9 @@ func _physics_process(delta: float) -> void:
 			queue_free()
 		return
 	if path_i >= path.size():
+		if stolen:
+			queue_free()  # off the edge of the map with the loot
+			return
 		if _goal_dest >= 0:
 			park(_goal_dest, true)
 			if _homing:
@@ -198,12 +228,15 @@ func _physics_process(delta: float) -> void:
 func _target_speed() -> float:
 	var t := CRUISE * (1.5 if _flee_left > 0.0 else 1.0)
 	_set_state(State.FLEEING if _flee_left > 0.0 else State.DRIVING)
-	t = minf(t, _turn_limit())
-	var light := _light_limit()
+	if stolen:
+		t = THIEF_CRUISE
+		_set_state(State.FLEEING)
+	t = minf(t, _turn_limit() * (1.6 if stolen else 1.0))
+	var light := INF if stolen else _light_limit()
 	if light < t:
 		t = light
 		_set_state(State.STOPPED_AT_LIGHT)
-	var look := 30.0 + speed * 0.6
+	var look := 30.0 + speed * (0.25 if stolen else 0.6)  # thieves brake late
 	_sensor.rotation = heading.angle() - rotation  # look where we're going, not where we point
 	_sensor.target_position = Vector2(look, 0)
 	_sensor.force_shapecast_update()
@@ -443,7 +476,7 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 	if kind == &"explosion" and d < radius * 0.6:
 		spinout((global_position - pos).normalized() * 380.0, _burnt)  # caught in the blast
 		return
-	if state == State.PARKED:
+	if state == State.PARKED or stolen:
 		return
 	if kind in [&"crash", &"explosion", &"theft"] and d < radius * 1.5:
 		_flee_left = FLEE_SECONDS
@@ -478,6 +511,8 @@ func _draw() -> void:
 		draw_rect(Rect2(Vector2(-10, 3), Vector2(2, 3)), Color.RED)
 	if state == State.CRASHED:
 		draw_circle(Vector2(0, 0), 7.0, Color(0.3, 0.3, 0.3, 0.7))
+	if stolen:
+		draw_rect(Rect2(Vector2(-6, -3), Vector2(6, 6)), Color.BLACK)  # masked driver
 	if _burnt:
 		draw_rect(Rect2(-SIZE / 2.0, SIZE), HUSK)  # charred husk with a little smoke
 		draw_circle(Vector2(-3, -2), 4.0, Color(0.4, 0.4, 0.4, 0.6))

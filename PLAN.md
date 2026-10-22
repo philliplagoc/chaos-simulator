@@ -5071,7 +5071,7 @@ Say to the human:
 - **Why:** R8, D5, spec step 9 ("walks to the nearest stopped car, pulls the driver out (driver becomes a fleeing citizen; emit a theft danger), then drives at high speed toward a random map exit ignoring lights and braking late; despawns at the map edge").
 - **Docs & gotchas:** the thief calls `steal()` only when touching the car. An owner who gets pulled out hears about it through the car's `driver_ejected` signal, then flees from the `theft` danger like anyone else. A stolen car is `temporary`: it's gone at the map edge (after a spin or crash it drives on toward the edge), and its owner walks from then on.
 
-- [ ] **Step 1: Stolen-car mode in the car**
+- [x] **Step 1: Stolen-car mode in the car**
 
 Edit `scripts/car.gd` (8 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -5222,7 +5222,7 @@ replace with:
 		draw_rect(Rect2(Vector2(-6, -3), Vector2(6, 6)), Color.BLACK)  # masked driver
 ```
 
-- [ ] **Step 2: Write the thief**
+- [x] **Step 2: Write the thief**
 
 Create `scripts/car_thief.gd` with exactly this:
 
@@ -5301,7 +5301,7 @@ func _draw() -> void:
 	draw_circle(Vector2(2, -0.5), 1.0, Color.WHITE)
 ```
 
-- [ ] **Step 3: Owners get pulled out**
+- [x] **Step 3: Owners get pulled out**
 
 Edit `scripts/citizen.gd` (3 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -5358,8 +5358,8 @@ func _on_ejected(at: Vector2) -> void:
 
 ```
 
-- [ ] **Step 4: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T038: Car Thief steals a stopped car and races for the edge" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run tests and smoke**: TEST → `1893 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T038: Car Thief steals a stopped car and races for the edge" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T039 [R8] The Road Rager
 - **Owner:** Agent
@@ -6924,6 +6924,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-17 | T036 | Done | Car spinouts (130+ spin, 220+ wreck; fast into a puddle; inside 60% of a blast); cars `take_hit` each other, hydrants and barrels. `1893 checks, 0 failed`, smoke clean. Next: T037 (human: tumble check, Nov 5 rule, post 3). |
 | 2026-10-17 | T037 | Done (post pending) | Human: tumble and spinout look good. Feedback: spinning cars phased through buildings → buildings are now solid for impact bodies (change log v1.7); cars teleported back to the road after crashes → they drive back, and cars burnt by a blast are removed for good (v1.8); debug cars vanished when they spun out → fixed (v1.9). Today is Oct 17, before the Nov 5 cutoff: keep the Road Rager. Substack post 3 NOT published yet; ask the human for the URL later. |
 | 2026-10-17 | Phase 7 | Done | Checkpoint: `1893 checks, 0 failed`, smoke clean. Human: tumble, spinout, solid buildings, drive-back and husks all look good. Pushed to GitHub. Substack post 3 still pending (ask for the URL). Next: T038 (Car Thief). Start a fresh session. |
+| 2026-10-22 | T038 | Done | `CarThief` walks to the nearest stopped car and calls `steal()`; the stolen car races for a random edge exit (no lights, late braking) and is freed there; a driving owner is pulled out and walks. Thief not placeable until T040. `1893 checks, 0 failed`, smoke clean. Next: T039 (Road Rager). |
 
 ## Change log
 

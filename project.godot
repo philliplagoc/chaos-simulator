@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Chaos Simulator"
-config/features=PackedStringArray("4.7", "GL Compatibility")
 run/main_scene="res://scenes/world/world.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]

@@ -66,6 +66,7 @@ func _ready() -> void:
 	EventBus.danger.connect(_on_danger)
 	if car:
 		car.arrived.connect(_on_car_arrived)
+		car.driver_ejected.connect(_on_ejected)
 		car.burnt.connect(_on_car_burnt)
 	_enter(data.home)
 	_think = Sim.rng.randf() * THINK_SECONDS  # don't all think on the same frame
@@ -122,7 +123,10 @@ func _dest_for(g: StringName) -> int:
 ## Leave the current place for `dest`: drive if our car is parked right here.
 func _travel(dest: int) -> void:
 	target_dest = dest
-	if car and is_instance_valid(car) and car.parked_at == at_dest and at_dest >= 0:
+	if not is_instance_valid(car):
+		car = null  # stolen and gone
+		data.has_car = false
+	if car and car.parked_at == at_dest and at_dest >= 0:
 		mode = Mode.DRIVING
 		at_dest = -1
 		car.drive_to(dest, data.patience)
@@ -175,6 +179,15 @@ func _enter(dest: int) -> void:
 func _on_car_arrived() -> void:
 	data.patience = car.patience
 	_enter(target_dest)
+
+
+## A thief yanked us out of our own car. We're on foot now (and about to flee).
+func _on_ejected(at: Vector2) -> void:
+	car = null
+	data.has_car = false
+	global_position = at
+	at_dest = -1
+	_travel(target_dest if target_dest >= 0 else data.home)
 
 
 ## Our car blew up. If we were in it, we're thrown out seeing stars.
