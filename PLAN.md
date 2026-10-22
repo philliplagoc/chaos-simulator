@@ -5762,7 +5762,7 @@ Say to the human:
 - **Why:** R9 ("raise the chaos meter on crashes, explosions, thefts, ragdolls, and fleeing citizens, and decay it over time").
 - **Docs & gotchas:** pure logic. Weights: crash 12, explosion 20, theft 10, ragdoll 8, water 5, panic 1. It decays 3/s, and each fleeing citizen adds 0.6/s.
 
-- [ ] **Step 1: Write the failing test and register it**
+- [x] **Step 1: Write the failing test and register it**
 
 Create `tests/test_chaos_meter.gd` with exactly this:
 
@@ -5838,8 +5838,8 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_chaos_meter.gd ...`
-- [ ] **Step 3: Write the meter**
+- [x] **Step 2: Run and confirm it fails**: TEST → `FAIL: could not load res://tests/test_chaos_meter.gd ...`
+- [x] **Step 3: Write the meter**
 
 Create `scripts/chaos_meter.gd` with exactly this:
 
@@ -5881,8 +5881,8 @@ func label() -> String:
 	return "MAYHEM"
 ```
 
-- [ ] **Step 4: Run and confirm it passes**: TEST → `1913 checks, 0 failed`
-- [ ] **Step 5: Commit**: `git add -A; git commit -m "T042: chaos meter logic" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Run and confirm it passes**: TEST → `1913 checks, 0 failed`
+- [x] **Step 5: Commit**: `git add -A; git commit -m "T042: chaos meter logic" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T043 [R9] Top bar: meter, clock, speed, Reset, New Seed, seed
 - **Owner:** Agent
@@ -6968,6 +6968,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T041 | Done | Human: Thief 3/5, Rager 3/5 (pass). Feedback: a stolen car waited in traffic → stolen cars now overtake through the oncoming lane as soon as they are blocked (v1.13). |
 | 2026-10-22 | T041b | Done | Getaway cars (stolen, Rager) ride the curb-side sidewalk for an overtake when an oncoming car is close. `1904 checks, 0 failed`, smoke clean. Human: looks right. |
 | 2026-10-22 | Phase 8 | Done | Checkpoint: `1904 checks, 0 failed`, smoke clean. Human check passed (Thief 3/5, Rager 3/5). Pushed to GitHub. Substack post 3 still pending (ask for the URL); week 4: start drafting the launch post. Next: T042 (chaos meter logic). Start a fresh session. |
+| 2026-10-22 | T042 | Done | `ChaosMeter` (pure logic) + `tests/test_chaos_meter.gd`. Runner got one new suite line (the full replace would have dropped `test_cars.gd`). `1913 checks, 0 failed`. Next: T043 (top bar). |
 
 ## Change log
 
