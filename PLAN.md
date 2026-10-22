@@ -6976,6 +6976,8 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T046 | Done | 12 Kenney sprites in `art/sprites/`, `Art` helper; cars, citizens, thief and impact bodies use them (shape fallback if missing); camera starts at zoom 0.8. `1917 checks, 0 failed`, smoke clean. Human: looks good. Next: T047 (F2 readout, web build). |
 | 2026-10-22 | T047 | Done | F2 toggles an FPS / agents / bodies readout in the top bar. `1917 checks, 0 failed`, smoke clean. Web export clean, `build/chaos-web.zip` 10.5 MB. Next: T048 (README, itch copy, cleanup, safety sweep). |
 | 2026-10-22 | T048 | Done | `README.md` and `docs/itch-page.md` written; spike removed (`scenes/spike/`, `scripts/spike.gd` + `.uid`); both safety sweeps (S1 names, S3 secrets) print nothing. `1917 checks, 0 failed`, smoke clean. Pushed. Next: T049 (human: itch draft upload, FPS, done-when pass). |
+| 2026-10-22 | T049 | Done | Human: new zip on the itch draft; "plays good"; about 50 FPS in both Chrome and Firefox (one figure given, read as the low under chaos) → pass, no fallback. Done-when items D2-D6 not reported one by one. |
+| 2026-10-22 | Phase 10 | Done | Checkpoint: `1917 checks, 0 failed`, smoke clean. Human check passed. Pushed to GitHub. Substack posts 2 and 3 still pending (ask for the URLs). Next: T050 (human: playtest with two friends). Start a fresh session. |
 
 ## Change log
 
