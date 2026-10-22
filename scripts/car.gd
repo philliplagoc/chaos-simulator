@@ -223,7 +223,7 @@ func _physics_process(delta: float) -> void:
 			return
 		new_route()
 	_flee_left = maxf(0.0, _flee_left - delta)
-	if rager:
+	if rager or stolen:
 		_update_anger(delta)
 	var target := _target_speed()
 	if global_position.distance_to(center + _lane_offset) > 10.0:
@@ -563,6 +563,7 @@ func _on_danger(pos: Vector2, radius: float, kind: StringName) -> void:
 
 
 ## Road rage: blocked = angrier. Past each threshold it does something worse.
+## A stolen car uses the same moves, and overtakes as soon as it's blocked.
 func _update_anger(delta: float) -> void:
 	_overtake_left = maxf(0.0, _overtake_left - delta)
 	_ram_left = maxf(0.0, _ram_left - delta)
@@ -570,7 +571,7 @@ func _update_anger(delta: float) -> void:
 	anger = clampf(anger + (18.0 if blocked else -4.0) * delta, 0.0, 100.0)
 	if _overtake_left <= 0.0:
 		lane_side = 1.0
-	if anger > ANGER_OVERTAKE and blocked and _overtake_left <= 0.0:
+	if (anger > ANGER_OVERTAKE or stolen) and blocked and _overtake_left <= 0.0:  # a thief won't wait
 		_overtake_left = 2.5
 		lane_side = -1.0  # swing into the oncoming lane
 	if anger > ANGER_RAM and speed > 40.0 and state == State.BRAKING and _ram_left <= 0.0:
