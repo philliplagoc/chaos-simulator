@@ -6121,7 +6121,7 @@ Say to the human:
 - **Why:** spec: "Kenney CC0 art from day one" (we kept the art in `art/kenney/` since T005 and switch it on now). Assumption 5.
 - **Docs & gotchas:** Kenney cars point **up** and are 71×131 px; people face **right** and are about 33×43 px. `Art` scales them to 24 px car length and 16 px person height and rotates cars by 90°. Sprites use `show_behind_parent`, so brake lights, the thief mask and the rager's anger bar still draw on top. Every sprite falls back to the old shapes if its file is missing. The camera now starts at zoom 0.8 so the sprites read better.
 
-- [ ] **Step 1: Copy the 12 sprites into `art/sprites/`**
+- [x] **Step 1: Copy the 12 sprites into `art/sprites/`**
   Run:
 ```powershell
 New-Item -ItemType Directory -Force art\sprites | Out-Null
@@ -6141,7 +6141,7 @@ Copy-Item "$k\shooter\PNG\Hitman 1\hitman1_stand.png"       art\sprites\thief.pn
 (Get-ChildItem art\sprites\*.png).Count
 ```
   Expected: `12`. (The delivery drivers are the pack's robot: quirky-city delivery bots. Swap in another `_stand` sprite if you prefer, but never one holding a weapon.)
-- [ ] **Step 2: Write the sprite helper**
+- [x] **Step 2: Write the sprite helper**
 
 Create `scripts/art.gd` with exactly this:
 
@@ -6194,7 +6194,7 @@ static func person_sprite(tex: Texture2D) -> Sprite2D:
 	return s
 ```
 
-- [ ] **Step 3: Cars use sprites**
+- [x] **Step 3: Cars use sprites**
 
 Edit `scripts/car.gd` (6 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -6285,7 +6285,7 @@ replace with:
 	car.sprite = sprite
 ```
 
-- [ ] **Step 4: Spinning bodies use the same sprite**
+- [x] **Step 4: Spinning bodies use the same sprite**
 
 Edit `scripts/impact_body.gd` (2 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -6322,7 +6322,7 @@ func _draw() -> void:
 	elif is_car:
 ```
 
-- [ ] **Step 5: Citizens and the thief use sprites**
+- [x] **Step 5: Citizens and the thief use sprites**
 
 Edit `scripts/citizen.gd` (9 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -6522,7 +6522,7 @@ func _draw() -> void:
 		return
 ```
 
-- [ ] **Step 6: The world hands out sprites; the camera starts closer**
+- [x] **Step 6: The world hands out sprites; the camera starts closer**
 
 Edit `scripts/world.gd` (3 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -6587,9 +6587,9 @@ replace with:
 	zoom = Vector2(0.8, 0.8)
 ```
 
-- [ ] **Step 7: Run tests and smoke**: TEST → `1917 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
-- [ ] **Step 8: Human look.** Ask the human to run `godot --path .`, zoom in, and confirm: cars are little top-down race cars pointing the way they drive, people are top-down figures facing the way they walk, the thief is a suited figure, the rager is the red car with an anger bar, and tumbling people and spinning cars keep their sprites. Wait for their reply.
-- [ ] **Step 9: Commit**: `git add -A; git commit -m "T046: Kenney sprites for cars, citizens, thief and ragdolls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 7: Run tests and smoke**: TEST → `1917 checks, 0 failed` (the import step also imports the 12 PNGs). SMOKE → clean.
+- [x] **Step 8: Human look.** Ask the human to run `godot --path .`, zoom in, and confirm: cars are little top-down race cars pointing the way they drive, people are top-down figures facing the way they walk, the thief is a suited figure, the rager is the red car with an anger bar, and tumbling people and spinning cars keep their sprites. Wait for their reply.
+- [x] **Step 9: Commit**: `git add -A; git commit -m "T046: Kenney sprites for cars, citizens, thief and ragdolls" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 **If it fails:** `Copy-Item` can't find a file: list the real names with `Get-ChildItem art\kenney -Recurse -Filter *_stand.png` (or `car_*_1.png`) and use those. Cars driving sideways means the rotation in `Art.car_sprite` is wrong for that art: try `-PI / 2.0`.
 
@@ -6973,6 +6973,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T044 | Done | `tests/test_reset.gd` builds the world 3 times: seed 42 twice matches, 43 differs. Passed first run. Runner got one new suite line. `1917 checks, 0 failed`. Next: T045 (human: meter, speed, Reset, seed). |
 | 2026-10-22 | T045 | Done | Human: meter climbs and decays, 3x/Pause/1x, Reset rebuilds the same city, New Seed changes it: all as expected. |
 | 2026-10-22 | Phase 9 | Done | Checkpoint: `1917 checks, 0 failed`, smoke clean. Human check passed. Pushed to GitHub. Substack posts 2 and 3 still pending (ask for the URLs). Next: T046 (Kenney sprites). Start a fresh session. |
+| 2026-10-22 | T046 | Done | 12 Kenney sprites in `art/sprites/`, `Art` helper; cars, citizens, thief and impact bodies use them (shape fallback if missing); camera starts at zoom 0.8. `1917 checks, 0 failed`, smoke clean. Human: looks good. Next: T047 (F2 readout, web build). |
 
 ## Change log
 

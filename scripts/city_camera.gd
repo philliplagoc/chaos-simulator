@@ -11,7 +11,7 @@ var _dragging := false
 
 
 func _ready() -> void:
-	zoom = Vector2(0.6, 0.6)
+	zoom = Vector2(0.8, 0.8)
 	position = CityMap.map_rect().get_center()
 	_clamp()
 

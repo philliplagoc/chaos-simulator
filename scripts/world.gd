@@ -112,6 +112,7 @@ func _spawn_people_and_cars() -> void:
 	for d in people:
 		var c := Citizen.new()
 		c.data = d
+		c.sprite = Art.texture(Art.PEOPLE[d.profession])
 		if d.has_car:
 			var car := _new_car()
 			car.owner_id = d.id
@@ -123,9 +124,11 @@ func _spawn_people_and_cars() -> void:
 		_new_car().place(Sim.free_road_cell())
 
 
-func _new_car() -> Car:
+func _new_car(sprite_index := -1) -> Car:
 	var car := Car.new()
 	car.color = CAR_COLORS[Sim.rng.randi_range(0, CAR_COLORS.size() - 1)]
+	var i := sprite_index if sprite_index >= 0 else Sim.rng.randi_range(0, Art.CARS.size() - 1)
+	car.sprite = Art.texture(Art.CARS[i])
 	add_child(car)
 	return car
 
@@ -156,7 +159,7 @@ func place_criminal(kind: StringName, at: Vector2) -> void:
 		t.position = at
 		add_child(t)
 	elif kind == &"rager":
-		var car := _new_car()
+		var car := _new_car(3)  # the red one
 		car.rager = true
 		car.temporary = true
 		car.color = Color("ff1f1f")

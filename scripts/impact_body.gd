@@ -15,6 +15,7 @@ static var active := 0
 var is_car := false
 var size := Vector2(10, 10)
 var color := Color.WHITE
+var texture: Texture2D        # Kenney art if we have it
 var _t := 0.0
 var _still := 0.0
 var _done := false
@@ -74,7 +75,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if is_car:
+	if texture:
+		# Same framing as Art.car_sprite / Art.person_sprite.
+		var h := Art.CAR_LENGTH if is_car else Art.PERSON_SIZE
+		draw_set_transform(Vector2.ZERO, PI / 2.0 if is_car else 0.0, Vector2.ONE * h / texture.get_height())
+		draw_texture(texture, -texture.get_size() / 2.0)
+		draw_set_transform(Vector2.ZERO)
+	elif is_car:
 		draw_rect(Rect2(-size / 2.0, size), color)
 		draw_rect(Rect2(Vector2(2, -5), Vector2(5, 10)), Color(0.75, 0.9, 1.0))
 	else:

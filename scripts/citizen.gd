@@ -36,6 +36,7 @@ static var show_debug := false
 static var selected_id := -1
 
 var data: CitizenData
+var sprite: Texture2D         # Kenney person art; null = draw a colored dot
 var car: Car                  # this citizen's own car, or null
 var goal: StringName = &"home"
 var mode: Mode = Mode.INSIDE
@@ -53,6 +54,7 @@ var _drawn := ""
 var _down_left := 0.0
 var _lying_angle := 0.0
 var _hurt := Hurtbox.make(7.0, HIT_SPEED)
+var _sprite: Sprite2D
 
 
 func _ready() -> void:
@@ -67,6 +69,9 @@ func _ready() -> void:
 	add_child(shape)
 	_hurt.hit.connect(func(body: Node2D, _v: float) -> void: tumble(Sim.body_velocity(body) * 1.3))
 	add_child(_hurt)
+	if sprite:
+		_sprite = Art.person_sprite(sprite)
+		add_child(_sprite)
 	EventBus.danger.connect(_on_danger)
 	if car:
 		car.arrived.connect(_on_car_arrived)
@@ -154,6 +159,7 @@ func _walk(delta: float) -> void:
 	if path_i >= path.size():
 		_enter(target_dest)
 		return
+	_face(path[path_i] - global_position)
 	global_position = global_position.move_toward(path[path_i], WALK_SPEED * delta)
 	if global_position.distance_to(path[path_i]) < 0.5:
 		path_i += 1
@@ -247,6 +253,7 @@ func tumble(impulse: Vector2) -> void:
 	mode = Mode.TUMBLING
 	var body := ImpactBody.new()
 	body.color = PROFESSION_COLORS[data.profession]
+	body.texture = sprite
 	body.position = global_position
 	body.settled.connect(_on_settled)
 	get_parent().add_child.call_deferred(body)
@@ -279,6 +286,7 @@ func _recover(delta: float) -> void:
 
 
 func _flee(delta: float) -> void:
+	_face(_flee_dir)
 	# Stop at building edges (off-map counts as a building) instead of running through.
 	var next := global_position + _flee_dir * FLEE_SPEED * delta
 	if Sim.city.cell(CityMap.world_to_cell(next)) != CityMap.Cell.BLOCK:
@@ -292,6 +300,7 @@ func _flee(delta: float) -> void:
 
 ## Run at the trouble (into the road if that's where it is) for a few seconds.
 func _confront(delta: float) -> void:
+	_face(_confront_at - global_position)
 	var next := global_position.move_toward(_confront_at, FLEE_SPEED * delta)
 	if Sim.city.cell(CityMap.world_to_cell(next)) != CityMap.Cell.BLOCK:
 		global_position = next
@@ -321,6 +330,11 @@ func where_text() -> String:
 	return "walking to " + Sim.city.destinations[target_dest].label
 
 
+func _face(dir: Vector2) -> void:
+	if _sprite and dir.length() > 0.1:
+		_sprite.rotation = dir.angle()
+
+
 func _show(on: bool) -> void:
 	visible = on
 	collision_layer = Sim.L_CITIZENS if on else 0
@@ -335,11 +349,14 @@ func _redraw_if_changed() -> void:
 
 
 func _draw() -> void:
+	if _sprite:
+		_sprite.visible = mode != Mode.DAZED
 	if mode == Mode.DAZED:
 		_draw_dazed()
 		return
-	draw_circle(Vector2.ZERO, 5.0, Color.BLACK)
-	draw_circle(Vector2.ZERO, 4.0, PROFESSION_COLORS[data.profession])
+	if not _sprite:
+		draw_circle(Vector2.ZERO, 5.0, Color.BLACK)
+		draw_circle(Vector2.ZERO, 4.0, PROFESSION_COLORS[data.profession])
 	if mode == Mode.FLEEING:
 		draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 12, Color.RED, 1.5)
 	elif mode == Mode.CONFRONTING:

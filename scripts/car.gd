@@ -43,6 +43,7 @@ const ONCOMING_LOOK := 150.0
 
 var state: State = State.DRIVING
 var color := Color.WHITE
+var sprite: Texture2D         # Kenney car art; null = draw a colored box
 var speed := 0.0
 var center := Vector2.ZERO    # position on the lane centerline
 var heading := Vector2.RIGHT
@@ -73,6 +74,7 @@ var _burnt := false
 var _homing := false          # driving back to our lot empty after a spin
 var _drawn_state := -1
 var _sensor := ShapeCast2D.new()
+var _sprite: Sprite2D
 
 
 func _ready() -> void:
@@ -92,6 +94,9 @@ func _ready() -> void:
 	_sensor.collision_mask = Sim.L_CARS | Sim.L_CITIZENS | Sim.L_RAGDOLLS
 	_sensor.add_exception(self)
 	add_child(_sensor)
+	if sprite:
+		_sprite = Art.car_sprite(sprite)
+		add_child(_sprite)
 	EventBus.danger.connect(_on_danger)
 
 
@@ -412,6 +417,7 @@ func spinout(impulse: Vector2, hard: bool) -> void:
 	body.is_car = true
 	body.size = SIZE
 	body.color = color
+	body.texture = null if _burnt else sprite  # a husk spins as a black box
 	if _burnt:
 		body.color = HUSK
 	body.position = global_position
@@ -521,6 +527,7 @@ func _replace_me() -> void:
 		return
 	var car := Car.new()
 	car.color = color
+	car.sprite = sprite
 	get_parent().add_child.call_deferred(car)
 	car.enter_from_edge.call_deferred()
 
@@ -619,9 +626,13 @@ func _redraw_if_changed() -> void:
 
 
 func _draw() -> void:
-	var body := color.darkened(0.55) if state == State.CRASHED else color
-	draw_rect(Rect2(-SIZE / 2.0, SIZE), body)
-	draw_rect(Rect2(Vector2(2, -5), Vector2(5, 10)), Color(0.75, 0.9, 1.0))
+	if _sprite:
+		_sprite.modulate = Color(0.45, 0.45, 0.45) if state == State.CRASHED else Color.WHITE
+		_sprite.visible = not _burnt  # the charred husk box is drawn instead
+	else:
+		var body := color.darkened(0.55) if state == State.CRASHED else color
+		draw_rect(Rect2(-SIZE / 2.0, SIZE), body)
+		draw_rect(Rect2(Vector2(2, -5), Vector2(5, 10)), Color(0.75, 0.9, 1.0))
 	if state == State.BRAKING or state == State.STOPPED_AT_LIGHT:
 		draw_rect(Rect2(Vector2(-10, -6), Vector2(2, 3)), Color.RED)
 		draw_rect(Rect2(Vector2(-10, 3), Vector2(2, 3)), Color.RED)

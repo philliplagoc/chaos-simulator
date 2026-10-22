@@ -14,6 +14,7 @@ var _target: Car
 var _retarget := 0.0
 var _shifty := 0.0
 var _hurt := Hurtbox.make(7.0, 40.0)
+var _sprite: Sprite2D
 var _touch := Area2D.new()
 
 
@@ -28,6 +29,10 @@ func _ready() -> void:
 	add_child(shape)
 	_hurt.hit.connect(_knocked_over)
 	add_child(_hurt)
+	var tex := Art.texture(Art.THIEF)
+	if tex:
+		_sprite = Art.person_sprite(tex)
+		add_child(_sprite)
 	_touch.collision_layer = 0
 	_touch.collision_mask = Sim.L_CITIZENS
 	_touch.monitorable = false
@@ -53,6 +58,8 @@ func _process(delta: float) -> void:
 	if _shifty <= 0.0:
 		_shifty = SHIFTY_SECONDS
 		EventBus.danger.emit(global_position, 80.0, &"theft")  # looks shifty
+	if _sprite:
+		_sprite.rotation = (_target.global_position - global_position).angle()
 	global_position = global_position.move_toward(_target.global_position, SPEED * delta)
 	if global_position.distance_to(_target.global_position) < GRAB_DISTANCE:
 		_target.steal()  # we're touching it
@@ -92,6 +99,8 @@ func _fall(impulse: Vector2) -> void:
 
 
 func _draw() -> void:
+	if _sprite:
+		return
 	draw_circle(Vector2.ZERO, 6.0, Color.BLACK)
 	draw_circle(Vector2.ZERO, 5.0, Color("2c3e50"))
 	draw_rect(Rect2(-5, -2, 10, 3), Color.BLACK)  # eye mask
