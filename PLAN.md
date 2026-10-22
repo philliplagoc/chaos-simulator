@@ -6008,7 +6008,7 @@ func done_placing() -> void:
 - **Why:** D6 and the spec step 10 check ("the same seed produces the same starting layout and citizen list").
 - **Docs & gotchas:** this builds the real world scene three times inside the test runner. It should pass on the first run, because it guards everything built so far. If it fails, some code is using randomness outside `Sim.rng` (search for `randi(`, `randf(`, `.shuffle(`, `randomize(`).
 
-- [ ] **Step 1: Write the test and register it**
+- [x] **Step 1: Write the test and register it**
 
 Create `tests/test_reset.gd` with exactly this:
 
@@ -6089,8 +6089,8 @@ func check(ok: bool, what: String) -> void:
 		printerr("FAIL: " + what)
 ```
 
-- [ ] **Step 2: Run it**: TEST → `1917 checks, 0 failed`
-- [ ] **Step 3: Commit**: `git add -A; git commit -m "T044: automated same-seed check" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 2: Run it**: TEST → `1917 checks, 0 failed`
+- [x] **Step 3: Commit**: `git add -A; git commit -m "T044: automated same-seed check" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T045 🧑 HUMAN: Meter, speed, Reset and seed
 **Agent: STOP here. Tell the human the steps below, then wait for their reply.**
@@ -6970,6 +6970,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | Phase 8 | Done | Checkpoint: `1904 checks, 0 failed`, smoke clean. Human check passed (Thief 3/5, Rager 3/5). Pushed to GitHub. Substack post 3 still pending (ask for the URL); week 4: start drafting the launch post. Next: T042 (chaos meter logic). Start a fresh session. |
 | 2026-10-22 | T042 | Done | `ChaosMeter` (pure logic) + `tests/test_chaos_meter.gd`. Runner got one new suite line (the full replace would have dropped `test_cars.gd`). `1913 checks, 0 failed`. Next: T043 (top bar). |
 | 2026-10-22 | T043 | Done | Top bar in `Hud`: chaos meter + label, clock, Pause/1x/3x, Reset, New Seed, seed. `1913 checks, 0 failed`, smoke clean. Next: T044 (same-seed check). |
+| 2026-10-22 | T044 | Done | `tests/test_reset.gd` builds the world 3 times: seed 42 twice matches, 43 differs. Passed first run. Runner got one new suite line. `1917 checks, 0 failed`. Next: T045 (human: meter, speed, Reset, seed). |
 
 ## Change log
 
