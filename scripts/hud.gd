@@ -2,6 +2,7 @@ class_name Hud
 extends CanvasLayer
 ## Top bar: chaos meter, clock, speed (pause / 1x / 3x), Reset, New Seed, seed.
 ## Bottom bar: pick a criminal, then click the map to drop it there.
+## F2 shows frames per second and the agent count (for performance checks).
 
 var placing: StringName = &""   # &"thief", &"rager" or &"" when not placing
 var meter := ChaosMeter.new()
@@ -11,6 +12,7 @@ var _chaos_bar := ProgressBar.new()
 var _chaos_label := Label.new()
 var _clock := Label.new()
 var _seed := Label.new()
+var _fps := Label.new()
 
 
 func _ready() -> void:
@@ -50,6 +52,8 @@ func _build_top_bar() -> void:
 	new_seed.pressed.connect(func() -> void: _restart(int(Time.get_unix_time_from_system() * 1000.0) % 1000000))
 	row.add_child(new_seed)
 	row.add_child(_seed)
+	_fps.visible = false
+	row.add_child(_fps)
 
 
 func _build_criminal_bar() -> void:
@@ -86,6 +90,14 @@ func _process(delta: float) -> void:
 	_chaos_label.text = "Chaos: " + meter.label()
 	_clock.text = Sim.clock_text()
 	_seed.text = "Seed %d%s" % [Sim.seed_value, "   (paused)" if Engine.time_scale == 0.0 else ""]
+	if _fps.visible:
+		var agents := get_tree().get_nodes_in_group("cars").size() + get_tree().get_nodes_in_group("citizens").size()
+		_fps.text = "FPS %d  agents %d  bodies %d" % [Engine.get_frames_per_second(), agents, ImpactBody.active]
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F2:
+		_fps.visible = not _fps.visible
 
 
 func _select(kind: StringName) -> void:

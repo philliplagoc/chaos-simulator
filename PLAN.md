@@ -6600,7 +6600,7 @@ replace with:
 - **Why:** R11, risk #1: check the real game (60 agents, physics, UI) in the browser, not just the spike.
 - **Docs & gotchas:** F2 shows FPS, the agent count and active bodies. Fallback, if T049 shows stutter: in `scripts/sim.gd` set `CITIZEN_COUNT := 30` and `CAR_COUNT := 15`; `ImpactBody.MAX_ACTIVE` is already 5.
 
-- [ ] **Step 1: Add the F2 readout**
+- [x] **Step 1: Add the F2 readout**
 
 Edit `scripts/hud.gd` (4 changes). Use the Edit tool: each **find** block appears exactly once in the file; replace it with the **replace** block. Apply them in order.
 
@@ -6664,8 +6664,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_fps.visible = not _fps.visible
 ```
 
-- [ ] **Step 2: Run tests and smoke**: TEST → `1917 checks, 0 failed`. SMOKE → clean.
-- [ ] **Step 3: Export and zip**
+- [x] **Step 2: Run tests and smoke**: TEST → `1917 checks, 0 failed`. SMOKE → clean.
+- [x] **Step 3: Export and zip**
   Run:
 ```powershell
 New-Item -ItemType Directory -Force build\web | Out-Null
@@ -6674,7 +6674,7 @@ Compress-Archive -Path build\web\* -DestinationPath build\chaos-web.zip -Force
 Get-Item build\chaos-web.zip | Select-Object Name, Length
 ```
   Expected: no `ERROR: Cannot export` line, and a zip of several MB.
-- [ ] **Step 4: Commit**: `git add -A; git commit -m "T047: F2 performance readout" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 4: Commit**: `git add -A; git commit -m "T047: F2 performance readout" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ### T048 [S1] [S3] [S4] README, itch copy, cleanup, safety sweep
 - **Owner:** Agent
@@ -6974,6 +6974,7 @@ Run TEST one last time (`0 failed`), commit, push, and write a final DEVLOG entr
 | 2026-10-22 | T045 | Done | Human: meter climbs and decays, 3x/Pause/1x, Reset rebuilds the same city, New Seed changes it: all as expected. |
 | 2026-10-22 | Phase 9 | Done | Checkpoint: `1917 checks, 0 failed`, smoke clean. Human check passed. Pushed to GitHub. Substack posts 2 and 3 still pending (ask for the URLs). Next: T046 (Kenney sprites). Start a fresh session. |
 | 2026-10-22 | T046 | Done | 12 Kenney sprites in `art/sprites/`, `Art` helper; cars, citizens, thief and impact bodies use them (shape fallback if missing); camera starts at zoom 0.8. `1917 checks, 0 failed`, smoke clean. Human: looks good. Next: T047 (F2 readout, web build). |
+| 2026-10-22 | T047 | Done | F2 toggles an FPS / agents / bodies readout in the top bar. `1917 checks, 0 failed`, smoke clean. Web export clean, `build/chaos-web.zip` 10.5 MB. Next: T048 (README, itch copy, cleanup, safety sweep). |
 
 ## Change log
 
